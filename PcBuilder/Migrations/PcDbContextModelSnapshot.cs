@@ -651,7 +651,7 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("idSsd")
+                    b.Property<bool>("isSsd")
                         .HasColumnType("boolean");
 
                     b.Property<string>("name")

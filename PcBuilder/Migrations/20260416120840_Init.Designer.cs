@@ -12,7 +12,7 @@ using PcBuilder.Data;
 namespace PcBuilder.Migrations
 {
     [DbContext(typeof(PcDbContext))]
-    [Migration("20260416115812_Init")]
+    [Migration("20260416120840_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -654,7 +654,7 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("idSsd")
+                    b.Property<bool>("isSsd")
                         .HasColumnType("boolean");
 
                     b.Property<string>("name")
