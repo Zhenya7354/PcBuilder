@@ -1,6 +1,6 @@
 ﻿namespace PcBuilder.Models
 {
-    public class Monitor : Component
+    public class PcMonitor : Component
     {
         public double screenSizeInch { get; set; }
         public int resolutionWidth { get; set; }

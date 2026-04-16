@@ -1,6 +1,6 @@
 ﻿namespace PcBuilder.Models
 {
-    public class Memory : Component
+    public class Ram : Component
     {
         public string memoryType { get; set; } = string.Empty;
         public int capacityGb { get; set; }

@@ -5,5 +5,7 @@
         public int id { get; set; }
         public int brandId { get; set; }
         public string name { get; set; } = string.Empty;
+        //Navigation property for the brand relationship
+        public Brand? brand { get; set; }
     }
 }

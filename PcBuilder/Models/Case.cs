@@ -17,5 +17,6 @@
         public bool hasGlassPanel { get; set; }
         public int includedFans { get; set; }
         public decimal? priceUsd { get; set; }
+        
     }
 }
