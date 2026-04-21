@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
+using PcBuilder.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<PcDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -19,9 +22,10 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
+AuthenticationService.MapRegisterUserEndpoint(app);
 
 
 
