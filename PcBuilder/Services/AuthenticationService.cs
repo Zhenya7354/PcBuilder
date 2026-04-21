@@ -7,28 +7,34 @@ using System.Text;
 
 namespace PcBuilder.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService(IConfiguration configuration)
     {
-        public record Request(string Email, string Password);
-        public static User user = new();
-
-        public static void MapRegisterUserEndpoint(IEndpointRouteBuilder app)
+        public string GenerateToken(User user, IList<string> roles)
         {
-            //app.MapPost("register", async (Request request, UserManager<User> userManager, IConfiguration configuration) =>
-            //    {
-            //        var user = await userManager.FindByEmailAsync(request.Email);
-            //        if (user is null || !(await userManager.CheckPasswordAsync(user, request.Password)))
-            //        {
-            //            return TypedResults.Unauthorized();
-            //        }
-            //        var roles = await userManager.GetRolesAsync(user);
+            var section = configuration.GetSection("Jwt");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(section["Key"]!));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!));
-            //        var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-                    
-                        
-                    
-            //    });
+            var claims = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Sub, user.UserName!),
+                new(JwtRegisteredClaimNames.Email, user.Email!),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var expires = DateTime.UtcNow.AddMinutes(int.Parse(section["ExpiresInMinutes"]!));
+
+            var token = new JwtSecurityToken(
+                issuer: section["Issuer"],
+                audience: section["Audience"],
+                claims: claims,
+                expires: expires,
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
