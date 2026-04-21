@@ -4,7 +4,7 @@ using PcBuilder.Models;
 
 namespace PcBuilder.Data
 {
-    public class PcDbContext(DbContextOptions<PcDbContext> options) : IdentityDbContext(options)
+    public class PcDbContext(DbContextOptions<PcDbContext> options) : IdentityDbContext<User>(options)
     {
         public DbSet<User> user { get; set; }
         public DbSet<Build> build { get; set; }
