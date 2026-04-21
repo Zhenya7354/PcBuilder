@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.UseHttpsRedirection();
 
-AuthenticationService.MapRegisterUserEndpoint(app);
+
 
 
 
