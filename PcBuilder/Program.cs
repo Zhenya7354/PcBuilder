@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
+using PcBuilder.Endpoints;
+using PcBuilder.Extentions;
 using PcBuilder.Services;
 using Scalar.AspNetCore;
 
@@ -8,13 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-builder.Services.AddDbContext<PcDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddAuthorization();
+
+builder.AddAppServices();
+builder.AddIdentityAndJwt();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -22,11 +27,12 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseAuthorization();
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
-
+app.MapAuthEndpoints();
 
 
 app.Run();
