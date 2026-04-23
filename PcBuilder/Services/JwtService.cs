@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PcBuilder.Services
 {
-    public class AuthenticationService(IConfiguration configuration)
+    public class JwtService(IConfiguration configuration)
     {
         public string GenerateToken(User user, IList<string> roles)
         {
