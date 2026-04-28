@@ -18,7 +18,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<DbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<PcDbContext>();
     await db.Database.MigrateAsync();
     await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
 }
