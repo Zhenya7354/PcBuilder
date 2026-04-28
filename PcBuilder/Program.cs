@@ -18,6 +18,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<DbContext>();
+    await db.Database.MigrateAsync();
     await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
 }
 // Configure the HTTP request pipeline.
@@ -33,6 +35,7 @@ app.UseAuthorization();
 
 
 app.MapAuthEndpoints();
+app.MapComponentEndpoints();
 
 
 app.Run();
