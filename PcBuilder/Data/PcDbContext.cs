@@ -10,6 +10,16 @@ namespace PcBuilder.Data
         public DbSet<Build> build { get; set; }
         public DbSet<RegularUser> regular_user { get; set; }
         public DbSet<Admin> admin { get; set; }
+        public DbSet<Cpu> cpu { get; set; }
+        public DbSet<CpuCooler> cpu_cooler { get; set; }
+        public DbSet<PcCase> pc_case { get; set; }
+        public DbSet<Gpu> gpu { get; set; }
+        public DbSet<HardDrive> hard_drive { get; set; }
+        public DbSet<Motherboard> motherboard { get; set; }
+        public DbSet<Psu> psu { get; set; } 
+        public DbSet<Ram> memory { get; set; }
+        public DbSet<PcMonitor> monitor { get; set; }
+        public DbSet<Brand> brand { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,7 +29,7 @@ namespace PcBuilder.Data
                 .Metadata.SetIsTableExcludedFromMigrations(true); 
             modelBuilder.Entity<CpuCooler>().ToTable("cpu_cooler")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Case>().ToTable("pc_case")
+            modelBuilder.Entity<PcCase>().ToTable("pc_case")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
             modelBuilder.Entity<Motherboard>().ToTable("motherboard")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
@@ -131,7 +141,7 @@ namespace PcBuilder.Data
                 .WithMany()
                 .HasForeignKey(c => c.brandId);
 
-            modelBuilder.Entity<Case>()
+            modelBuilder.Entity<PcCase>()
                 .HasOne(c => c.brand)
                 .WithMany()
                 .HasForeignKey(c => c.brandId);
