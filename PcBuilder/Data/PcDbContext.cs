@@ -7,43 +7,43 @@ namespace PcBuilder.Data
     public class PcDbContext(DbContextOptions<PcDbContext> options) : IdentityDbContext<User>(options)
     {
         public DbSet<User> user { get; set; }
-        public DbSet<Build> build { get; set; }
-        public DbSet<RegularUser> regular_user { get; set; }
-        public DbSet<Admin> admin { get; set; }
-        public DbSet<Cpu> cpu { get; set; }
-        public DbSet<CpuCooler> cpu_cooler { get; set; }
-        public DbSet<PcCase> pc_case { get; set; }
-        public DbSet<Gpu> gpu { get; set; }
-        public DbSet<HardDrive> hard_drive { get; set; }
-        public DbSet<Motherboard> motherboard { get; set; }
-        public DbSet<Psu> psu { get; set; } 
-        public DbSet<Ram> memory { get; set; }
-        public DbSet<PcMonitor> monitor { get; set; }
-        public DbSet<Brand> brand { get; set; }
+        public DbSet<Build> Build { get; set; }
+        public DbSet<RegularUser> RegularUser { get; set; }
+        public DbSet<Admin> Admin { get; set; }
+        public DbSet<Cpu> Cpu { get; set; }
+        public DbSet<CpuCooler> CpuCooler { get; set; }
+        public DbSet<PcCase> PcCase { get; set; }
+        public DbSet<Gpu> Gpu { get; set; }
+        public DbSet<HardDrive> HardDrive { get; set; }
+        public DbSet<Motherboard> Motherboard { get; set; }
+        public DbSet<Psu> Psu { get; set; } 
+        public DbSet<Ram> Ram { get; set; }
+        public DbSet<PcMonitor> PcMonitor { get; set; }
+        public DbSet<Brand> Brand { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             // Configure relationships and constraints here if needed
-            modelBuilder.Entity<Cpu>().ToTable("cpu")
+            modelBuilder.Entity<Cpu>().ToTable("Cpu")
                 .Metadata.SetIsTableExcludedFromMigrations(true); 
-            modelBuilder.Entity<CpuCooler>().ToTable("cpu_cooler")
+            modelBuilder.Entity<CpuCooler>().ToTable("CpuCooler")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<PcCase>().ToTable("pc_case")
+            modelBuilder.Entity<PcCase>().ToTable("PcCase")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Motherboard>().ToTable("motherboard")
+            modelBuilder.Entity<Motherboard>().ToTable("Motherboard")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<HardDrive>().ToTable("hard_drive")
+            modelBuilder.Entity<HardDrive>().ToTable("HardDrive")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Gpu>().ToTable("gpu")
+            modelBuilder.Entity<Gpu>().ToTable("Gpu")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Psu>().ToTable("psu")
+            modelBuilder.Entity<Psu>().ToTable("Psu")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Ram>().ToTable("memory")
+            modelBuilder.Entity<Ram>().ToTable("Ram")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<PcMonitor>().ToTable("monitor")
+            modelBuilder.Entity<PcMonitor>().ToTable("PcMonitor")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
-            modelBuilder.Entity<Brand>().ToTable("brand")
+            modelBuilder.Entity<Brand>().ToTable("Brand")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
 
             modelBuilder.Entity<Build>()

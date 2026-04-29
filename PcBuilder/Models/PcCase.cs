@@ -1,6 +1,6 @@
 ﻿namespace PcBuilder.Models
 {
-    public class Case : Component
+    public class PcCase : Component
     {
         public string[] supportedFormFactors { get; set; } = [];
         public int maxGpuLengthMm { get; set; }

@@ -24,7 +24,7 @@
         public HardDrive? hardDrive { get; set; }
         public Motherboard? motherboard { get; set; }
         public Psu? psu { get; set; }
-        public Case? pcCase { get; set; }
+        public PcCase? pcCase { get; set; }
         public PcMonitor? monitor { get; set; }
     }
 }
