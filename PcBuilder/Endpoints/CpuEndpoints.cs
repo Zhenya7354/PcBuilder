@@ -1,0 +1,79 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using PcBuilder.Dtos;
+using PcBuilder.Services;
+
+namespace PcBuilder.Endpoints
+{
+    public static class CpuEndpoints
+    {
+        public static WebApplication MapCpuEndpoints(this WebApplication webApplication)
+        {
+            var group = webApplication.MapGroup("/cpu");
+
+            group.MapGet("/all", async ([FromServices] CpuService cpuService) =>
+            {
+                var cpus = await cpuService.GetAllCpuAsync();
+                if (cpus is null) return Results.NotFound("Cpus not found");
+                return Results.Ok(cpus);
+            });
+
+            group.MapGet("/{id}", async ([FromServices] CpuService cpuService, int id) =>
+            {
+                try
+                {
+                    var cpu = await cpuService.GetCpuByIdAsync(id);
+                    return Results.Ok(cpu);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.NotFound(ex.Message);
+                }
+            });
+            group.MapPost("/add", async ([FromServices] CpuService cpuService, [FromBody] CpuCreateDto cpuDto) =>
+            {
+                if(cpuDto is null) return Results.BadRequest("Cpu data is required");
+                try
+                {
+                    var cpu = await cpuService.AddCpuAsync(cpuDto);
+                    return Results.Ok(cpu);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(ex.Message);
+                }
+            });
+            group.MapPut("/update/{id}", async ([FromServices] CpuService cpuService, [FromBody] CpuUpdateDto cpuDto, int id) =>
+            {
+                var cpu = await cpuService.GetCpuByIdAsync(id);
+                if (cpu is null) return Results.NotFound("Cpu not found");
+                try
+                {
+                    var updatedCpu = await cpuService.UpdateCpuAsync(id, cpuDto);
+                    return Results.Ok(updatedCpu);
+
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(ex.Message);
+                }
+            });
+
+            group.MapDelete("/delete/{id}", async ([FromServices] CpuService cpuService, int id) =>
+            {
+                var cpu = await cpuService.GetCpuByIdAsync(id);
+                if (cpu is null) return Results.NotFound("Cpu not found");
+                try
+                {
+                    await cpuService.DeleteCpuAsync(id);
+                    return Results.Ok($"Cpu with id {id} deleted successfully");
+
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(ex.Message);
+                }
+            });
+                return webApplication;
+        }
+    }
+}

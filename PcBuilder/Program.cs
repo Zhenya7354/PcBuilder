@@ -35,7 +35,7 @@ app.UseAuthorization();
 
 
 app.MapAuthEndpoints();
-app.MapComponentEndpoints();
+app.MapCpuEndpoints();
 
 
 app.Run();
