@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PcBuilder.Data;
+using PcBuilder.Dtos;
 using PcBuilder.Models;
 using PcBuilder.Services;
 
@@ -23,7 +24,7 @@ namespace PcBuilder.Endpoints
 
                 await userManager.AddToRoleAsync(user, "User");
 
-                db.regular_user.Add(new RegularUser { userId = user.Id });
+                db.RegularUser.Add(new RegularUser { userId = user.Id });
                 await db.SaveChangesAsync();
 
                 return Results.Ok(new { message = "Registration successful" });
@@ -68,7 +69,7 @@ namespace PcBuilder.Endpoints
                 try
                 {
                     await userManager.AddToRoleAsync(user, "Admin");
-                    db.admin.Add(new Admin { userId = user.Id });
+                    db.Admin.Add(new Admin { userId = user.Id });
                     await db.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
