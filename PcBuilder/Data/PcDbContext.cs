@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PcBuilder.Enums;
 using PcBuilder.Models;
 
 namespace PcBuilder.Data
@@ -45,6 +46,8 @@ namespace PcBuilder.Data
                 .Metadata.SetIsTableExcludedFromMigrations(true);
             modelBuilder.Entity<Brand>().ToTable("Brand")
                 .Metadata.SetIsTableExcludedFromMigrations(true);
+
+            ConfigurePostgresEnumColumns(modelBuilder);
 
             modelBuilder.Entity<Build>()
                 .HasOne(b => b.user)
@@ -160,6 +163,54 @@ namespace PcBuilder.Data
 
 
         }
+        private static void ConfigurePostgresEnumColumns(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Cpu>()
+                .Property(c => c.socket)
+                .HasColumnType("socket_type");
+            modelBuilder.Entity<Cpu>()
+                .Property(c => c.memoryType)
+                .HasColumnType("memory_type");
 
+            modelBuilder.Entity<CpuCooler>()
+                .Property(c => c.coolerType)
+                .HasColumnType("cooler_type");
+
+            modelBuilder.Entity<Gpu>()
+                .Property(g => g.gpuInterface)
+                .HasColumnType("gpu_interface");
+
+            modelBuilder.Entity<HardDrive>()
+                .Property(h => h.driveInterface)
+                .HasColumnType("storage_interface");
+            modelBuilder.Entity<HardDrive>()
+                .Property(h => h.formFactor)
+                .HasColumnType("storage_form_factor");
+
+            modelBuilder.Entity<Motherboard>()
+                .Property(m => m.socket)
+                .HasColumnType("socket_type");
+            modelBuilder.Entity<Motherboard>()
+                .Property(m => m.formFactor)
+                .HasColumnType("form_factor");
+            modelBuilder.Entity<Motherboard>()
+                .Property(m => m.memoryType)
+                .HasColumnType("memory_type");
+
+            modelBuilder.Entity<PcMonitor>()
+                .Property(m => m.panelType)
+                .HasColumnType("panel_type");
+
+            modelBuilder.Entity<Psu>()
+                .Property(p => p.efficiency)
+                .HasColumnType("psu_rating");
+            modelBuilder.Entity<Psu>()
+                .Property(p => p.modularity)
+                .HasColumnType("psu_modular");
+
+            modelBuilder.Entity<Ram>()
+                .Property(r => r.memoryType)
+                .HasColumnType("memory_type");
+        }
     }
 }
