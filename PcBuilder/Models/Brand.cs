@@ -2,7 +2,7 @@
 {
     public class Brand
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public int id { get; set; }
+        public string name { get; set; } = string.Empty;
     }
 }
