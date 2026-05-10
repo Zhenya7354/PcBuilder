@@ -36,6 +36,15 @@ app.UseAuthorization();
 
 app.MapAuthEndpoints();
 app.MapCpuEndpoints();
+app.MapGpuEndpoints();
+app.MapCpuCoolerEndpoints();
+app.MapMotherboardEndpoints();
+app.MapRamEndpoints();
+app.MapPsuEndpoints();
+app.MapPcCaseEndpoints();
+app.MapPcMonitorEndpoints();
+app.MapHardDriveEndpoints();
+app.MapBrandEndpoints();
 
 
 app.Run();

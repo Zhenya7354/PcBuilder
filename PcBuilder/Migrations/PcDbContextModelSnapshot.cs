@@ -181,7 +181,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Admin");
+                    b.ToTable("Admin", (string)null);
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Brand", b =>
@@ -267,7 +267,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Build");
+                    b.ToTable("Build", (string)null);
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Cpu", b =>
@@ -1119,7 +1119,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("RegularUser");
+                    b.ToTable("RegularUser", (string)null);
                 });
 
             modelBuilder.Entity("PcBuilder.Models.User", b =>
