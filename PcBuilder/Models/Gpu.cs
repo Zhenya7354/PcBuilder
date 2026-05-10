@@ -5,7 +5,7 @@ namespace PcBuilder.Models
 {
     public class Gpu : Component
     {
-        [Column("grpu_chip")]
+        [Column("gpu_chip")]
         public string gpuChip { get; set; } = string.Empty;
         [Column("interface")]
         public GpuInterface gpuInterface { get; set; }
@@ -19,25 +19,25 @@ namespace PcBuilder.Models
         public int boostClockMhz { get; set; }
         [Column("memory_bus_bits")]
         public int memoryBusBits { get; set; }
-        [Column("memory_bandwidth_gb")]
+        [Column("memory_bandwidth_gbps")]
         public double? memoryBandwithGb { get; set; }
         [Column("tdp_watts")]
         public int tdpWatts { get; set; }
-        [Column("recommended_psu_wattage")]
+        [Column("recommended_psu_w")]
         public int recommendedPsuWattage { get; set; }
         [Column("power_connectors")]
         public string? powerConnectors { get; set; }
-        [Column("output_hdmi")]
+        [Column("outputs_hdmi")]
         public int outputHdmi { get; set; }
-        [Column("output_dp")]
+        [Column("outputs_dp")]
         public int outputDp { get; set; }
         [Column("card_length_mm")]
         public int? cardLengthMm { get; set; }
-        [Column("cord_slots")]
-        public double cordSlots { get; set; }
+        [Column("card_slots")]
+        public double cardSlots { get; set; }
         [Column("has_rgb")]
         public bool hasRgb { get; set; }
-        [Column("price")]
+        [Column("price_usd")]
         public decimal? price { get; set; }
 
     }
