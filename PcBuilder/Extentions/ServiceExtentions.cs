@@ -12,6 +12,15 @@ namespace PcBuilder.Extentions
         {
             builder.Services.AddScoped<JwtService>();
             builder.Services.AddScoped<CpuService>();
+            builder.Services.AddScoped<GpuService>();
+            builder.Services.AddScoped<CpuCoolerService>();
+            builder.Services.AddScoped<MotherboardService>();
+            builder.Services.AddScoped<RamService>();
+            builder.Services.AddScoped<PsuService>();
+            builder.Services.AddScoped<PcCaseService>();
+            builder.Services.AddScoped<PcMonitorService>();
+            builder.Services.AddScoped<HardDriveService>();
+            builder.Services.AddScoped<BrandService>();
             builder.Services.AddOpenApi();
             builder.Services.AddDbContext<PcDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
