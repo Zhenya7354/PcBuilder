@@ -25,10 +25,7 @@ namespace PcBuilder.Services
         public async Task<Cpu> AddCpuAsync(CpuCreateDto cpuDto)
         {
             var brandExists = await _context.Brand.AnyAsync(b => b.id == cpuDto.BrandId);
-            if (!brandExists)
-            {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
-            }
+            await EnsureBrandExistsAsync(cpuDto.BrandId);
             var cpu = new Cpu
             {
                 name = cpuDto.Name,
@@ -63,16 +60,11 @@ namespace PcBuilder.Services
         {
             var cpu = await _context.Cpu.FindAsync(id);
             if (cpu is null)
-                throw new ArgumentException("CPU with the specified ID does not exist.");
+                throw new ArgumentException($"CPU with Id {id} not found");
 
             if (cpuDto.BrandId.HasValue)
             {
-                var brandExists = await _context.Brand.AnyAsync(b => b.id == cpuDto.BrandId.Value);
-                if (!brandExists)
-                {
-                    throw new ArgumentException("Brand with the specified ID does not exist.");
-                }
-
+                await EnsureBrandExistsAsync(cpuDto.BrandId.Value);
                 cpu.brandId = cpuDto.BrandId.Value;
             }
 
@@ -110,6 +102,14 @@ namespace PcBuilder.Services
             }
             _context.Cpu.Remove(cpu);
             await _context.SaveChangesAsync();
+        }
+        private async Task EnsureBrandExistsAsync(int brandId)
+        {
+            var brandExists = await _context.Brand.AnyAsync(b => b.id == brandId);
+            if (!brandExists)
+            {
+                throw new ArgumentException("Brand with the specified ID does not exist.");
+            }
         }
     }
 }
