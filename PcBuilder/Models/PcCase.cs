@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using PcBuilder.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PcBuilder.Models
 {
     public class PcCase : Component
     {
         [Column("form_factors_supported")]
-        public List<string> SupportedFormFactors { get; set; } = [];
+        public List<FormFactor> SupportedFormFactors { get; set; } = [];
         [Column("max_gpu_length_mm")]
         public int MaxGpuLengthMm { get; set; }
         [Column("max_cpu_cooler_height_mm")]
@@ -21,7 +22,7 @@ namespace PcBuilder.Models
         [Column("front_usb_c")]
         public int FrontUsbC { get; set; }
         [Column("radiator_support_mm")]
-        public List<string> RadiatorSupportMm { get; set; } = [];
+        public List<int> RadiatorSupportMm { get; set; } = [];
         [Column("case_width_mm")]
         public int? CaseWidthMm { get; set; }
         [Column("case_height_mm")]
