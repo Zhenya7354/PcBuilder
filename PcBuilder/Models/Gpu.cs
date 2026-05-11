@@ -6,39 +6,39 @@ namespace PcBuilder.Models
     public class Gpu : Component
     {
         [Column("gpu_chip")]
-        public string gpuChip { get; set; } = string.Empty;
+        public string GpuChip { get; set; } = string.Empty;
         [Column("interface")]
-        public GpuInterface gpuInterface { get; set; }
+        public GpuInterface GpuInterface { get; set; }
         [Column("vram_gb")]
-        public int vram_gb { get; set; }
+        public int VramGb { get; set; }
         [Column("vram_type")]
-        public string vramType { get; set; } = string.Empty;
+        public string VramType { get; set; } = string.Empty;
         [Column("base_clock_mhz")]
-        public int? baseClockMhz { get; set; }
+        public int? BaseClockMhz { get; set; }
         [Column("boost_clock_mhz")]
-        public int boostClockMhz { get; set; }
+        public int BoostClockMhz { get; set; }
         [Column("memory_bus_bits")]
-        public int memoryBusBits { get; set; }
+        public int MemoryBusBits { get; set; }
         [Column("memory_bandwidth_gbps")]
-        public double? memoryBandwithGb { get; set; }
+        public double? MemoryBandwithGb { get; set; }
         [Column("tdp_watts")]
-        public int tdpWatts { get; set; }
+        public int TdpWatts { get; set; }
         [Column("recommended_psu_w")]
-        public int recommendedPsuWattage { get; set; }
+        public int RecommendedPsuWattage { get; set; }
         [Column("power_connectors")]
-        public string? powerConnectors { get; set; }
+        public string? PowerConnectors { get; set; }
         [Column("outputs_hdmi")]
-        public int outputHdmi { get; set; }
+        public int OutputHdmi { get; set; }
         [Column("outputs_dp")]
-        public int outputDp { get; set; }
+        public int OutputDp { get; set; }
         [Column("card_length_mm")]
-        public int? cardLengthMm { get; set; }
+        public int? CardLengthMm { get; set; }
         [Column("card_slots")]
-        public double cardSlots { get; set; }
+        public double CardSlots { get; set; }
         [Column("has_rgb")]
-        public bool hasRgb { get; set; }
+        public bool HasRgb { get; set; }
         [Column("price_usd")]
-        public decimal? price { get; set; }
+        public decimal? Price { get; set; }
 
     }
 }

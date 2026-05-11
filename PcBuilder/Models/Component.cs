@@ -7,14 +7,14 @@ namespace PcBuilder.Models
     {
         [JsonPropertyOrder(-3)]
         [Column("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
         [JsonPropertyOrder(-2)]
         [Column("brand_id")]
-        public int brandId { get; set; }
+        public int BrandId { get; set; }
         [JsonPropertyOrder(-1)]
         [Column("name")]
-        public string name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         //Navigation property for the brand relationship
-        public Brand? brand { get; set; }
+        public Brand? Brand { get; set; }
     }
 }

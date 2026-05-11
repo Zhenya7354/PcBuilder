@@ -2,11 +2,11 @@
 {
     public class RegularUser
     {
-        public int id { get; set; }
-        public string userId { get; set; } = string.Empty;
-        public string prefferedCurrency { get; set; } = string.Empty;
-        public string postalCode { get; set; } = string.Empty;
-        public int buildsCreated { get; set; }
-        public User? user { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string PrefferedCurrency { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public int BuildsCreated { get; set; }
+        public User? User { get; set; }
     }
 }

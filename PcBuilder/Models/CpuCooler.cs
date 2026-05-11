@@ -6,24 +6,24 @@ namespace PcBuilder.Models
     public class CpuCooler : Component
     {
         [Column("cooler_type")]
-        public CoolerType coolerType { get; set; }
+        public CoolerType CoolerType { get; set; }
         [Column("sockets_supported")]
-        public List<string> socketsSupported { get; set; } = [];
+        public List<string> SocketsSupported { get; set; } = [];
         [Column("radiator_size_mm")]
-        public int? radiatorSizeMm { get; set; }
+        public int? RadiatorSizeMm { get; set; }
         [Column("fan_count")]
-        public int fanCount { get; set; }
+        public int FanCount { get; set; }
         [Column("fan_size_mm")]
-        public int fanSizeMm { get; set; }
+        public int FanSizeMm { get; set; }
         [Column("max_tdp_watts")]
-        public int maxTdpWatts { get; set; }
+        public int MaxTdpWatts { get; set; }
         [Column("height_mm")]
-        public int? heightMm { get; set; }
+        public int? HeightMm { get; set; }
         [Column("has_rgb")]
-        public bool hasRgb { get; set; }
+        public bool HasRgb { get; set; }
         [Column("noise_db")]
-        public double? noiseLevelDb { get; set; }
+        public double? NoiseLevelDb { get; set; }
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
     }
 }

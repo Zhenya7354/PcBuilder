@@ -50,114 +50,114 @@ namespace PcBuilder.Data
             ConfigurePostgresEnumColumns(modelBuilder);
 
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.user)
+                .HasOne(b => b.User)
                 .WithMany()
-                .HasForeignKey(b => b.userId)
+                .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.cpu)
+                .HasOne(b => b.Cpu)
                 .WithMany()
-                .HasForeignKey(b => b.cpuId)
+                .HasForeignKey(b => b.CpuId)
                 .IsRequired(false);
 
             
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.gpu)
+                .HasOne(b => b.Gpu)
                 .WithMany()
-                .HasForeignKey(b => b.gpuId)
+                .HasForeignKey(b => b.GpuId)
                 .IsRequired(false);
 
             
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.motherboard)
+                .HasOne(b => b.Motherboard)
                 .WithMany()
-                .HasForeignKey(b => b.motherboardId)
+                .HasForeignKey(b => b.MotherboardId)
                 .IsRequired(false);
 
             
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.hardDrive)
+                .HasOne(b => b.HardDrive)
                 .WithMany()
-                .HasForeignKey(b => b.hardDriveId)
+                .HasForeignKey(b => b.HardDriveId)
                 .IsRequired(false);
 
             
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.cpuCooler)
+                .HasOne(b => b.CpuCooler)
                 .WithMany()
-                .HasForeignKey(b => b.cpuCoolerId)
+                .HasForeignKey(b => b.CpuCoolerId)
                 .IsRequired(false);
 
             
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.monitor)
+                .HasOne(b => b.Monitor)
                 .WithMany()
-                .HasForeignKey(b => b.monitorId)
+                .HasForeignKey(b => b.MonitorId)
                 .IsRequired(false);
 
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.ram)
+                .HasOne(b => b.Ram)
                 .WithMany()
-                .HasForeignKey(b => b.ramId)
+                .HasForeignKey(b => b.RamId)
                 .IsRequired(false);
 
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.psu)
+                .HasOne(b => b.Psu)
                 .WithMany()
-                .HasForeignKey(b => b.psuId)
+                .HasForeignKey(b => b.PsuId)
                 .IsRequired(false);
 
             modelBuilder.Entity<Build>()
-                .HasOne(b => b.pcCase)
+                .HasOne(b => b.PcCase)
                 .WithMany()
-                .HasForeignKey(b => b.caseId)
+                .HasForeignKey(b => b.CaseId)
                 .IsRequired(false);
 
             modelBuilder.Entity<Cpu>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<Gpu>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<Psu>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<PcMonitor>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<Ram>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<HardDrive>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<PcCase>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<Motherboard>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
             modelBuilder.Entity<CpuCooler>()
-                .HasOne(c => c.brand)
+                .HasOne(c => c.Brand)
                 .WithMany()
-                .HasForeignKey(c => c.brandId);
+                .HasForeignKey(c => c.BrandId);
 
 
 
@@ -166,50 +166,50 @@ namespace PcBuilder.Data
         private static void ConfigurePostgresEnumColumns(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cpu>()
-                .Property(c => c.socket)
+                .Property(c => c.Socket)
                 .HasColumnType("socket_type");
             modelBuilder.Entity<Cpu>()
-                .Property(c => c.memoryType)
+                .Property(c => c.MemoryType)
                 .HasColumnType("memory_type");
 
             modelBuilder.Entity<CpuCooler>()
-                .Property(c => c.coolerType)
+                .Property(c => c.CoolerType)
                 .HasColumnType("cooler_type");
 
             modelBuilder.Entity<Gpu>()
-                .Property(g => g.gpuInterface)
+                .Property(g => g.GpuInterface)
                 .HasColumnType("gpu_interface");
 
             modelBuilder.Entity<HardDrive>()
-                .Property(h => h.driveInterface)
+                .Property(h => h.DriveInterface)
                 .HasColumnType("storage_interface");
             modelBuilder.Entity<HardDrive>()
-                .Property(h => h.formFactor)
+                .Property(h => h.FormFactor)
                 .HasColumnType("storage_form_factor");
 
             modelBuilder.Entity<Motherboard>()
-                .Property(m => m.socket)
+                .Property(m => m.Socket)
                 .HasColumnType("socket_type");
             modelBuilder.Entity<Motherboard>()
-                .Property(m => m.formFactor)
+                .Property(m => m.FormFactor)
                 .HasColumnType("form_factor");
             modelBuilder.Entity<Motherboard>()
-                .Property(m => m.memoryType)
+                .Property(m => m.MemoryType)
                 .HasColumnType("memory_type");
 
             modelBuilder.Entity<PcMonitor>()
-                .Property(m => m.panelType)
+                .Property(m => m.PanelType)
                 .HasColumnType("panel_type");
 
             modelBuilder.Entity<Psu>()
-                .Property(p => p.efficiency)
+                .Property(p => p.Efficiency)
                 .HasColumnType("psu_rating");
             modelBuilder.Entity<Psu>()
-                .Property(p => p.modularity)
+                .Property(p => p.Modularity)
                 .HasColumnType("psu_modular");
 
             modelBuilder.Entity<Ram>()
-                .Property(r => r.memoryType)
+                .Property(r => r.MemoryType)
                 .HasColumnType("memory_type");
         }
     }

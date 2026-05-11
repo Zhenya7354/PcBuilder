@@ -6,50 +6,50 @@ namespace PcBuilder.Models
     public class PcMonitor : Component
     {
         [Column("screen_size_inch")]
-        public double screenSizeInch { get; set; }
+        public double ScreenSizeInch { get; set; }
         [Column("resolution_width")]
-        public int resolutionWidth { get; set; }
+        public int ResolutionWidth { get; set; }
         [Column("resolution_height")]
-        public int resolutionHeight { get; set; }
+        public int ResolutionHeight { get; set; }
         [Column("panel_type")]
-        public PanelType panelType { get; set; }
+        public PanelType PanelType { get; set; }
         [Column("refresh_rate_hz")]
-        public int refreshRateHz { get; set; }
+        public int RefreshRateHz { get; set; }
         [Column("response_time_ms")]
-        public double? responseTimeMs { get; set; }
+        public double? ResponseTimeMs { get; set; }
         [Column("hdr_support")]
-        public string? hdrSupport { get; set; }
+        public string? HdrSupport { get; set; }
         [Column("brightness_nits")]
-        public int? brightnessNits { get; set; }
+        public int? BrightnessNits { get; set; }
         [Column("contrast_ratio")]
-        public string? contrastRatio { get; set; }
+        public string? ContrastRatio { get; set; }
         [Column("color_gamut_p3")]
-        public int? colorGamutP3 { get; set; }
+        public int? ColorGamutP3 { get; set; }
         [Column("has_gsync")]
-        public bool hasGSync { get; set; }
+        public bool HasGSync { get; set; }
         [Column("has_freesync")]
-        public bool hasFreeSync { get; set; }
+        public bool HasFreeSync { get; set; }
         [Column("has_freesync_premium")]
-        public bool hasFreeSyncPremium { get; set; }
+        public bool HasFreeSyncPremium { get; set; }
         [Column("inputs_hdmi")]
-        public int hdmiPorts { get; set; }
+        public int HdmiPorts { get; set; }
         [Column("hdmi_version")]
-        public string? hdmiVersion { get; set; }
+        public string? HdmiVersion { get; set; }
         [Column("inputs_dp")]
-        public int dpPorts { get; set; }
+        public int DpPorts { get; set; }
         [Column("dp_version")]
-        public string? dpVersion { get; set; }
+        public string? DpVersion { get; set; }
         [Column("inputs_usb_c")]
-        public int usbCPorts { get; set; }
+        public int UsbCPorts { get; set; }
         [Column("has_usb_hub")]
-        public bool hasUsbHub { get; set; }
+        public bool HasUsbHub { get; set; }
         [Column("has_speakers")]
-        public bool hasSpeakers { get; set; }
+        public bool HasSpeakers { get; set; }
         [Column("height_adjustable")]
-        public bool heightAdjustable { get; set; }
+        public bool HeightAdjustable { get; set; }
         [Column("vesa_mount")]
-        public string vesaMount { get; set; } = string.Empty;
+        public string VesaMount { get; set; } = string.Empty;
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class Admin
     {
-        public int id { get; set; }
-        public string? userId { get; set; } = string.Empty;
-        public User? user { get; set; }
+        public int Id { get; set; }
+        public string? UserId { get; set; } = string.Empty;
+        public User? User { get; set; }
     }
 }

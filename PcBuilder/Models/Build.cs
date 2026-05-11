@@ -2,29 +2,29 @@
 {
     public class Build
     {
-        public int id { get; set; }
-        public string? name { get; set; }
-        public int? cpuId { get; set; }
-        public int? cpuCoolerId { get; set; }
-        public int? gpuId { get; set; }
-        public int? ramId { get; set; }
-        public int? hardDriveId { get; set; }
-        public int? motherboardId { get; set; }
-        public int? psuId { get; set; }
-        public int? caseId { get; set; }
-        public int? monitorId { get; set; }
-        public string? userId { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public int? CpuId { get; set; }
+        public int? CpuCoolerId { get; set; }
+        public int? GpuId { get; set; }
+        public int? RamId { get; set; }
+        public int? HardDriveId { get; set; }
+        public int? MotherboardId { get; set; }
+        public int? PsuId { get; set; }
+        public int? CaseId { get; set; }
+        public int? MonitorId { get; set; }
+        public string? UserId { get; set; } = string.Empty;
 
         // Navigation properties
-        public User? user { get; set; }
-        public Cpu? cpu { get; set; }
-        public CpuCooler? cpuCooler { get; set; }
-        public Gpu? gpu { get; set; }
-        public Ram? ram { get; set; }
-        public HardDrive? hardDrive { get; set; }
-        public Motherboard? motherboard { get; set; }
-        public Psu? psu { get; set; }
-        public PcCase? pcCase { get; set; }
-        public PcMonitor? monitor { get; set; }
+        public User? User { get; set; }
+        public Cpu? Cpu { get; set; }
+        public CpuCooler? CpuCooler { get; set; }
+        public Gpu? Gpu { get; set; }
+        public Ram? Ram { get; set; }
+        public HardDrive? HardDrive { get; set; }
+        public Motherboard? Motherboard { get; set; }
+        public Psu? Psu { get; set; }
+        public PcCase? PcCase { get; set; }
+        public PcMonitor? Monitor { get; set; }
     }
 }

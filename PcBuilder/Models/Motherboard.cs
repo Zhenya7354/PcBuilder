@@ -7,53 +7,53 @@ namespace PcBuilder.Models
     public class Motherboard : Component
     {
         [Column("socket")]
-        public PcSocketType socket { get; set; }
+        public PcSocketType Socket { get; set; }
         [Column("chipset")]
-        public string chipset { get; set; } = string.Empty;
+        public string Chipset { get; set; } = string.Empty;
         [Column("form_factor")]
-        public FormFactor formFactor { get; set; }
+        public FormFactor FormFactor { get; set; }
         [Column("memory_type")]
-        public MemoryType memoryType { get; set; }
+        public MemoryType MemoryType { get; set; }
         [Column("memory_slots")]
-        public int memorySlots { get; set; }
+        public int MemorySlots { get; set; }
         [Column("max_memory_gb")]
-        public int maxMemoryGb { get; set; }
+        public int MaxMemoryGb { get; set; }
         [Column("max_memory_speed_mhz")]
-        public int maxMemorySpeedMhz { get; set; }
+        public int MaxMemorySpeedMhz { get; set; }
         [Column("pcie_x16_slots")]
-        public int pcieX16Slots { get; set; }
+        public int PcieX16Slots { get; set; }
         [Column("pcie_x1_slots")]
-        public int pcieX1Slots { get; set; }
+        public int PcieX1Slots { get; set; }
         [Column("m2_slots")]
-        public int m2Slots { get; set; }
+        public int M2Slots { get; set; }
         [Column("sata_ports")]
-        public int sataPorts { get; set; }
+        public int SataPorts { get; set; }
         [Column("usb_headers_3_2")]
-        public int usbHeaders3Gen2 { get; set; }
+        public int UsbHeaders3Gen2 { get; set; }
         [Column("usb_headers_2_0")]
-        public int usbHeaders2Gen0 { get; set; }
+        public int UsbHeaders2Gen0 { get; set; }
         [Column("has_wifi")]
-        public bool hasWifi { get; set; }
+        public bool HasWifi { get; set; }
         [Column("has_bluetooth")]
-        public bool hasBluetooth { get; set; }
+        public bool HasBluetooth { get; set; }
         [Column("lan_speed_gbps")]
-        public int lanSpeedGbps { get; set; }
+        public int LanSpeedGbps { get; set; }
         [Column("fan_headers")]
-        public int fanHeaders { get; set; }
+        public int FanHeaders { get; set; }
         [Column("argb_headers")]
-        public int argbHeaders { get; set; }
+        public int ArgbHeaders { get; set; }
         [Column("vrm_phases")]
-        public int? vrmPhases { get; set; }
+        public int? VrmPhases { get; set; }
         [Column("rear_usb_a")]
-        public int rearUsbA { get; set; }
+        public int RearUsbA { get; set; }
         [Column("rear_usb_c")]
-        public int rearUsbC { get; set; }
+        public int RearUsbC { get; set; }
         [Column("rear_hdmi")]
-        public int rearHdmi { get; set; }
+        public int RearHdmi { get; set; }
         [Column("rear_display_port")]
-        public int rearDisplayPort { get; set; }
+        public int RearDisplayPort { get; set; }
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
 
 
     }

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
@@ -11,12 +11,12 @@ namespace PcBuilder.Services
 
         public async Task<List<Ram>> GetAllRamAsync()
         {
-            return await _context.Ram.Include(r => r.brand).ToListAsync();
+            return await _context.Ram.Include(r => r.Brand).ToListAsync();
         }
 
         public async Task<Ram> GetRamByIdAsync(int id)
         {
-            var ram = await _context.Ram.Include(r => r.brand).FirstOrDefaultAsync(r => r.id == id);
+            var ram = await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
             if (ram is null)
                 throw new ArgumentException($"RAM with ID {id} not found.");
 
@@ -29,18 +29,18 @@ namespace PcBuilder.Services
 
             var ram = new Ram
             {
-                name = dto.Name,
-                brandId = dto.BrandId,
-                memoryType = dto.MemoryType,
-                capacityGb = dto.CapacityGb,
-                kitCount = dto.KitCount,
-                speedMhz = dto.SpeedMhz,
-                casLatency = dto.CasLatency,
-                voltage = dto.Voltage,
-                hasRgb = dto.HasRgb,
-                hasEcc = dto.HasEcc,
-                heightMm = dto.HeightMm,
-                priceUsd = dto.PriceUsd
+                Name = dto.Name,
+                BrandId = dto.BrandId,
+                MemoryType = dto.MemoryType,
+                CapacityGb = dto.CapacityGb,
+                KitCount = dto.KitCount,
+                SpeedMhz = dto.SpeedMhz,
+                CasLatency = dto.CasLatency,
+                Voltage = dto.Voltage,
+                HasRgb = dto.HasRgb,
+                HasEcc = dto.HasEcc,
+                HeightMm = dto.HeightMm,
+                PriceUsd = dto.PriceUsd
             };
 
             _context.Ram.Add(ram);
@@ -57,20 +57,20 @@ namespace PcBuilder.Services
             if (dto.BrandId.HasValue)
             {
                 await EnsureBrandExistsAsync(dto.BrandId.Value);
-                ram.brandId = dto.BrandId.Value;
+                ram.BrandId = dto.BrandId.Value;
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) ram.name = dto.Name;
-            if (dto.MemoryType.HasValue) ram.memoryType = dto.MemoryType.Value;
-            if (dto.CapacityGb.HasValue) ram.capacityGb = dto.CapacityGb.Value;
-            if (dto.KitCount.HasValue) ram.kitCount = dto.KitCount.Value;
-            if (dto.SpeedMhz.HasValue) ram.speedMhz = dto.SpeedMhz.Value;
-            if (dto.CasLatency.HasValue) ram.casLatency = dto.CasLatency.Value;
-            if (dto.Voltage.HasValue) ram.voltage = dto.Voltage.Value;
-            if (dto.HasRgb.HasValue) ram.hasRgb = dto.HasRgb.Value;
-            if (dto.HasEcc.HasValue) ram.hasEcc = dto.HasEcc.Value;
-            if (dto.HeightMm.HasValue) ram.heightMm = dto.HeightMm.Value;
-            if (dto.PriceUsd.HasValue) ram.priceUsd = dto.PriceUsd.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Name)) ram.Name = dto.Name;
+            if (dto.MemoryType.HasValue) ram.MemoryType = dto.MemoryType.Value;
+            if (dto.CapacityGb.HasValue) ram.CapacityGb = dto.CapacityGb.Value;
+            if (dto.KitCount.HasValue) ram.KitCount = dto.KitCount.Value;
+            if (dto.SpeedMhz.HasValue) ram.SpeedMhz = dto.SpeedMhz.Value;
+            if (dto.CasLatency.HasValue) ram.CasLatency = dto.CasLatency.Value;
+            if (dto.Voltage.HasValue) ram.Voltage = dto.Voltage.Value;
+            if (dto.HasRgb.HasValue) ram.HasRgb = dto.HasRgb.Value;
+            if (dto.HasEcc.HasValue) ram.HasEcc = dto.HasEcc.Value;
+            if (dto.HeightMm.HasValue) ram.HeightMm = dto.HeightMm.Value;
+            if (dto.PriceUsd.HasValue) ram.PriceUsd = dto.PriceUsd.Value;
 
             await _context.SaveChangesAsync();
             return ram;
@@ -88,7 +88,7 @@ namespace PcBuilder.Services
 
         private async Task EnsureBrandExistsAsync(int brandId)
         {
-            var brandExists = await _context.Brand.AnyAsync(b => b.id == brandId);
+            var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
                 throw new ArgumentException("Brand with the specified ID does not exist.");

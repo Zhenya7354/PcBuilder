@@ -11,12 +11,12 @@ namespace PcBuilder.Services
 
         public async Task<List<Gpu>> GetGpusAsync()
         {
-            return await _context.Gpu.Include(g => g.brand).ToListAsync();
+            return await _context.Gpu.Include(g => g.Brand).ToListAsync();
         }
 
         public async Task<Gpu> GetGpuById(int id)
         {
-            var gpu = await _context.Gpu.Include(g => g.brand).FirstOrDefaultAsync(g => g.id == id);
+            var gpu = await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
             if (gpu == null)
             {
                 throw new ArgumentException($"GPU with ID {id} not found.");
@@ -26,32 +26,32 @@ namespace PcBuilder.Services
 
         public async Task<Gpu> AddGpuAsync(GpuCreateDto gpuDto)
         {
-            var brandExists = await _context.Brand.AnyAsync(b => b.id == gpuDto.BrandId);
+            var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId);
             if (!brandExists)
             {
                 throw new ArgumentException("Brand with the specified ID does not exist.");
             }
             var gpu = new Gpu
             {
-                name = gpuDto.Name,
-                brandId = gpuDto.BrandId,
-                gpuChip = gpuDto.gpuChip,
-                gpuInterface = gpuDto.gpuInterface,
-                vram_gb = gpuDto.vram_gb,
-                vramType = gpuDto.vramType,
-                baseClockMhz = gpuDto.baseClockMhz,
-                boostClockMhz = gpuDto.boostClockMhz,
-                memoryBusBits = gpuDto.memoryBusBits,
-                memoryBandwithGb = gpuDto.memoryBandwithGb,
-                tdpWatts = gpuDto.tdpWatts,
-                recommendedPsuWattage = gpuDto.recommendedPsuWattage,
-                powerConnectors = gpuDto.powerConnectors,
-                outputHdmi = gpuDto.outputHdmi,
-                outputDp = gpuDto.outputDp,
-                cardLengthMm = gpuDto.cardLengthMm,
-                cardSlots = gpuDto.cardSlots,
-                hasRgb = gpuDto.hasRgb,
-                price = gpuDto.price
+                Name = gpuDto.Name,
+                BrandId = gpuDto.BrandId,
+                GpuChip = gpuDto.gpuChip,
+                GpuInterface = gpuDto.gpuInterface,
+                VramGb = gpuDto.vram_gb,
+                VramType = gpuDto.vramType,
+                BaseClockMhz = gpuDto.baseClockMhz,
+                BoostClockMhz = gpuDto.boostClockMhz,
+                MemoryBusBits = gpuDto.memoryBusBits,
+                MemoryBandwithGb = gpuDto.memoryBandwithGb,
+                TdpWatts = gpuDto.tdpWatts,
+                RecommendedPsuWattage = gpuDto.recommendedPsuWattage,
+                PowerConnectors = gpuDto.powerConnectors,
+                OutputHdmi = gpuDto.outputHdmi,
+                OutputDp = gpuDto.outputDp,
+                CardLengthMm = gpuDto.cardLengthMm,
+                CardSlots = gpuDto.cardSlots,
+                HasRgb = gpuDto.hasRgb,
+                Price = gpuDto.price
             };
             _context.Gpu.Add(gpu);
             await _context.SaveChangesAsync();
@@ -66,31 +66,31 @@ namespace PcBuilder.Services
 
             if(gpuDto.BrandId.HasValue)
             {
-                var brandExists = await _context.Brand.AnyAsync(b => b.id == gpuDto.BrandId.Value);
+                var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId.Value);
                 if (!brandExists)
                 {
                     throw new ArgumentException("Brand with the specified ID does not exist.");
                 }
-                gpu.brandId = gpuDto.BrandId.Value;
+                gpu.BrandId = gpuDto.BrandId.Value;
             }
-            if (!string.IsNullOrWhiteSpace(gpuDto.Name)) gpu.name = gpuDto.Name;
-            if (!string.IsNullOrWhiteSpace(gpuDto.gpuChip)) gpu.gpuChip = gpuDto.gpuChip;
-            if (gpuDto.gpuInterface.HasValue) gpu.gpuInterface = gpuDto.gpuInterface.Value;
-            if (gpuDto.vram_gb.HasValue) gpu.vram_gb = gpuDto.vram_gb.Value;
-            if (!string.IsNullOrWhiteSpace(gpuDto.vramType)) gpu.vramType = gpuDto.vramType;
-            if (gpuDto.baseClockMhz.HasValue) gpu.baseClockMhz = gpuDto.baseClockMhz.Value;
-            if (gpuDto.boostClockMhz.HasValue) gpu.boostClockMhz = gpuDto.boostClockMhz.Value;
-            if (gpuDto.memoryBusBits.HasValue) gpu.memoryBusBits = gpuDto.memoryBusBits.Value;
-            if (gpuDto.memoryBandwithGb.HasValue) gpu.memoryBandwithGb = gpuDto.memoryBandwithGb.Value;
-            if (gpuDto.tdpWatts.HasValue) gpu.tdpWatts = gpuDto.tdpWatts.Value;
-            if (gpuDto.recommendedPsuWattage.HasValue) gpu.recommendedPsuWattage = gpuDto.recommendedPsuWattage.Value;
-            if (!string.IsNullOrWhiteSpace(gpuDto.powerConnectors)) gpu.powerConnectors = gpuDto.powerConnectors;
-            if (gpuDto.outputHdmi.HasValue) gpu.outputHdmi = gpuDto.outputHdmi.Value;
-            if (gpuDto.outputDp.HasValue) gpu.outputDp = gpuDto.outputDp.Value;
-            if (gpuDto.cardLengthMm.HasValue) gpu.cardLengthMm = gpuDto.cardLengthMm.Value;
-            if (gpuDto.cardSlots.HasValue) gpu.cardSlots = gpuDto.cardSlots.Value;
-            if (gpuDto.hasRgb.HasValue) gpu.hasRgb = gpuDto.hasRgb.Value;
-            if (gpuDto.price.HasValue) gpu.price = gpuDto.price.Value;
+            if (!string.IsNullOrWhiteSpace(gpuDto.Name)) gpu.Name = gpuDto.Name;
+            if (!string.IsNullOrWhiteSpace(gpuDto.gpuChip)) gpu.GpuChip = gpuDto.gpuChip;
+            if (gpuDto.gpuInterface.HasValue) gpu.GpuInterface = gpuDto.gpuInterface.Value;
+            if (gpuDto.vram_gb.HasValue) gpu.VramGb = gpuDto.vram_gb.Value;
+            if (!string.IsNullOrWhiteSpace(gpuDto.vramType)) gpu.VramType = gpuDto.vramType;
+            if (gpuDto.baseClockMhz.HasValue) gpu.BaseClockMhz = gpuDto.baseClockMhz.Value;
+            if (gpuDto.boostClockMhz.HasValue) gpu.BoostClockMhz = gpuDto.boostClockMhz.Value;
+            if (gpuDto.memoryBusBits.HasValue) gpu.MemoryBusBits = gpuDto.memoryBusBits.Value;
+            if (gpuDto.memoryBandwithGb.HasValue) gpu.MemoryBandwithGb = gpuDto.memoryBandwithGb.Value;
+            if (gpuDto.tdpWatts.HasValue) gpu.TdpWatts = gpuDto.tdpWatts.Value;
+            if (gpuDto.recommendedPsuWattage.HasValue) gpu.RecommendedPsuWattage = gpuDto.recommendedPsuWattage.Value;
+            if (!string.IsNullOrWhiteSpace(gpuDto.powerConnectors)) gpu.PowerConnectors = gpuDto.powerConnectors;
+            if (gpuDto.outputHdmi.HasValue) gpu.OutputHdmi = gpuDto.outputHdmi.Value;
+            if (gpuDto.outputDp.HasValue) gpu.OutputDp = gpuDto.outputDp.Value;
+            if (gpuDto.cardLengthMm.HasValue) gpu.CardLengthMm = gpuDto.cardLengthMm.Value;
+            if (gpuDto.cardSlots.HasValue) gpu.CardSlots = gpuDto.cardSlots.Value;
+            if (gpuDto.hasRgb.HasValue) gpu.HasRgb = gpuDto.hasRgb.Value;
+            if (gpuDto.price.HasValue) gpu.Price = gpuDto.price.Value;
 
             await _context.SaveChangesAsync();
             return gpu;

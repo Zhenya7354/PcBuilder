@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
@@ -11,12 +11,12 @@ namespace PcBuilder.Services
 
         public async Task<List<PcMonitor>> GetAllMonitorsAsync()
         {
-            return await _context.PcMonitor.Include(m => m.brand).ToListAsync();
+            return await _context.PcMonitor.Include(m => m.Brand).ToListAsync();
         }
 
         public async Task<PcMonitor> GetMonitorByIdAsync(int id)
         {
-            var monitor = await _context.PcMonitor.Include(m => m.brand).FirstOrDefaultAsync(m => m.id == id);
+            var monitor = await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
             if (monitor is null)
                 throw new ArgumentException($"Monitor with ID {id} not found.");
 
@@ -29,31 +29,31 @@ namespace PcBuilder.Services
 
             var monitor = new PcMonitor
             {
-                name = dto.Name,
-                brandId = dto.BrandId,
-                screenSizeInch = dto.ScreenSizeInch,
-                resolutionWidth = dto.ResolutionWidth,
-                resolutionHeight = dto.ResolutionHeight,
-                panelType = dto.PanelType,
-                refreshRateHz = dto.RefreshRateHz,
-                responseTimeMs = dto.ResponseTimeMs,
-                hdrSupport = dto.HdrSupport,
-                brightnessNits = dto.BrightnessNits,
-                contrastRatio = dto.ContrastRatio,
-                colorGamutP3 = dto.ColorGamutP3,
-                hasGSync = dto.HasGSync,
-                hasFreeSync = dto.HasFreeSync,
-                hasFreeSyncPremium = dto.HasFreeSyncPremium,
-                hdmiPorts = dto.HdmiPorts,
-                hdmiVersion = dto.HdmiVersion,
-                dpPorts = dto.DpPorts,
-                dpVersion = dto.DpVersion,
-                usbCPorts = dto.UsbCPorts,
-                hasUsbHub = dto.HasUsbHub,
-                hasSpeakers = dto.HasSpeakers,
-                heightAdjustable = dto.HeightAdjustable,
-                vesaMount = dto.VesaMount,
-                priceUsd = dto.PriceUsd
+                Name = dto.Name,
+                BrandId = dto.BrandId,
+                ScreenSizeInch = dto.ScreenSizeInch,
+                ResolutionWidth = dto.ResolutionWidth,
+                ResolutionHeight = dto.ResolutionHeight,
+                PanelType = dto.PanelType,
+                RefreshRateHz = dto.RefreshRateHz,
+                ResponseTimeMs = dto.ResponseTimeMs,
+                HdrSupport = dto.HdrSupport,
+                BrightnessNits = dto.BrightnessNits,
+                ContrastRatio = dto.ContrastRatio,
+                ColorGamutP3 = dto.ColorGamutP3,
+                HasGSync = dto.HasGSync,
+                HasFreeSync = dto.HasFreeSync,
+                HasFreeSyncPremium = dto.HasFreeSyncPremium,
+                HdmiPorts = dto.HdmiPorts,
+                HdmiVersion = dto.HdmiVersion,
+                DpPorts = dto.DpPorts,
+                DpVersion = dto.DpVersion,
+                UsbCPorts = dto.UsbCPorts,
+                HasUsbHub = dto.HasUsbHub,
+                HasSpeakers = dto.HasSpeakers,
+                HeightAdjustable = dto.HeightAdjustable,
+                VesaMount = dto.VesaMount,
+                PriceUsd = dto.PriceUsd
             };
 
             _context.PcMonitor.Add(monitor);
@@ -70,33 +70,33 @@ namespace PcBuilder.Services
             if (dto.BrandId.HasValue)
             {
                 await EnsureBrandExistsAsync(dto.BrandId.Value);
-                monitor.brandId = dto.BrandId.Value;
+                monitor.BrandId = dto.BrandId.Value;
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) monitor.name = dto.Name;
-            if (dto.ScreenSizeInch.HasValue) monitor.screenSizeInch = dto.ScreenSizeInch.Value;
-            if (dto.ResolutionWidth.HasValue) monitor.resolutionWidth = dto.ResolutionWidth.Value;
-            if (dto.ResolutionHeight.HasValue) monitor.resolutionHeight = dto.ResolutionHeight.Value;
-            if (dto.PanelType.HasValue) monitor.panelType = dto.PanelType.Value;
-            if (dto.RefreshRateHz.HasValue) monitor.refreshRateHz = dto.RefreshRateHz.Value;
-            if (dto.ResponseTimeMs.HasValue) monitor.responseTimeMs = dto.ResponseTimeMs.Value;
-            if (!string.IsNullOrWhiteSpace(dto.HdrSupport)) monitor.hdrSupport = dto.HdrSupport;
-            if (dto.BrightnessNits.HasValue) monitor.brightnessNits = dto.BrightnessNits.Value;
-            if (!string.IsNullOrWhiteSpace(dto.ContrastRatio)) monitor.contrastRatio = dto.ContrastRatio;
-            if (dto.ColorGamutP3.HasValue) monitor.colorGamutP3 = dto.ColorGamutP3.Value;
-            if (dto.HasGSync.HasValue) monitor.hasGSync = dto.HasGSync.Value;
-            if (dto.HasFreeSync.HasValue) monitor.hasFreeSync = dto.HasFreeSync.Value;
-            if (dto.HasFreeSyncPremium.HasValue) monitor.hasFreeSyncPremium = dto.HasFreeSyncPremium.Value;
-            if (dto.HdmiPorts.HasValue) monitor.hdmiPorts = dto.HdmiPorts.Value;
-            if (!string.IsNullOrWhiteSpace(dto.HdmiVersion)) monitor.hdmiVersion = dto.HdmiVersion;
-            if (dto.DpPorts.HasValue) monitor.dpPorts = dto.DpPorts.Value;
-            if (!string.IsNullOrWhiteSpace(dto.DpVersion)) monitor.dpVersion = dto.DpVersion;
-            if (dto.UsbCPorts.HasValue) monitor.usbCPorts = dto.UsbCPorts.Value;
-            if (dto.HasUsbHub.HasValue) monitor.hasUsbHub = dto.HasUsbHub.Value;
-            if (dto.HasSpeakers.HasValue) monitor.hasSpeakers = dto.HasSpeakers.Value;
-            if (dto.HeightAdjustable.HasValue) monitor.heightAdjustable = dto.HeightAdjustable.Value;
-            if (!string.IsNullOrWhiteSpace(dto.VesaMount)) monitor.vesaMount = dto.VesaMount;
-            if (dto.PriceUsd.HasValue) monitor.priceUsd = dto.PriceUsd.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Name)) monitor.Name = dto.Name;
+            if (dto.ScreenSizeInch.HasValue) monitor.ScreenSizeInch = dto.ScreenSizeInch.Value;
+            if (dto.ResolutionWidth.HasValue) monitor.ResolutionWidth = dto.ResolutionWidth.Value;
+            if (dto.ResolutionHeight.HasValue) monitor.ResolutionHeight = dto.ResolutionHeight.Value;
+            if (dto.PanelType.HasValue) monitor.PanelType = dto.PanelType.Value;
+            if (dto.RefreshRateHz.HasValue) monitor.RefreshRateHz = dto.RefreshRateHz.Value;
+            if (dto.ResponseTimeMs.HasValue) monitor.ResponseTimeMs = dto.ResponseTimeMs.Value;
+            if (!string.IsNullOrWhiteSpace(dto.HdrSupport)) monitor.HdrSupport = dto.HdrSupport;
+            if (dto.BrightnessNits.HasValue) monitor.BrightnessNits = dto.BrightnessNits.Value;
+            if (!string.IsNullOrWhiteSpace(dto.ContrastRatio)) monitor.ContrastRatio = dto.ContrastRatio;
+            if (dto.ColorGamutP3.HasValue) monitor.ColorGamutP3 = dto.ColorGamutP3.Value;
+            if (dto.HasGSync.HasValue) monitor.HasGSync = dto.HasGSync.Value;
+            if (dto.HasFreeSync.HasValue) monitor.HasFreeSync = dto.HasFreeSync.Value;
+            if (dto.HasFreeSyncPremium.HasValue) monitor.HasFreeSyncPremium = dto.HasFreeSyncPremium.Value;
+            if (dto.HdmiPorts.HasValue) monitor.HdmiPorts = dto.HdmiPorts.Value;
+            if (!string.IsNullOrWhiteSpace(dto.HdmiVersion)) monitor.HdmiVersion = dto.HdmiVersion;
+            if (dto.DpPorts.HasValue) monitor.DpPorts = dto.DpPorts.Value;
+            if (!string.IsNullOrWhiteSpace(dto.DpVersion)) monitor.DpVersion = dto.DpVersion;
+            if (dto.UsbCPorts.HasValue) monitor.UsbCPorts = dto.UsbCPorts.Value;
+            if (dto.HasUsbHub.HasValue) monitor.HasUsbHub = dto.HasUsbHub.Value;
+            if (dto.HasSpeakers.HasValue) monitor.HasSpeakers = dto.HasSpeakers.Value;
+            if (dto.HeightAdjustable.HasValue) monitor.HeightAdjustable = dto.HeightAdjustable.Value;
+            if (!string.IsNullOrWhiteSpace(dto.VesaMount)) monitor.VesaMount = dto.VesaMount;
+            if (dto.PriceUsd.HasValue) monitor.PriceUsd = dto.PriceUsd.Value;
 
             await _context.SaveChangesAsync();
             return monitor;
@@ -114,7 +114,7 @@ namespace PcBuilder.Services
 
         private async Task EnsureBrandExistsAsync(int brandId)
         {
-            var brandExists = await _context.Brand.AnyAsync(b => b.id == brandId);
+            var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
                 throw new ArgumentException("Brand with the specified ID does not exist.");

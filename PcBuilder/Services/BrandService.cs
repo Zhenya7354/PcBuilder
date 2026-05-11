@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
@@ -16,7 +16,7 @@ namespace PcBuilder.Services
 
         public async Task<Brand> GetBrandByIdAsync(int id)
         {
-            var brand = await _context.Brand.FirstOrDefaultAsync(b => b.id == id);
+            var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
             if (brand is null)
             {
                 throw new ArgumentException($"Brand with ID {id} not found.");
@@ -27,7 +27,7 @@ namespace PcBuilder.Services
 
         public async Task<Brand> AddBrandAsync(BrandCreateDto dto)
         {
-            var brand = new Brand { name = dto.Name };
+            var brand = new Brand { Name = dto.Name };
             _context.Brand.Add(brand);
             await _context.SaveChangesAsync();
             return brand;
@@ -39,7 +39,7 @@ namespace PcBuilder.Services
             if (brand is null)
                 throw new ArgumentException($"Brand with ID {id} not found.");
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) brand.name = dto.Name;
+            if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
 
             await _context.SaveChangesAsync();
             return brand;

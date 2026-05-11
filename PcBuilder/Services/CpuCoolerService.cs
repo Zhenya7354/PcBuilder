@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
@@ -11,12 +11,12 @@ namespace PcBuilder.Services
 
         public async Task<List<CpuCooler>> GetAllCpuCoolersAsync()
         {
-            return await _context.CpuCooler.Include(c => c.brand).ToListAsync();
+            return await _context.CpuCooler.Include(c => c.Brand).ToListAsync();
         }
 
         public async Task<CpuCooler> GetCpuCoolerByIdAsync(int id)
         {
-            var cpuCooler = await _context.CpuCooler.Include(c => c.brand).FirstOrDefaultAsync(c => c.id == id);
+            var cpuCooler = await _context.CpuCooler.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
             if (cpuCooler is null)
             {
                 throw new ArgumentException($"CPU cooler with ID {id} not found.");
@@ -31,18 +31,18 @@ namespace PcBuilder.Services
 
             var cpuCooler = new CpuCooler
             {
-                name = dto.Name,
-                brandId = dto.BrandId,
-                coolerType = dto.CoolerType,
-                socketsSupported = dto.SocketsSupported,
-                radiatorSizeMm = dto.RadiatorSizeMm,
-                fanCount = dto.FanCount,
-                fanSizeMm = dto.FanSizeMm,
-                maxTdpWatts = dto.MaxTdpWatts,
-                heightMm = dto.HeightMm,
-                hasRgb = dto.HasRgb,
-                noiseLevelDb = dto.NoiseLevelDb,
-                priceUsd = dto.PriceUsd
+                Name = dto.Name,
+                BrandId = dto.BrandId,
+                CoolerType = dto.CoolerType,
+                SocketsSupported = dto.SocketsSupported,
+                RadiatorSizeMm = dto.RadiatorSizeMm,
+                FanCount = dto.FanCount,
+                FanSizeMm = dto.FanSizeMm,
+                MaxTdpWatts = dto.MaxTdpWatts,
+                HeightMm = dto.HeightMm,
+                HasRgb = dto.HasRgb,
+                NoiseLevelDb = dto.NoiseLevelDb,
+                PriceUsd = dto.PriceUsd
             };
 
             _context.CpuCooler.Add(cpuCooler);
@@ -59,20 +59,20 @@ namespace PcBuilder.Services
             if (dto.BrandId.HasValue)
             {
                 await EnsureBrandExistsAsync(dto.BrandId.Value);
-                cpuCooler.brandId = dto.BrandId.Value;
+                cpuCooler.BrandId = dto.BrandId.Value;
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) cpuCooler.name = dto.Name;
-            if (dto.CoolerType.HasValue) cpuCooler.coolerType = dto.CoolerType.Value;
-            if (dto.SocketsSupported is { Count: > 0 }) cpuCooler.socketsSupported = dto.SocketsSupported;
-            if (dto.RadiatorSizeMm.HasValue) cpuCooler.radiatorSizeMm = dto.RadiatorSizeMm.Value;
-            if (dto.FanCount.HasValue) cpuCooler.fanCount = dto.FanCount.Value;
-            if (dto.FanSizeMm.HasValue) cpuCooler.fanSizeMm = dto.FanSizeMm.Value;
-            if (dto.MaxTdpWatts.HasValue) cpuCooler.maxTdpWatts = dto.MaxTdpWatts.Value;
-            if (dto.HeightMm.HasValue) cpuCooler.heightMm = dto.HeightMm.Value;
-            if (dto.HasRgb.HasValue) cpuCooler.hasRgb = dto.HasRgb.Value;
-            if (dto.NoiseLevelDb.HasValue) cpuCooler.noiseLevelDb = dto.NoiseLevelDb.Value;
-            if (dto.PriceUsd.HasValue) cpuCooler.priceUsd = dto.PriceUsd.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Name)) cpuCooler.Name = dto.Name;
+            if (dto.CoolerType.HasValue) cpuCooler.CoolerType = dto.CoolerType.Value;
+            if (dto.SocketsSupported is { Count: > 0 }) cpuCooler.SocketsSupported = dto.SocketsSupported;
+            if (dto.RadiatorSizeMm.HasValue) cpuCooler.RadiatorSizeMm = dto.RadiatorSizeMm.Value;
+            if (dto.FanCount.HasValue) cpuCooler.FanCount = dto.FanCount.Value;
+            if (dto.FanSizeMm.HasValue) cpuCooler.FanSizeMm = dto.FanSizeMm.Value;
+            if (dto.MaxTdpWatts.HasValue) cpuCooler.MaxTdpWatts = dto.MaxTdpWatts.Value;
+            if (dto.HeightMm.HasValue) cpuCooler.HeightMm = dto.HeightMm.Value;
+            if (dto.HasRgb.HasValue) cpuCooler.HasRgb = dto.HasRgb.Value;
+            if (dto.NoiseLevelDb.HasValue) cpuCooler.NoiseLevelDb = dto.NoiseLevelDb.Value;
+            if (dto.PriceUsd.HasValue) cpuCooler.PriceUsd = dto.PriceUsd.Value;
 
             await _context.SaveChangesAsync();
             return cpuCooler;
@@ -90,7 +90,7 @@ namespace PcBuilder.Services
 
         private async Task EnsureBrandExistsAsync(int brandId)
         {
-            var brandExists = await _context.Brand.AnyAsync(b => b.id == brandId);
+            var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
                 throw new ArgumentException("Brand with the specified ID does not exist.");

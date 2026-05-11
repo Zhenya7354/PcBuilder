@@ -168,35 +168,35 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Admin", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("userId")
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Admin", (string)null);
+                    b.ToTable("Admin");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Brand", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Brand", null, t =>
                         {
@@ -206,171 +206,171 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Build", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("caseId")
+                    b.Property<int?>("CaseId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("cpuCoolerId")
+                    b.Property<int?>("CpuCoolerId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("cpuId")
+                    b.Property<int?>("CpuId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("gpuId")
+                    b.Property<int?>("GpuId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("hardDriveId")
+                    b.Property<int?>("HardDriveId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("monitorId")
+                    b.Property<int?>("MonitorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("motherboardId")
+                    b.Property<int?>("MotherboardId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("psuId")
+                    b.Property<int?>("PsuId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ramId")
+                    b.Property<int?>("RamId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("userId")
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("caseId");
+                    b.HasIndex("CaseId");
 
-                    b.HasIndex("cpuCoolerId");
+                    b.HasIndex("CpuCoolerId");
 
-                    b.HasIndex("cpuId");
+                    b.HasIndex("CpuId");
 
-                    b.HasIndex("gpuId");
+                    b.HasIndex("GpuId");
 
-                    b.HasIndex("hardDriveId");
+                    b.HasIndex("HardDriveId");
 
-                    b.HasIndex("monitorId");
+                    b.HasIndex("MonitorId");
 
-                    b.HasIndex("motherboardId");
+                    b.HasIndex("MotherboardId");
 
-                    b.HasIndex("psuId");
+                    b.HasIndex("PsuId");
 
-                    b.HasIndex("ramId");
+                    b.HasIndex("RamId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Build", (string)null);
+                    b.ToTable("Build");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Cpu", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("baseClockGhz")
+                    b.Property<double>("BaseClockGhz")
                         .HasColumnType("double precision")
                         .HasColumnName("base_clock_ghz");
 
-                    b.Property<double?>("boostClockGhz")
+                    b.Property<double?>("BoostClockGhz")
                         .HasColumnType("double precision")
                         .HasColumnName("boost_clock_ghz");
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.PrimitiveCollection<List<string>>("chipsetsSupported")
+                    b.PrimitiveCollection<List<string>>("ChipsetsSupported")
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("chipsets_supported");
 
-                    b.Property<int>("cores")
+                    b.Property<int>("Cores")
                         .HasColumnType("integer")
                         .HasColumnName("cores");
 
-                    b.Property<string>("igpuModel")
+                    b.Property<string>("IgpuModel")
                         .HasColumnType("text")
                         .HasColumnName("igpu_model");
 
-                    b.Property<bool>("includesCooler")
+                    b.Property<bool>("IncludesCooler")
                         .HasColumnType("boolean")
                         .HasColumnName("includes_cooler");
 
-                    b.Property<bool>("integratedGraphics")
+                    b.Property<bool>("IntegratedGraphics")
                         .HasColumnType("boolean")
                         .HasColumnName("integrated_graphics");
 
-                    b.Property<int?>("l3CacheMb")
+                    b.Property<int?>("L3CacheMb")
                         .HasColumnType("integer")
                         .HasColumnName("l3_cache_mb");
 
-                    b.Property<int?>("launchedYear")
+                    b.Property<int?>("LaunchedYear")
                         .HasColumnType("integer")
                         .HasColumnName("launched_year");
 
-                    b.Property<int>("maxMemoryGb")
+                    b.Property<int>("MaxMemoryGb")
                         .HasColumnType("integer")
                         .HasColumnName("max_memory_gb");
 
-                    b.Property<int>("maxMemorySpeedMhz")
+                    b.Property<int>("MaxMemorySpeedMhz")
                         .HasColumnType("integer")
                         .HasColumnName("max_memory_speed_mhz");
 
-                    b.Property<int>("memoryChannels")
+                    b.Property<int>("MemoryChannels")
                         .HasColumnType("integer")
                         .HasColumnName("memory_channels");
 
-                    b.Property<MemoryType>("memoryType")
+                    b.Property<MemoryType>("MemoryType")
                         .HasColumnType("memory_type")
                         .HasColumnName("memory_type");
 
-                    b.Property<string>("modelNumber")
+                    b.Property<string>("ModelNumber")
                         .HasColumnType("text")
                         .HasColumnName("model_number");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int?>("pcieLanes")
+                    b.Property<int?>("PcieLanes")
                         .HasColumnType("integer")
                         .HasColumnName("pcie_lanes");
 
-                    b.Property<string>("pcieVersion")
+                    b.Property<string>("PcieVersion")
                         .HasColumnType("text")
                         .HasColumnName("pcie_version");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<PcSocketType>("socket")
+                    b.Property<PcSocketType>("Socket")
                         .HasColumnType("socket_type")
                         .HasColumnName("socket");
 
-                    b.Property<int>("tdpWatts")
+                    b.Property<int>("TdpWatts")
                         .HasColumnType("integer")
                         .HasColumnName("tdp_watts");
 
-                    b.Property<int>("threads")
+                    b.Property<int>("Threads")
                         .HasColumnType("integer");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Cpu", null, t =>
                         {
@@ -380,66 +380,66 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.CpuCooler", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<CoolerType>("coolerType")
+                    b.Property<CoolerType>("CoolerType")
                         .HasColumnType("cooler_type")
                         .HasColumnName("cooler_type");
 
-                    b.Property<int>("fanCount")
+                    b.Property<int>("FanCount")
                         .HasColumnType("integer")
                         .HasColumnName("fan_count");
 
-                    b.Property<int>("fanSizeMm")
+                    b.Property<int>("FanSizeMm")
                         .HasColumnType("integer")
                         .HasColumnName("fan_size_mm");
 
-                    b.Property<bool>("hasRgb")
+                    b.Property<bool>("HasRgb")
                         .HasColumnType("boolean")
                         .HasColumnName("has_rgb");
 
-                    b.Property<int?>("heightMm")
+                    b.Property<int?>("HeightMm")
                         .HasColumnType("integer")
                         .HasColumnName("height_mm");
 
-                    b.Property<int>("maxTdpWatts")
+                    b.Property<int>("MaxTdpWatts")
                         .HasColumnType("integer")
                         .HasColumnName("max_tdp_watts");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<double?>("noiseLevelDb")
+                    b.Property<double?>("NoiseLevelDb")
                         .HasColumnType("double precision")
                         .HasColumnName("noise_db");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int?>("radiatorSizeMm")
+                    b.Property<int?>("RadiatorSizeMm")
                         .HasColumnType("integer")
                         .HasColumnName("radiator_size_mm");
 
-                    b.PrimitiveCollection<string[]>("socketsSupported")
+                    b.PrimitiveCollection<List<string>>("SocketsSupported")
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("sockets_supported");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("CpuCooler", null, t =>
                         {
@@ -449,95 +449,95 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Gpu", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("baseClockMhz")
+                    b.Property<int?>("BaseClockMhz")
                         .HasColumnType("integer")
                         .HasColumnName("base_clock_mhz");
 
-                    b.Property<int>("boostClockMhz")
+                    b.Property<int>("BoostClockMhz")
                         .HasColumnType("integer")
                         .HasColumnName("boost_clock_mhz");
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<int?>("cardLengthMm")
+                    b.Property<int?>("CardLengthMm")
                         .HasColumnType("integer")
                         .HasColumnName("card_length_mm");
 
-                    b.Property<double>("cordSlots")
+                    b.Property<double>("CardSlots")
                         .HasColumnType("double precision")
-                        .HasColumnName("cord_slots");
+                        .HasColumnName("card_slots");
 
-                    b.Property<string>("gpuChip")
+                    b.Property<string>("GpuChip")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("grpu_chip");
+                        .HasColumnName("gpu_chip");
 
-                    b.Property<GpuInterface>("gpuInterface")
+                    b.Property<GpuInterface>("GpuInterface")
                         .HasColumnType("gpu_interface")
                         .HasColumnName("interface");
 
-                    b.Property<bool>("hasRgb")
+                    b.Property<bool>("HasRgb")
                         .HasColumnType("boolean")
                         .HasColumnName("has_rgb");
 
-                    b.Property<double?>("memoryBandwithGb")
+                    b.Property<double?>("MemoryBandwithGb")
                         .HasColumnType("double precision")
-                        .HasColumnName("memory_bandwidth_gb");
+                        .HasColumnName("memory_bandwidth_gbps");
 
-                    b.Property<int>("memoryBusBits")
+                    b.Property<int>("MemoryBusBits")
                         .HasColumnType("integer")
                         .HasColumnName("memory_bus_bits");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("outputDp")
+                    b.Property<int>("OutputDp")
                         .HasColumnType("integer")
-                        .HasColumnName("output_dp");
+                        .HasColumnName("outputs_dp");
 
-                    b.Property<int>("outputHdmi")
+                    b.Property<int>("OutputHdmi")
                         .HasColumnType("integer")
-                        .HasColumnName("output_hdmi");
+                        .HasColumnName("outputs_hdmi");
 
-                    b.Property<string>("powerConnectors")
+                    b.Property<string>("PowerConnectors")
                         .HasColumnType("text")
                         .HasColumnName("power_connectors");
 
-                    b.Property<decimal?>("price")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric")
-                        .HasColumnName("price");
+                        .HasColumnName("price_usd");
 
-                    b.Property<int>("recommendedPsuWattage")
+                    b.Property<int>("RecommendedPsuWattage")
                         .HasColumnType("integer")
-                        .HasColumnName("recommended_psu_wattage");
+                        .HasColumnName("recommended_psu_w");
 
-                    b.Property<int>("tdpWatts")
+                    b.Property<int>("TdpWatts")
                         .HasColumnType("integer")
                         .HasColumnName("tdp_watts");
 
-                    b.Property<string>("vramType")
+                    b.Property<int>("VramGb")
+                        .HasColumnType("integer")
+                        .HasColumnName("vram_gb");
+
+                    b.Property<string>("VramType")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("vram_type");
 
-                    b.Property<int>("vram_gb")
-                        .HasColumnType("integer")
-                        .HasColumnName("vram_gb");
+                    b.HasKey("Id");
 
-                    b.HasKey("id");
-
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Gpu", null, t =>
                         {
@@ -547,67 +547,67 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.HardDrive", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<int?>("cacheMb")
+                    b.Property<int?>("CacheMb")
                         .HasColumnType("integer")
                         .HasColumnName("cache_mb");
 
-                    b.Property<int>("capacityGb")
+                    b.Property<int>("CapacityGb")
                         .HasColumnType("integer")
                         .HasColumnName("capacity_gb");
 
-                    b.Property<StorageInterface>("driveInterface")
+                    b.Property<StorageInterface>("DriveInterface")
                         .HasColumnType("storage_interface")
                         .HasColumnName("interface");
 
-                    b.Property<StorageFormFactor>("formFactor")
+                    b.Property<StorageFormFactor>("FormFactor")
                         .HasColumnType("storage_form_factor")
                         .HasColumnName("form_factor");
 
-                    b.Property<bool>("isSsd")
+                    b.Property<bool>("IsSsd")
                         .HasColumnType("boolean")
                         .HasColumnName("is_ssd");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<double?>("powerWatts")
+                    b.Property<double?>("PowerWatts")
                         .HasColumnType("double precision")
                         .HasColumnName("power_watts");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int?>("readSpeedMbS")
+                    b.Property<int?>("ReadSpeedMbS")
                         .HasColumnType("integer")
                         .HasColumnName("read_speed_mbps");
 
-                    b.Property<int?>("rpm")
+                    b.Property<int?>("Rpm")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("tbw")
+                    b.Property<int?>("Tbw")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("writeSpeedMbs")
+                    b.Property<int?>("WriteSpeedMbs")
                         .HasColumnType("integer")
                         .HasColumnName("write_speed_mbps");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("HardDrive", null, t =>
                         {
@@ -617,122 +617,122 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Motherboard", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("argbHeaders")
+                    b.Property<int>("ArgbHeaders")
                         .HasColumnType("integer")
                         .HasColumnName("argb_headers");
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<string>("chipset")
+                    b.Property<string>("Chipset")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("chipset");
 
-                    b.Property<int>("fanHeaders")
+                    b.Property<int>("FanHeaders")
                         .HasColumnType("integer")
                         .HasColumnName("fan_headers");
 
-                    b.Property<FormFactor>("formFactor")
+                    b.Property<FormFactor>("FormFactor")
                         .HasColumnType("form_factor")
                         .HasColumnName("form_factor");
 
-                    b.Property<bool>("hasBluetooth")
+                    b.Property<bool>("HasBluetooth")
                         .HasColumnType("boolean")
                         .HasColumnName("has_bluetooth");
 
-                    b.Property<bool>("hasWifi")
+                    b.Property<bool>("HasWifi")
                         .HasColumnType("boolean")
                         .HasColumnName("has_wifi");
 
-                    b.Property<int>("lanSpeedGbps")
+                    b.Property<int>("LanSpeedGbps")
                         .HasColumnType("integer")
                         .HasColumnName("lan_speed_gbps");
 
-                    b.Property<int>("m2Slots")
+                    b.Property<int>("M2Slots")
                         .HasColumnType("integer")
                         .HasColumnName("m2_slots");
 
-                    b.Property<int>("maxMemoryGb")
+                    b.Property<int>("MaxMemoryGb")
                         .HasColumnType("integer")
                         .HasColumnName("max_memory_gb");
 
-                    b.Property<int>("maxMemorySpeedMhz")
+                    b.Property<int>("MaxMemorySpeedMhz")
                         .HasColumnType("integer")
                         .HasColumnName("max_memory_speed_mhz");
 
-                    b.Property<int>("memorySlots")
+                    b.Property<int>("MemorySlots")
                         .HasColumnType("integer")
                         .HasColumnName("memory_slots");
 
-                    b.Property<MemoryType>("memoryType")
+                    b.Property<MemoryType>("MemoryType")
                         .HasColumnType("memory_type")
                         .HasColumnName("memory_type");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("pcieX16Slots")
+                    b.Property<int>("PcieX16Slots")
                         .HasColumnType("integer")
                         .HasColumnName("pcie_x16_slots");
 
-                    b.Property<int>("pcieX1Slots")
+                    b.Property<int>("PcieX1Slots")
                         .HasColumnType("integer")
                         .HasColumnName("pcie_x1_slots");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int>("rearDisplayPort")
+                    b.Property<int>("RearDisplayPort")
                         .HasColumnType("integer")
                         .HasColumnName("rear_display_port");
 
-                    b.Property<int>("rearHdmi")
+                    b.Property<int>("RearHdmi")
                         .HasColumnType("integer")
                         .HasColumnName("rear_hdmi");
 
-                    b.Property<int>("rearUsbA")
+                    b.Property<int>("RearUsbA")
                         .HasColumnType("integer")
                         .HasColumnName("rear_usb_a");
 
-                    b.Property<int>("rearUsbC")
+                    b.Property<int>("RearUsbC")
                         .HasColumnType("integer")
                         .HasColumnName("rear_usb_c");
 
-                    b.Property<int>("sataPorts")
+                    b.Property<int>("SataPorts")
                         .HasColumnType("integer")
                         .HasColumnName("sata_ports");
 
-                    b.Property<PcSocketType>("socket")
+                    b.Property<PcSocketType>("Socket")
                         .HasColumnType("socket_type")
                         .HasColumnName("socket");
 
-                    b.Property<int>("usbHeaders2Gen0")
+                    b.Property<int>("UsbHeaders2Gen0")
                         .HasColumnType("integer")
                         .HasColumnName("usb_headers_2_0");
 
-                    b.Property<int>("usbHeaders3Gen2")
+                    b.Property<int>("UsbHeaders3Gen2")
                         .HasColumnType("integer")
                         .HasColumnName("usb_headers_3_2");
 
-                    b.Property<int?>("vrmPhases")
+                    b.Property<int?>("VrmPhases")
                         .HasColumnType("integer")
                         .HasColumnName("vrm_phases");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Motherboard", null, t =>
                         {
@@ -742,87 +742,87 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.PcCase", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<int?>("caseDepthMm")
+                    b.Property<int?>("CaseDepthMm")
                         .HasColumnType("integer")
                         .HasColumnName("case_depth_mm");
 
-                    b.Property<int?>("caseHeightMm")
+                    b.Property<int?>("CaseHeightMm")
                         .HasColumnType("integer")
                         .HasColumnName("case_height_mm");
 
-                    b.Property<int?>("caseWidthMm")
+                    b.Property<int?>("CaseWidthMm")
                         .HasColumnType("integer")
                         .HasColumnName("case_width_mm");
 
-                    b.Property<int>("driveBays25Inch")
+                    b.Property<int>("DriveBays25Inch")
                         .HasColumnType("integer")
                         .HasColumnName("drive_bays_25");
 
-                    b.Property<int>("driveBays35Inch")
+                    b.Property<int>("DriveBays35Inch")
                         .HasColumnType("integer")
                         .HasColumnName("drive_bays_35");
 
-                    b.Property<int>("frontUsbA")
+                    b.Property<int>("FrontUsbA")
                         .HasColumnType("integer")
                         .HasColumnName("front_usb_a");
 
-                    b.Property<int>("frontUsbC")
+                    b.Property<int>("FrontUsbC")
                         .HasColumnType("integer")
                         .HasColumnName("front_usb_c");
 
-                    b.Property<bool>("hasGlassPanel")
+                    b.Property<bool>("HasGlassPanel")
                         .HasColumnType("boolean")
                         .HasColumnName("has_glass_panel");
 
-                    b.Property<int>("includedFans")
+                    b.Property<int>("IncludedFans")
                         .HasColumnType("integer")
                         .HasColumnName("included_fans");
 
-                    b.Property<int>("maxCpuCoolerHeightMm")
+                    b.Property<int>("MaxCpuCoolerHeightMm")
                         .HasColumnType("integer")
                         .HasColumnName("max_cpu_cooler_height_mm");
 
-                    b.Property<int>("maxGpuLengthMm")
+                    b.Property<int>("MaxGpuLengthMm")
                         .HasColumnType("integer")
                         .HasColumnName("max_gpu_length_mm");
 
-                    b.Property<int>("maxPsuLengthMm")
+                    b.Property<int>("MaxPsuLengthMm")
                         .HasColumnType("integer")
                         .HasColumnName("max_psu_length_mm");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.PrimitiveCollection<List<string>>("radiatorSupportMm")
+                    b.PrimitiveCollection<List<string>>("RadiatorSupportMm")
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("radiator_support_mm");
 
-                    b.PrimitiveCollection<List<string>>("supportedFormFactors")
+                    b.PrimitiveCollection<List<string>>("SupportedFormFactors")
                         .IsRequired()
                         .HasColumnType("text[]")
                         .HasColumnName("form_factors_supported");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("PcCase", null, t =>
                         {
@@ -832,118 +832,118 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.PcMonitor", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<int?>("brightnessNits")
+                    b.Property<int?>("BrightnessNits")
                         .HasColumnType("integer")
                         .HasColumnName("brightness_nits");
 
-                    b.Property<int?>("colorGamutP3")
+                    b.Property<int?>("ColorGamutP3")
                         .HasColumnType("integer")
                         .HasColumnName("color_gamut_p3");
 
-                    b.Property<string>("contrastRatio")
+                    b.Property<string>("ContrastRatio")
                         .HasColumnType("text")
                         .HasColumnName("contrast_ratio");
 
-                    b.Property<int>("dpPorts")
+                    b.Property<int>("DpPorts")
                         .HasColumnType("integer")
                         .HasColumnName("inputs_dp");
 
-                    b.Property<string>("dpVersion")
+                    b.Property<string>("DpVersion")
                         .HasColumnType("text")
                         .HasColumnName("dp_version");
 
-                    b.Property<bool>("hasFreeSync")
+                    b.Property<bool>("HasFreeSync")
                         .HasColumnType("boolean")
                         .HasColumnName("has_freesync");
 
-                    b.Property<bool>("hasFreeSyncPremium")
+                    b.Property<bool>("HasFreeSyncPremium")
                         .HasColumnType("boolean")
                         .HasColumnName("has_freesync_premium");
 
-                    b.Property<bool>("hasGSync")
+                    b.Property<bool>("HasGSync")
                         .HasColumnType("boolean")
                         .HasColumnName("has_gsync");
 
-                    b.Property<bool>("hasSpeakers")
+                    b.Property<bool>("HasSpeakers")
                         .HasColumnType("boolean")
                         .HasColumnName("has_speakers");
 
-                    b.Property<bool>("hasUsbHub")
+                    b.Property<bool>("HasUsbHub")
                         .HasColumnType("boolean")
                         .HasColumnName("has_usb_hub");
 
-                    b.Property<int>("hdmiPorts")
+                    b.Property<int>("HdmiPorts")
                         .HasColumnType("integer")
                         .HasColumnName("inputs_hdmi");
 
-                    b.Property<string>("hdmiVersion")
+                    b.Property<string>("HdmiVersion")
                         .HasColumnType("text")
                         .HasColumnName("hdmi_version");
 
-                    b.Property<string>("hdrSupport")
+                    b.Property<string>("HdrSupport")
                         .HasColumnType("text")
                         .HasColumnName("hdr_support");
 
-                    b.Property<bool>("heightAdjustable")
+                    b.Property<bool>("HeightAdjustable")
                         .HasColumnType("boolean")
                         .HasColumnName("height_adjustable");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<PanelType>("panelType")
+                    b.Property<PanelType>("PanelType")
                         .HasColumnType("panel_type")
                         .HasColumnName("panel_type");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int>("refreshRateHz")
+                    b.Property<int>("RefreshRateHz")
                         .HasColumnType("integer")
                         .HasColumnName("refresh_rate_hz");
 
-                    b.Property<int>("resolutionHeight")
+                    b.Property<int>("ResolutionHeight")
                         .HasColumnType("integer")
                         .HasColumnName("resolution_height");
 
-                    b.Property<int>("resolutionWidth")
+                    b.Property<int>("ResolutionWidth")
                         .HasColumnType("integer")
                         .HasColumnName("resolution_width");
 
-                    b.Property<double?>("responseTimeMs")
+                    b.Property<double?>("ResponseTimeMs")
                         .HasColumnType("double precision")
                         .HasColumnName("response_time_ms");
 
-                    b.Property<double>("screenSizeInch")
+                    b.Property<double>("ScreenSizeInch")
                         .HasColumnType("double precision")
                         .HasColumnName("screen_size_inch");
 
-                    b.Property<int>("usbCPorts")
+                    b.Property<int>("UsbCPorts")
                         .HasColumnType("integer")
                         .HasColumnName("inputs_usb_c");
 
-                    b.Property<string>("vesaMount")
+                    b.Property<string>("VesaMount")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("vesa_mount");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("PcMonitor", null, t =>
                         {
@@ -953,70 +953,70 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Psu", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("atxVersion")
+                    b.Property<string>("AtxVersion")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("atx_version");
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<PsuRating>("efficiency")
+                    b.Property<PsuRating>("Efficiency")
                         .HasColumnType("psu_rating")
                         .HasColumnName("efficiency");
 
-                    b.Property<int>("epsConnectors")
+                    b.Property<int>("EpsConnectors")
                         .HasColumnType("integer")
                         .HasColumnName("eps_connectors");
 
-                    b.Property<int>("fanSizeMm")
+                    b.Property<int>("FanSizeMm")
                         .HasColumnType("integer")
                         .HasColumnName("fan_size_mm");
 
-                    b.Property<bool>("has16Pin")
+                    b.Property<bool>("Has16Pin")
                         .HasColumnType("boolean")
                         .HasColumnName("has_16pin");
 
-                    b.Property<int?>("lengthMm")
+                    b.Property<int?>("LengthMm")
                         .HasColumnType("integer")
                         .HasColumnName("length_mm");
 
-                    b.Property<PsuModular>("modularity")
+                    b.Property<PsuModular>("Modularity")
                         .HasColumnType("psu_modular")
                         .HasColumnName("modularity");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("pcie8PinConnectors")
+                    b.Property<int>("Pcie8PinConnectors")
                         .HasColumnType("integer")
                         .HasColumnName("pcie_8pin");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int>("sataConnectors")
+                    b.Property<int>("SataConnectors")
                         .HasColumnType("integer")
                         .HasColumnName("sata_connectors");
 
-                    b.Property<int>("wattage")
+                    b.Property<int>("Wattage")
                         .HasColumnType("integer")
                         .HasColumnName("wattage");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Psu", null, t =>
                         {
@@ -1026,65 +1026,65 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Ram", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("brandId")
+                    b.Property<int>("BrandId")
                         .HasColumnType("integer")
                         .HasColumnName("brand_id");
 
-                    b.Property<int>("capacityGb")
+                    b.Property<int>("CapacityGb")
                         .HasColumnType("integer")
                         .HasColumnName("capacity_gb");
 
-                    b.Property<int?>("casLatency")
+                    b.Property<int?>("CasLatency")
                         .HasColumnType("integer")
                         .HasColumnName("cas_latency");
 
-                    b.Property<bool>("hasEcc")
+                    b.Property<bool>("HasEcc")
                         .HasColumnType("boolean")
                         .HasColumnName("has_ecc");
 
-                    b.Property<bool>("hasRgb")
+                    b.Property<bool>("HasRgb")
                         .HasColumnType("boolean")
                         .HasColumnName("has_rgb");
 
-                    b.Property<int?>("heightMm")
+                    b.Property<int?>("HeightMm")
                         .HasColumnType("integer")
                         .HasColumnName("height_mm");
 
-                    b.Property<int>("kitCount")
+                    b.Property<int>("KitCount")
                         .HasColumnType("integer")
                         .HasColumnName("kit_count");
 
-                    b.Property<MemoryType>("memoryType")
+                    b.Property<MemoryType>("MemoryType")
                         .HasColumnType("memory_type")
                         .HasColumnName("memory_type");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<decimal?>("priceUsd")
+                    b.Property<decimal?>("PriceUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int>("speedMhz")
+                    b.Property<int>("SpeedMhz")
                         .HasColumnType("integer")
                         .HasColumnName("speed_mhz");
 
-                    b.Property<double?>("voltage")
+                    b.Property<double?>("Voltage")
                         .HasColumnType("double precision")
                         .HasColumnName("voltage");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("brandId");
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Ram", null, t =>
                         {
@@ -1094,32 +1094,32 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.RegularUser", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("buildsCreated")
+                    b.Property<int>("BuildsCreated")
                         .HasColumnType("integer");
 
-                    b.Property<string>("postalCode")
+                    b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("prefferedCurrency")
+                    b.Property<string>("PrefferedCurrency")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("userId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("RegularUser", (string)null);
+                    b.ToTable("RegularUser");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.User", b =>
@@ -1239,185 +1239,185 @@ namespace PcBuilder.Migrations
 
             modelBuilder.Entity("PcBuilder.Models.Admin", b =>
                 {
-                    b.HasOne("PcBuilder.Models.User", "user")
+                    b.HasOne("PcBuilder.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("userId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Build", b =>
                 {
-                    b.HasOne("PcBuilder.Models.PcCase", "pcCase")
+                    b.HasOne("PcBuilder.Models.PcCase", "PcCase")
                         .WithMany()
-                        .HasForeignKey("caseId");
+                        .HasForeignKey("CaseId");
 
-                    b.HasOne("PcBuilder.Models.CpuCooler", "cpuCooler")
+                    b.HasOne("PcBuilder.Models.CpuCooler", "CpuCooler")
                         .WithMany()
-                        .HasForeignKey("cpuCoolerId");
+                        .HasForeignKey("CpuCoolerId");
 
-                    b.HasOne("PcBuilder.Models.Cpu", "cpu")
+                    b.HasOne("PcBuilder.Models.Cpu", "Cpu")
                         .WithMany()
-                        .HasForeignKey("cpuId");
+                        .HasForeignKey("CpuId");
 
-                    b.HasOne("PcBuilder.Models.Gpu", "gpu")
+                    b.HasOne("PcBuilder.Models.Gpu", "Gpu")
                         .WithMany()
-                        .HasForeignKey("gpuId");
+                        .HasForeignKey("GpuId");
 
-                    b.HasOne("PcBuilder.Models.HardDrive", "hardDrive")
+                    b.HasOne("PcBuilder.Models.HardDrive", "HardDrive")
                         .WithMany()
-                        .HasForeignKey("hardDriveId");
+                        .HasForeignKey("HardDriveId");
 
-                    b.HasOne("PcBuilder.Models.PcMonitor", "monitor")
+                    b.HasOne("PcBuilder.Models.PcMonitor", "Monitor")
                         .WithMany()
-                        .HasForeignKey("monitorId");
+                        .HasForeignKey("MonitorId");
 
-                    b.HasOne("PcBuilder.Models.Motherboard", "motherboard")
+                    b.HasOne("PcBuilder.Models.Motherboard", "Motherboard")
                         .WithMany()
-                        .HasForeignKey("motherboardId");
+                        .HasForeignKey("MotherboardId");
 
-                    b.HasOne("PcBuilder.Models.Psu", "psu")
+                    b.HasOne("PcBuilder.Models.Psu", "Psu")
                         .WithMany()
-                        .HasForeignKey("psuId");
+                        .HasForeignKey("PsuId");
 
-                    b.HasOne("PcBuilder.Models.Ram", "ram")
+                    b.HasOne("PcBuilder.Models.Ram", "Ram")
                         .WithMany()
-                        .HasForeignKey("ramId");
+                        .HasForeignKey("RamId");
 
-                    b.HasOne("PcBuilder.Models.User", "user")
+                    b.HasOne("PcBuilder.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("cpu");
+                    b.Navigation("Cpu");
 
-                    b.Navigation("cpuCooler");
+                    b.Navigation("CpuCooler");
 
-                    b.Navigation("gpu");
+                    b.Navigation("Gpu");
 
-                    b.Navigation("hardDrive");
+                    b.Navigation("HardDrive");
 
-                    b.Navigation("monitor");
+                    b.Navigation("Monitor");
 
-                    b.Navigation("motherboard");
+                    b.Navigation("Motherboard");
 
-                    b.Navigation("pcCase");
+                    b.Navigation("PcCase");
 
-                    b.Navigation("psu");
+                    b.Navigation("Psu");
 
-                    b.Navigation("ram");
+                    b.Navigation("Ram");
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Cpu", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.CpuCooler", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Gpu", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.HardDrive", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Motherboard", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.PcCase", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.PcMonitor", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Psu", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.Ram", b =>
                 {
-                    b.HasOne("PcBuilder.Models.Brand", "brand")
+                    b.HasOne("PcBuilder.Models.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("brandId")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("brand");
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Models.RegularUser", b =>
                 {
-                    b.HasOne("PcBuilder.Models.User", "user")
+                    b.HasOne("PcBuilder.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

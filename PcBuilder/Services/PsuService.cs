@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
@@ -11,12 +11,12 @@ namespace PcBuilder.Services
 
         public async Task<List<Psu>> GetAllPsusAsync()
         {
-            return await _context.Psu.Include(p => p.brand).ToListAsync();
+            return await _context.Psu.Include(p => p.Brand).ToListAsync();
         }
 
         public async Task<Psu> GetPsuByIdAsync(int id)
         {
-            var psu = await _context.Psu.Include(p => p.brand).FirstOrDefaultAsync(p => p.id == id);
+            var psu = await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
             if (psu is null)
                 throw new ArgumentException($"PSU with ID {id} not found.");
 
@@ -29,19 +29,19 @@ namespace PcBuilder.Services
 
             var psu = new Psu
             {
-                name = dto.Name,
-                brandId = dto.BrandId,
-                wattage = dto.Wattage,
-                efficiency = dto.Efficiency,
-                modularity = dto.Modularity,
-                atxVersion = dto.AtxVersion,
-                has16Pin = dto.Has16Pin,
-                epsConnectors = dto.EpsConnectors,
-                sataConnectors = dto.SataConnectors,
-                pcie8PinConnectors = dto.Pcie8PinConnectors,
-                fanSizeMm = dto.FanSizeMm,
-                lengthMm = dto.LengthMm,
-                priceUsd = dto.PriceUsd
+                Name = dto.Name,
+                BrandId = dto.BrandId,
+                Wattage = dto.Wattage,
+                Efficiency = dto.Efficiency,
+                Modularity = dto.Modularity,
+                AtxVersion = dto.AtxVersion,
+                Has16Pin = dto.Has16Pin,
+                EpsConnectors = dto.EpsConnectors,
+                SataConnectors = dto.SataConnectors,
+                Pcie8PinConnectors = dto.Pcie8PinConnectors,
+                FanSizeMm = dto.FanSizeMm,
+                LengthMm = dto.LengthMm,
+                PriceUsd = dto.PriceUsd
             };
 
             _context.Psu.Add(psu);
@@ -58,21 +58,21 @@ namespace PcBuilder.Services
             if (dto.BrandId.HasValue)
             {
                 await EnsureBrandExistsAsync(dto.BrandId.Value);
-                psu.brandId = dto.BrandId.Value;
+                psu.BrandId = dto.BrandId.Value;
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) psu.name = dto.Name;
-            if (dto.Wattage.HasValue) psu.wattage = dto.Wattage.Value;
-            if (dto.Efficiency.HasValue) psu.efficiency = dto.Efficiency.Value;
-            if (dto.Modularity.HasValue) psu.modularity = dto.Modularity.Value;
-            if (!string.IsNullOrWhiteSpace(dto.AtxVersion)) psu.atxVersion = dto.AtxVersion;
-            if (dto.Has16Pin.HasValue) psu.has16Pin = dto.Has16Pin.Value;
-            if (dto.EpsConnectors.HasValue) psu.epsConnectors = dto.EpsConnectors.Value;
-            if (dto.SataConnectors.HasValue) psu.sataConnectors = dto.SataConnectors.Value;
-            if (dto.Pcie8PinConnectors.HasValue) psu.pcie8PinConnectors = dto.Pcie8PinConnectors.Value;
-            if (dto.FanSizeMm.HasValue) psu.fanSizeMm = dto.FanSizeMm.Value;
-            if (dto.LengthMm.HasValue) psu.lengthMm = dto.LengthMm.Value;
-            if (dto.PriceUsd.HasValue) psu.priceUsd = dto.PriceUsd.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Name)) psu.Name = dto.Name;
+            if (dto.Wattage.HasValue) psu.Wattage = dto.Wattage.Value;
+            if (dto.Efficiency.HasValue) psu.Efficiency = dto.Efficiency.Value;
+            if (dto.Modularity.HasValue) psu.Modularity = dto.Modularity.Value;
+            if (!string.IsNullOrWhiteSpace(dto.AtxVersion)) psu.AtxVersion = dto.AtxVersion;
+            if (dto.Has16Pin.HasValue) psu.Has16Pin = dto.Has16Pin.Value;
+            if (dto.EpsConnectors.HasValue) psu.EpsConnectors = dto.EpsConnectors.Value;
+            if (dto.SataConnectors.HasValue) psu.SataConnectors = dto.SataConnectors.Value;
+            if (dto.Pcie8PinConnectors.HasValue) psu.Pcie8PinConnectors = dto.Pcie8PinConnectors.Value;
+            if (dto.FanSizeMm.HasValue) psu.FanSizeMm = dto.FanSizeMm.Value;
+            if (dto.LengthMm.HasValue) psu.LengthMm = dto.LengthMm.Value;
+            if (dto.PriceUsd.HasValue) psu.PriceUsd = dto.PriceUsd.Value;
 
             await _context.SaveChangesAsync();
             return psu;
@@ -90,7 +90,7 @@ namespace PcBuilder.Services
 
         private async Task EnsureBrandExistsAsync(int brandId)
         {
-            var brandExists = await _context.Brand.AnyAsync(b => b.id == brandId);
+            var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
                 throw new ArgumentException("Brand with the specified ID does not exist.");

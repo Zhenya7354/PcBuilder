@@ -5,35 +5,35 @@ namespace PcBuilder.Models
     public class PcCase : Component
     {
         [Column("form_factors_supported")]
-        public List<string> supportedFormFactors { get; set; } = [];
+        public List<string> SupportedFormFactors { get; set; } = [];
         [Column("max_gpu_length_mm")]
-        public int maxGpuLengthMm { get; set; }
+        public int MaxGpuLengthMm { get; set; }
         [Column("max_cpu_cooler_height_mm")]
-        public int maxCpuCoolerHeightMm { get; set; }
+        public int MaxCpuCoolerHeightMm { get; set; }
         [Column("max_psu_length_mm")]
-        public int maxPsuLengthMm { get; set; }
+        public int MaxPsuLengthMm { get; set; }
         [Column("drive_bays_35")]
-        public int driveBays35Inch { get; set; }
+        public int DriveBays35Inch { get; set; }
         [Column("drive_bays_25")]
-        public int driveBays25Inch { get; set; }
+        public int DriveBays25Inch { get; set; }
         [Column("front_usb_a")]
-        public int frontUsbA { get; set; }
+        public int FrontUsbA { get; set; }
         [Column("front_usb_c")]
-        public int frontUsbC { get; set; }
+        public int FrontUsbC { get; set; }
         [Column("radiator_support_mm")]
-        public List<string> radiatorSupportMm { get; set; } = [];
+        public List<string> RadiatorSupportMm { get; set; } = [];
         [Column("case_width_mm")]
-        public int? caseWidthMm { get; set; }
+        public int? CaseWidthMm { get; set; }
         [Column("case_height_mm")]
-        public int? caseHeightMm { get; set; }
+        public int? CaseHeightMm { get; set; }
         [Column("case_depth_mm")]
-        public int? caseDepthMm { get; set; }
+        public int? CaseDepthMm { get; set; }
         [Column("has_glass_panel")]
-        public bool hasGlassPanel { get; set; }
+        public bool HasGlassPanel { get; set; }
         [Column("included_fans")]
-        public int includedFans { get; set; }
+        public int IncludedFans { get; set; }
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
         
     }
 }

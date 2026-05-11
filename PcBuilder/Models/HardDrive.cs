@@ -6,24 +6,24 @@ namespace PcBuilder.Models
     public class HardDrive : Component
     {
         [Column("capacity_gb")]
-        public int capacityGb { get; set; }
+        public int CapacityGb { get; set; }
         [Column("interface")]
-        public StorageInterface driveInterface { get; set; }
+        public StorageInterface DriveInterface { get; set; }
         [Column("form_factor")]
-        public StorageFormFactor formFactor { get; set; }
+        public StorageFormFactor FormFactor { get; set; }
         [Column("is_ssd")]
-        public bool isSsd { get; set; }
+        public bool IsSsd { get; set; }
         [Column("read_speed_mbps")]
-        public int? readSpeedMbS { get; set; }
+        public int? ReadSpeedMbS { get; set; }
         [Column("write_speed_mbps")]
-        public int? writeSpeedMbs { get; set; }
-        public int? rpm { get; set; }
+        public int? WriteSpeedMbs { get; set; }
+        public int? Rpm { get; set; }
         [Column("cache_mb")]
-        public int? cacheMb { get; set; }
-        public int? tbw { get; set; }
+        public int? CacheMb { get; set; }
+        public int? Tbw { get; set; }
         [Column("power_watts")]
-        public double? powerWatts { get; set; }
+        public double? PowerWatts { get; set; }
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
     }
 }

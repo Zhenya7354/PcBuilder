@@ -24,7 +24,7 @@ namespace PcBuilder.Endpoints
 
                 await userManager.AddToRoleAsync(user, "User");
 
-                db.RegularUser.Add(new RegularUser { userId = user.Id });
+                db.RegularUser.Add(new RegularUser { UserId = user.Id });
                 await db.SaveChangesAsync();
 
                 return Results.Ok(new { message = "Registration successful" });
@@ -69,7 +69,7 @@ namespace PcBuilder.Endpoints
                 try
                 {
                     await userManager.AddToRoleAsync(user, "Admin");
-                    db.Admin.Add(new Admin { userId = user.Id });
+                    db.Admin.Add(new Admin { UserId = user.Id });
                     await db.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }

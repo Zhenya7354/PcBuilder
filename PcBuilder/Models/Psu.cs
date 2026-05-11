@@ -6,27 +6,27 @@ namespace PcBuilder.Models
     public class Psu : Component
     {
         [Column("wattage")]
-        public int wattage { get; set; }
+        public int Wattage { get; set; }
         [Column("efficiency")]
-        public PsuRating efficiency { get; set; }
+        public PsuRating Efficiency { get; set; }
         [Column("modularity")]
-        public PsuModular modularity { get; set; }
+        public PsuModular Modularity { get; set; }
         [Column("atx_version")]
-        public string atxVersion { get; set; } = string.Empty;
+        public string AtxVersion { get; set; } = string.Empty;
         [Column("has_16pin")]
-        public bool has16Pin { get; set; }
+        public bool Has16Pin { get; set; }
         [Column("eps_connectors")]
-        public int epsConnectors { get; set; }
+        public int EpsConnectors { get; set; }
         [Column("sata_connectors")]
-        public int sataConnectors { get; set; }
+        public int SataConnectors { get; set; }
         [Column("pcie_8pin")]
-        public int pcie8PinConnectors { get; set; }
+        public int Pcie8PinConnectors { get; set; }
         [Column("fan_size_mm")]
-        public int fanSizeMm { get; set; }
+        public int FanSizeMm { get; set; }
         [Column("length_mm")]
-        public int? lengthMm { get; set; }
+        public int? LengthMm { get; set; }
         [Column("price_usd")]
-        public decimal? priceUsd { get; set; }
+        public decimal? PriceUsd { get; set; }
 
 
     }
