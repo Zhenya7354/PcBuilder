@@ -17,7 +17,7 @@ namespace PcBuilder.Services
 
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, user.UserName!),
+                new(JwtRegisteredClaimNames.Sub, user.Id!),
                 new(JwtRegisteredClaimNames.Email, user.Email!),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
