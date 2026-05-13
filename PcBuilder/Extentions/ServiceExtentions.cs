@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Enums;
 using PcBuilder.Services;
+using System.Text.Json.Serialization;
 
 namespace PcBuilder.Extentions
 {
@@ -21,6 +22,7 @@ namespace PcBuilder.Extentions
             builder.Services.AddScoped<PcMonitorService>();
             builder.Services.AddScoped<HardDriveService>();
             builder.Services.AddScoped<BrandService>();
+            builder.Services.AddScoped<BuildService>();
             builder.Services.AddOpenApi();
             builder.Services.AddDbContext<PcDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
@@ -36,6 +38,12 @@ namespace PcBuilder.Extentions
                     o.MapEnum<StorageFormFactor>("storage_form_factor");
                     o.MapEnum<StorageInterface>("storage_interface");
                 }));
+
+            builder.Services.ConfigureHttpJsonOptions(options =>
+            {
+                options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+            });
+
 
             return builder;
         }
