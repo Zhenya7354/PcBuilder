@@ -45,7 +45,7 @@ app.MapPcCaseEndpoints();
 app.MapPcMonitorEndpoints();
 app.MapHardDriveEndpoints();
 app.MapBrandEndpoints();
-
+app.MapBuildEndpoints();
 
 app.Run();
 
