@@ -7,7 +7,7 @@ namespace PcBuilder.Dtos
         [Required] string Name,
         [Required] int BrandId,
         [Required] CoolerType CoolerType,
-        List<string> SocketsSupported,
+        List<PcSocketType> SocketsSupported,
         int? RadiatorSizeMm,
         [Required, Range(1, 10)] int FanCount,
         [Required, Range(40, 300)] int FanSizeMm,

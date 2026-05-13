@@ -1,3 +1,4 @@
+using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Dtos
@@ -5,7 +6,7 @@ namespace PcBuilder.Dtos
     public record PcCaseCreateDto(
         [Required] string Name,
         [Required] int BrandId,
-        List<string> SupportedFormFactors,
+        List<FormFactor> SupportedFormFactors,
         [Required, Range(1, 1000)] int MaxGpuLengthMm,
         [Required, Range(1, 300)] int MaxCpuCoolerHeightMm,
         [Required, Range(1, 500)] int MaxPsuLengthMm,
@@ -13,7 +14,7 @@ namespace PcBuilder.Dtos
         [Required, Range(0, 20)] int DriveBays25Inch,
         [Required, Range(0, 20)] int FrontUsbA,
         [Required, Range(0, 20)] int FrontUsbC,
-        List<string> RadiatorSupportMm,
+        List<int> RadiatorSupportMm,
         int? CaseWidthMm,
         int? CaseHeightMm,
         int? CaseDepthMm,
