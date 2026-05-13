@@ -8,7 +8,7 @@ namespace PcBuilder.Enums
         NonModular,
         [PgName("Semi-Modular")]
         SemiModular,
-        [PgName("Fully Modular")]
+        [PgName("Fully-Modular")]
         FullyModular
     }
 }

@@ -191,7 +191,7 @@ namespace PcBuilder.Services
             }
             if (cpuCooler.CoolerType == Enums.CoolerType.Liquid)
             {
-                if (!pcCase.RadiatorSupportMm.Contains(cpuCooler.RadiatorSizeMm ?? 0))
+                if (!pcCase.RadiatorSupportMm.Contains(cpuCooler.RadiatorSizeMm.ToString() ?? "0"))
                 {
                     issues.Add(new CompatibilityIssue()
                     {

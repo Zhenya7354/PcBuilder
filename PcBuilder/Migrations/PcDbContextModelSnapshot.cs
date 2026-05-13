@@ -27,7 +27,7 @@ namespace PcBuilder.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gpu_interface", new[] { "PCIe 3.0 x16", "PCIe 4.0 x16", "PCIe 5.0 x16" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "memory_type", new[] { "DDR4", "DDR4/DDR5", "DDR5" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "panel_type", new[] { "IPS", "Mini-LED", "OLED", "QD-OLED", "TN", "VA" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "psu_modular", new[] { "Fully Modular", "Non-Modular", "Semi-Modular" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "psu_modular", new[] { "Fully-Modular", "Non-Modular", "Semi-Modular" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "psu_rating", new[] { "80+ Bronze", "80+ Gold", "80+ Platinum", "80+ Silver", "80+ Titanium", "80+ White" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "socket_type", new[] { "AM4", "AM5", "LGA1200", "LGA1700", "LGA1851", "LGA2066", "SP3", "sTR4", "sTRX4" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "storage_form_factor", new[] { "2.5", "3.5", "Add-In Card", "M.2 22110", "M.2 2242", "M.2 2260", "M.2 2280", "U.2" });
@@ -188,13 +188,15 @@ namespace PcBuilder.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
@@ -366,7 +368,8 @@ namespace PcBuilder.Migrations
                         .HasColumnName("tdp_watts");
 
                     b.Property<int>("Threads")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("threads");
 
                     b.HasKey("Id");
 
@@ -432,10 +435,10 @@ namespace PcBuilder.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("radiator_size_mm");
 
-                    b.PrimitiveCollection<List<string>>("SocketsSupported")
+                    b.PrimitiveCollection<List<PcSocketType>>("SocketsSupported")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("sockets_supported");
+                        .HasColumnType("socket_type[]")
+                        .HasColumnName("socket_support");
 
                     b.HasKey("Id");
 
@@ -694,12 +697,12 @@ namespace PcBuilder.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.Property<int>("RearDisplayPort")
-                        .HasColumnType("integer")
-                        .HasColumnName("rear_display_port");
+                    b.Property<bool>("RearDisplayPort")
+                        .HasColumnType("boolean")
+                        .HasColumnName("rear_displayport");
 
-                    b.Property<int>("RearHdmi")
-                        .HasColumnType("integer")
+                    b.Property<bool>("RearHdmi")
+                        .HasColumnType("boolean")
                         .HasColumnName("rear_hdmi");
 
                     b.Property<int>("RearUsbA")
@@ -810,14 +813,14 @@ namespace PcBuilder.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("price_usd");
 
-                    b.PrimitiveCollection<List<string>>("RadiatorSupportMm")
+                    b.PrimitiveCollection<List<int>>("RadiatorSupportMm")
                         .IsRequired()
-                        .HasColumnType("text[]")
+                        .HasColumnType("integer[]")
                         .HasColumnName("radiator_support_mm");
 
-                    b.PrimitiveCollection<List<string>>("SupportedFormFactors")
+                    b.PrimitiveCollection<List<FormFactor>>("SupportedFormFactors")
                         .IsRequired()
-                        .HasColumnType("text[]")
+                        .HasColumnType("form_factor[]")
                         .HasColumnName("form_factors_supported");
 
                     b.HasKey("Id");
@@ -991,7 +994,7 @@ namespace PcBuilder.Migrations
 
                     b.Property<PsuModular>("Modularity")
                         .HasColumnType("psu_modular")
-                        .HasColumnName("modularity");
+                        .HasColumnName("modular");
 
                     b.Property<string>("Name")
                         .IsRequired()
