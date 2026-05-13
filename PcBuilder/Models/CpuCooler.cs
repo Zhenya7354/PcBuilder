@@ -7,7 +7,7 @@ namespace PcBuilder.Models
     {
         [Column("cooler_type")]
         public CoolerType CoolerType { get; set; }
-        [Column("sockets_supported")]
+        [Column("socket_support")]
         public List<PcSocketType> SocketsSupported { get; set; } = [];
         [Column("radiator_size_mm")]
         public int? RadiatorSizeMm { get; set; }

@@ -7,9 +7,9 @@ namespace PcBuilder.Models
     {
         [Column("screen_size_inch")]
         public double ScreenSizeInch { get; set; }
-        [Column("resolution_width")]
+        [Column("resolution_w")]
         public int ResolutionWidth { get; set; }
-        [Column("resolution_height")]
+        [Column("resolution_h")]
         public int ResolutionHeight { get; set; }
         [Column("panel_type")]
         public PanelType PanelType { get; set; }

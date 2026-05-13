@@ -16,6 +16,7 @@ namespace PcBuilder.Models
         public List<string> ChipsetsSupported { get; set; } = [];
         [Column("cores")]
         public int Cores { get; set; }
+        [Column("threads")]
         public int Threads { get; set; }
         [Column("base_clock_ghz")]
         public double BaseClockGhz { get; set; }

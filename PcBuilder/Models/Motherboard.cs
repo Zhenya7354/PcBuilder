@@ -49,9 +49,9 @@ namespace PcBuilder.Models
         [Column("rear_usb_c")]
         public int RearUsbC { get; set; }
         [Column("rear_hdmi")]
-        public int RearHdmi { get; set; }
-        [Column("rear_display_port")]
-        public int RearDisplayPort { get; set; }
+        public bool RearHdmi { get; set; }
+        [Column("rear_displayport")]
+        public bool RearDisplayPort { get; set; }
         [Column("price_usd")]
         public decimal? PriceUsd { get; set; }
 

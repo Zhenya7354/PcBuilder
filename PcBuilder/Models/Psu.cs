@@ -9,7 +9,7 @@ namespace PcBuilder.Models
         public int Wattage { get; set; }
         [Column("efficiency")]
         public PsuRating Efficiency { get; set; }
-        [Column("modularity")]
+        [Column("modular")]
         public PsuModular Modularity { get; set; }
         [Column("atx_version")]
         public string AtxVersion { get; set; } = string.Empty;
