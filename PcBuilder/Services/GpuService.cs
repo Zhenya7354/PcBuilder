@@ -19,7 +19,7 @@ namespace PcBuilder.Services
             var gpu = await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
             if (gpu == null)
             {
-                throw new ArgumentException($"GPU with ID {id} not found.");
+                throw new KeyNotFoundException($"GPU with ID {id} not found.");
             }
             return gpu;
         }
@@ -29,7 +29,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
             var gpu = new Gpu
             {
@@ -62,14 +62,14 @@ namespace PcBuilder.Services
         {
             var gpu = await _context.Gpu.FindAsync(id);
             if(gpu is null) 
-                throw new ArgumentException($"GPU with ID {id} not found.");
+                throw new KeyNotFoundException($"GPU with ID {id} not found.");
 
             if(gpuDto.BrandId.HasValue)
             {
                 var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId.Value);
                 if (!brandExists)
                 {
-                    throw new ArgumentException("Brand with the specified ID does not exist.");
+                    throw new KeyNotFoundException("Brand with the specified ID does not exist.");
                 }
                 gpu.BrandId = gpuDto.BrandId.Value;
             }
@@ -101,7 +101,7 @@ namespace PcBuilder.Services
             var gpu = await _context.Gpu.FindAsync(id);
             if(gpu is null)
             {
-                throw new ArgumentException($"GPU with ID {id} not found.");
+                throw new KeyNotFoundException($"GPU with ID {id} not found.");
             }
             _context.Gpu.Remove(gpu);
             await _context.SaveChangesAsync();

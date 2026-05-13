@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var monitor = await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
             if (monitor is null)
-                throw new ArgumentException($"Monitor with ID {id} not found.");
+                throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
             return monitor;
         }
@@ -65,7 +65,7 @@ namespace PcBuilder.Services
         {
             var monitor = await _context.PcMonitor.FindAsync(id);
             if (monitor is null)
-                throw new ArgumentException($"Monitor with ID {id} not found.");
+                throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -106,7 +106,7 @@ namespace PcBuilder.Services
         {
             var monitor = await _context.PcMonitor.FindAsync(id);
             if (monitor is null)
-                throw new ArgumentException($"Monitor with ID {id} not found.");
+                throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
             _context.PcMonitor.Remove(monitor);
             await _context.SaveChangesAsync();
@@ -117,7 +117,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

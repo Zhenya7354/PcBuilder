@@ -19,7 +19,7 @@ namespace PcBuilder.Services
             var cpuCooler = await _context.CpuCooler.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
             if (cpuCooler is null)
             {
-                throw new ArgumentException($"CPU cooler with ID {id} not found.");
+                throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
             }
 
             return cpuCooler;
@@ -54,7 +54,7 @@ namespace PcBuilder.Services
         {
             var cpuCooler = await _context.CpuCooler.FindAsync(id);
             if (cpuCooler is null)
-                throw new ArgumentException($"CPU cooler with ID {id} not found.");
+                throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -82,7 +82,7 @@ namespace PcBuilder.Services
         {
             var cpuCooler = await _context.CpuCooler.FindAsync(id);
             if (cpuCooler is null)
-                throw new ArgumentException($"CPU cooler with ID {id} not found.");
+                throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
 
             _context.CpuCooler.Remove(cpuCooler);
             await _context.SaveChangesAsync();
@@ -93,7 +93,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

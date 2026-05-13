@@ -18,7 +18,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.GetRamByIdAsync(id));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -31,7 +31,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.AddRamAsync(dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -44,7 +44,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.UpdateRamAsync(id, dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -57,7 +57,7 @@ namespace PcBuilder.Endpoints
                     await service.DeleteRamAsync(id);
                     return Results.Ok($"Ram with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

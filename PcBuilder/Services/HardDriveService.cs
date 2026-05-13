@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var hardDrive = await _context.HardDrive.Include(h => h.Brand).FirstOrDefaultAsync(h => h.Id == id);
             if (hardDrive is null)
-                throw new ArgumentException($"Hard drive with ID {id} not found.");
+                throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 
             return hardDrive;
         }
@@ -53,7 +53,7 @@ namespace PcBuilder.Services
         {
             var hardDrive = await _context.HardDrive.FindAsync(id);
             if (hardDrive is null)
-                throw new ArgumentException($"Hard drive with ID {id} not found.");
+                throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -82,7 +82,7 @@ namespace PcBuilder.Services
         {
             var hardDrive = await _context.HardDrive.FindAsync(id);
             if (hardDrive is null)
-                throw new ArgumentException($"Hard drive with ID {id} not found.");
+                throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 
             _context.HardDrive.Remove(hardDrive);
             await _context.SaveChangesAsync();
@@ -93,7 +93,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var psu = await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
             if (psu is null)
-                throw new ArgumentException($"PSU with ID {id} not found.");
+                throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
             return psu;
         }
@@ -53,7 +53,7 @@ namespace PcBuilder.Services
         {
             var psu = await _context.Psu.FindAsync(id);
             if (psu is null)
-                throw new ArgumentException($"PSU with ID {id} not found.");
+                throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -82,7 +82,7 @@ namespace PcBuilder.Services
         {
             var psu = await _context.Psu.FindAsync(id);
             if (psu is null)
-                throw new ArgumentException($"PSU with ID {id} not found.");
+                throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
             _context.Psu.Remove(psu);
             await _context.SaveChangesAsync();
@@ -93,7 +93,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

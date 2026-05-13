@@ -23,7 +23,7 @@ namespace PcBuilder.Endpoints
                     var brand = await brandService.GetBrandByIdAsync(id);
                     return Results.Ok(brand);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -32,8 +32,15 @@ namespace PcBuilder.Endpoints
             group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreateDto dto) =>
             {
                 if (dto is null) return Results.BadRequest("Brand data is required");
-                var brand = await brandService.AddBrandAsync(dto);
-                return Results.Ok(brand);
+                try
+                {
+                    var brand = await brandService.AddBrandAsync(dto);
+                    return Results.Ok(brand);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return Results.BadRequest(ex.Message);
+                }
             });
 
             group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdateDto dto, int id) =>
@@ -44,7 +51,7 @@ namespace PcBuilder.Endpoints
                     var brand = await brandService.UpdateBrandAsync(id, dto);
                     return Results.Ok(brand);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -57,7 +64,7 @@ namespace PcBuilder.Endpoints
                     await brandService.DeleteBrandAsync(id);
                     return Results.Ok($"Brand with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

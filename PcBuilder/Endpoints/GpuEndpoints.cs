@@ -25,7 +25,7 @@ namespace PcBuilder.Endpoints
                     var gpu = await gpuService.GetGpuById(id);
                     return Results.Ok(gpu);
                 }
-                catch(ArgumentException ex)
+                catch(KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -39,7 +39,7 @@ namespace PcBuilder.Endpoints
                     var gpu = await gpuService.AddGpuAsync(dto);
                     return Results.Ok(gpu);
                 }
-                catch(ArgumentException ex)
+                catch(KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -53,7 +53,7 @@ namespace PcBuilder.Endpoints
                     var gpu = await gpuService.UpdateGpuAsync(id, dto);
                     return Results.Ok(gpu);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -66,7 +66,7 @@ namespace PcBuilder.Endpoints
                     await gpuService.DeleteGpuAsync(id);
                     return Results.Ok($"Gpu with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

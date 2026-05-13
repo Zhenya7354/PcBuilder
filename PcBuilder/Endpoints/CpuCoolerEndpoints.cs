@@ -23,7 +23,7 @@ namespace PcBuilder.Endpoints
                     var cpuCooler = await service.GetCpuCoolerByIdAsync(id);
                     return Results.Ok(cpuCooler);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -37,7 +37,7 @@ namespace PcBuilder.Endpoints
                     var cpuCooler = await service.AddCpuCoolerAsync(dto);
                     return Results.Ok(cpuCooler);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -51,7 +51,7 @@ namespace PcBuilder.Endpoints
                     var cpuCooler = await service.UpdateCpuCoolerAsync(id, dto);
                     return Results.Ok(cpuCooler);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -64,7 +64,7 @@ namespace PcBuilder.Endpoints
                     await service.DeleteCpuCoolerAsync(id);
                     return Results.Ok($"Cpu cooler with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

@@ -18,7 +18,7 @@ namespace PcBuilder.Services
             var cpu = await _context.Cpu.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
             if (cpu == null)
             {
-                throw new ArgumentException($"CPU with ID {id} not found.");
+                throw new KeyNotFoundException($"CPU with ID {id} not found.");
             }
             return cpu;
         }
@@ -60,7 +60,7 @@ namespace PcBuilder.Services
         {
             var cpu = await _context.Cpu.FindAsync(id);
             if (cpu is null)
-                throw new ArgumentException($"CPU with Id {id} not found");
+                throw new KeyNotFoundException($"CPU with Id {id} not found");
 
             if (cpuDto.BrandId.HasValue)
             {
@@ -98,7 +98,7 @@ namespace PcBuilder.Services
             var cpu = await _context.Cpu.FindAsync(id);
             if (cpu == null)
             {
-                throw new ArgumentException($"CPU with ID {id} not found.");
+                throw new KeyNotFoundException($"CPU with ID {id} not found.");
             }
             _context.Cpu.Remove(cpu);
             await _context.SaveChangesAsync();
@@ -108,7 +108,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

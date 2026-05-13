@@ -24,7 +24,7 @@ namespace PcBuilder.Endpoints
                     var cpu = await cpuService.GetCpuByIdAsync(id);
                     return Results.Ok(cpu);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -37,7 +37,7 @@ namespace PcBuilder.Endpoints
                     var cpu = await cpuService.AddCpuAsync(cpuDto);
                     return Results.Ok(cpu);
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -52,7 +52,7 @@ namespace PcBuilder.Endpoints
                     return Results.Ok(updatedCpu);
 
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -68,7 +68,7 @@ namespace PcBuilder.Endpoints
                     return Results.Ok($"Cpu with id {id} deleted successfully");
 
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

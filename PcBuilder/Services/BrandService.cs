@@ -19,7 +19,7 @@ namespace PcBuilder.Services
             var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
             if (brand is null)
             {
-                throw new ArgumentException($"Brand with ID {id} not found.");
+                throw new KeyNotFoundException($"Brand with ID {id} not found.");
             }
 
             return brand;
@@ -37,7 +37,7 @@ namespace PcBuilder.Services
         {
             var brand = await _context.Brand.FindAsync(id);
             if (brand is null)
-                throw new ArgumentException($"Brand with ID {id} not found.");
+                throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
             if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
 
@@ -49,7 +49,7 @@ namespace PcBuilder.Services
         {
             var brand = await _context.Brand.FindAsync(id);
             if (brand is null)
-                throw new ArgumentException($"Brand with ID {id} not found.");
+                throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
             _context.Brand.Remove(brand);
             await _context.SaveChangesAsync();

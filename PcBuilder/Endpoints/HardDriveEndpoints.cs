@@ -18,7 +18,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.GetHardDriveByIdAsync(id));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -31,7 +31,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.AddHardDriveAsync(dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -44,7 +44,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.UpdateHardDriveAsync(id, dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -57,7 +57,7 @@ namespace PcBuilder.Endpoints
                     await service.DeleteHardDriveAsync(id);
                     return Results.Ok($"Hard drive with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

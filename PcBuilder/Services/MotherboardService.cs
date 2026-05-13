@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var motherboard = await _context.Motherboard.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
             if (motherboard is null)
-                throw new ArgumentException($"Motherboard with ID {id} not found.");
+                throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
             return motherboard;
         }
@@ -66,7 +66,7 @@ namespace PcBuilder.Services
         {
             var motherboard = await _context.Motherboard.FindAsync(id);
             if (motherboard is null)
-                throw new ArgumentException($"Motherboard with ID {id} not found.");
+                throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -108,7 +108,7 @@ namespace PcBuilder.Services
         {
             var motherboard = await _context.Motherboard.FindAsync(id);
             if (motherboard is null)
-                throw new ArgumentException($"Motherboard with ID {id} not found.");
+                throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
             _context.Motherboard.Remove(motherboard);
             await _context.SaveChangesAsync();
@@ -119,7 +119,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

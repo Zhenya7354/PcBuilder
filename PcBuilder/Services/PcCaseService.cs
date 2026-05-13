@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var pcCase = await _context.PcCase.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
             if (pcCase is null)
-                throw new ArgumentException($"Case with ID {id} not found.");
+                throw new KeyNotFoundException($"Case with ID {id} not found.");
 
             return pcCase;
         }
@@ -57,7 +57,7 @@ namespace PcBuilder.Services
         {
             var pcCase = await _context.PcCase.FindAsync(id);
             if (pcCase is null)
-                throw new ArgumentException($"Case with ID {id} not found.");
+                throw new KeyNotFoundException($"Case with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -90,7 +90,7 @@ namespace PcBuilder.Services
         {
             var pcCase = await _context.PcCase.FindAsync(id);
             if (pcCase is null)
-                throw new ArgumentException($"Case with ID {id} not found.");
+                throw new KeyNotFoundException($"Case with ID {id} not found.");
 
             _context.PcCase.Remove(pcCase);
             await _context.SaveChangesAsync();
@@ -101,7 +101,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }

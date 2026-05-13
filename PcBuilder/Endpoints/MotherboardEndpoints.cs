@@ -18,7 +18,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.GetMotherboardByIdAsync(id));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.NotFound(ex.Message);
                 }
@@ -31,7 +31,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.AddMotherboardAsync(dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -44,7 +44,7 @@ namespace PcBuilder.Endpoints
                 {
                     return Results.Ok(await service.UpdateMotherboardAsync(id, dto));
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }
@@ -57,7 +57,7 @@ namespace PcBuilder.Endpoints
                     await service.DeleteMotherboardAsync(id);
                     return Results.Ok($"Motherboard with id {id} deleted successfully");
                 }
-                catch (ArgumentException ex)
+                catch (KeyNotFoundException ex)
                 {
                     return Results.BadRequest(ex.Message);
                 }

@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             var ram = await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
             if (ram is null)
-                throw new ArgumentException($"RAM with ID {id} not found.");
+                throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
             return ram;
         }
@@ -52,7 +52,7 @@ namespace PcBuilder.Services
         {
             var ram = await _context.Ram.FindAsync(id);
             if (ram is null)
-                throw new ArgumentException($"RAM with ID {id} not found.");
+                throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
             if (dto.BrandId.HasValue)
             {
@@ -80,7 +80,7 @@ namespace PcBuilder.Services
         {
             var ram = await _context.Ram.FindAsync(id);
             if (ram is null)
-                throw new ArgumentException($"RAM with ID {id} not found.");
+                throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
             _context.Ram.Remove(ram);
             await _context.SaveChangesAsync();
@@ -91,7 +91,7 @@ namespace PcBuilder.Services
             var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
             if (!brandExists)
             {
-                throw new ArgumentException("Brand with the specified ID does not exist.");
+                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
             }
         }
     }
