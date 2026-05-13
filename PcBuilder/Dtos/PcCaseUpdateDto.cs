@@ -14,7 +14,7 @@ namespace PcBuilder.Dtos
         [Range(0, 20)] int? DriveBays25Inch,
         [Range(0, 20)] int? FrontUsbA,
         [Range(0, 20)] int? FrontUsbC,
-        List<int>? RadiatorSupportMm,
+        List<string>? RadiatorSupportMm,
         int? CaseWidthMm,
         int? CaseHeightMm,
         int? CaseDepthMm,

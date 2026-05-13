@@ -14,7 +14,7 @@ namespace PcBuilder.Dtos
         [Required, Range(0, 20)] int DriveBays25Inch,
         [Required, Range(0, 20)] int FrontUsbA,
         [Required, Range(0, 20)] int FrontUsbC,
-        List<int> RadiatorSupportMm,
+        List<string> RadiatorSupportMm,
         int? CaseWidthMm,
         int? CaseHeightMm,
         int? CaseDepthMm,

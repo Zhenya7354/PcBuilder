@@ -27,8 +27,8 @@ namespace PcBuilder.Dtos
         int? VrmPhases,
         [Range(0, 30)] int? RearUsbA,
         [Range(0, 30)] int? RearUsbC,
-        [Range(0, 10)] int? RearHdmi,
-        [Range(0, 10)] int? RearDisplayPort,
+        [Range(0, 10)] bool? RearHdmi,
+        [Range(0, 10)] bool? RearDisplayPort,
         [Range(0, 100000)] decimal? PriceUsd
     );
 }
