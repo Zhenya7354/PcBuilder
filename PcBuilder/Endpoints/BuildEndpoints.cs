@@ -44,7 +44,7 @@ namespace PcBuilder.Endpoints
 
             });
 
-            group.MapPost("/add", async ([FromServices] BuildService service, ClaimsPrincipal user, [FromBody] BuildCreateDto dto) =>
+            group.MapPost("/add", async ([FromServices] BuildService service,[FromServices] CompatibilityCheckService compatibilityCheckService, ClaimsPrincipal user, [FromBody] BuildDto dto) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -52,14 +52,14 @@ namespace PcBuilder.Endpoints
                     return Results.Unauthorized();
                 }
                 try
-                {
+                { 
                     var build = await service.AddBuildAsync(userId, dto);
                     return Results.Ok(build);
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
 
-            group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildUpdateDto dto) =>
+            group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildDto dto) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)

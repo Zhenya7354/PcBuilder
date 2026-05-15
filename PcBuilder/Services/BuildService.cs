@@ -18,7 +18,7 @@ namespace PcBuilder.Services
         {
             return await BuildWithAllComponents().Where(b => b.UserId == userId).ToListAsync();
         }
-        public async Task<Build> AddBuildAsync(string userId, BuildCreateDto dto)
+        public async Task<Build> AddBuildAsync(string userId, BuildDto dto)
         {
             var build = new Build
             {
@@ -39,11 +39,12 @@ namespace PcBuilder.Services
             return build;
         }
 
-        public async Task<Build> UpdateBuildAsync(int buildId, string userId, BuildUpdateDto dto)
+        public async Task<Build> UpdateBuildAsync(int buildId, string userId, BuildDto dto)
         {
             var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
                 throw new KeyNotFoundException($"Build with Id {buildId} for user with Id {userId} not found");
 
+            if(!string.IsNullOrEmpty(dto.Name)) { build.Name = dto.Name; }
             if (dto.CpuId.HasValue) build.CpuId = dto.CpuId;
             if (dto.CpuCoolerId.HasValue) build.CpuCoolerId = dto.CpuCoolerId;
             if (dto.GpuId.HasValue) build.GpuId = dto.GpuId;

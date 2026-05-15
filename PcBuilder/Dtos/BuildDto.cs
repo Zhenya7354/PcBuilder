@@ -2,8 +2,8 @@
 
 namespace PcBuilder.Dtos
 {
-    public record BuildCreateDto(
-    [Required] string Name,
+    public record BuildDto(
+    string? Name,
     int? CpuId,
     int? CpuCoolerId,
     int? GpuId,
