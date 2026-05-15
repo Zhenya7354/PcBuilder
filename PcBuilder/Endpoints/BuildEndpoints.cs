@@ -28,7 +28,7 @@ namespace PcBuilder.Endpoints
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
             
-            group.MapGet("/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int buildId) =>
+            group.MapGet("/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -37,7 +37,7 @@ namespace PcBuilder.Endpoints
                 }
                 try
                 {
-                    var build = await service.GetBuildByIdAsync(userId, buildId);
+                    var build = await service.GetBuildByIdAsync(userId, id);
                     return Results.Ok(build);
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
@@ -59,7 +59,7 @@ namespace PcBuilder.Endpoints
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
 
-            group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int buildId, [FromBody] BuildUpdateDto dto) =>
+            group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildUpdateDto dto) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -68,13 +68,13 @@ namespace PcBuilder.Endpoints
                 }
                 try
                 {
-                    var build = await service.UpdateBuildAsync(buildId, userId, dto);
+                    var build = await service.UpdateBuildAsync(id, userId, dto);
                     return Results.Ok(build);
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
 
-            group.MapDelete("/delete/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int buildId) =>
+            group.MapDelete("/delete/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -83,13 +83,13 @@ namespace PcBuilder.Endpoints
                 }
                 try
                 {
-                    await service.DeleteBuildAsync(buildId, userId);
+                    await service.DeleteBuildAsync(id, userId);
                     return Results.Ok();
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
 
-            group.MapPost("/set-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int buildId, [FromBody] BuildComponentDto dto) =>
+            group.MapPost("/set-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentDto dto) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -98,13 +98,13 @@ namespace PcBuilder.Endpoints
                 }
                 try
                 {
-                    var build = await service.SetComponentAsync(buildId, userId, dto);
+                    var build = await service.SetComponentAsync(id, userId, dto);
                     return Results.Ok(build);
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             });
 
-            group.MapPost("/remove-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int buildId, [FromBody] BuildComponentType componentType) =>
+            group.MapPost("/remove-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType) =>
             {
                 var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(userId is null)
@@ -113,7 +113,7 @@ namespace PcBuilder.Endpoints
                 }
                 try
                 {
-                    var build = await service.RemoveComponentAsync(buildId, userId, componentType);
+                    var build = await service.RemoveComponentAsync(id, userId, componentType);
                     return Results.Ok(build);
                 }
                 catch(KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
