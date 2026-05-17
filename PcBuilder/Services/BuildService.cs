@@ -6,9 +6,10 @@ using PcBuilder.Models;
 
 namespace PcBuilder.Services
 {
-    public class BuildService(PcDbContext context)
+    public class BuildService(PcDbContext context, CompatibilityCheckService compatibilityCheckService)
     {
         private readonly PcDbContext _context = context;
+        private readonly CompatibilityCheckService _compatibilityCheckService = compatibilityCheckService;
         public async Task<Build> GetBuildByIdAsync(string userId, int buildId)
         {
             return await BuildWithAllComponents().FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
@@ -86,6 +87,82 @@ namespace PcBuilder.Services
             ApplyComponent(build, componentType, null);
             await _context.SaveChangesAsync();
             return build;
+        }
+
+        public async Task<List<CompatibilityIssue>> RunCompatibilityChecksAsync(BuildDto dto)
+        {
+            var checks = new List<(int? IdA, int? IdB, Func<int, int, Task<CompatibilityCheckResponse>> Check)> {
+                (dto.CpuId, dto.MotherboardId, compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync),
+                (dto.CpuId, dto.CpuCoolerId, compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync),
+                (dto.CpuId, dto.RamId, compatibilityCheckService.CheckCpuToRamCompatibilityAsync),
+                (dto.RamId, dto.MotherboardId, compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync),
+                (dto.CaseId, dto.MotherboardId, compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync),
+                (dto.CaseId, dto.CpuCoolerId, compatibilityCheckService.CheckCaseToCpuCoolerCompatibilityAsync),
+                (dto.CaseId, dto.GpuId, compatibilityCheckService.CheckCaseToGpuCompatibilityAsync),
+                (dto.CaseId, dto.PsuId, compatibilityCheckService.CheckCaseToPsuCompatibilityAsync),
+                (dto.PsuId, dto.GpuId, compatibilityCheckService.CheckPsuToGpuCompatibilityAsync)
+            };
+
+            var tasks = checks
+                .Where(c => c.IdA.HasValue && c.IdB.HasValue)
+                .Select(c => c.Check(c.IdA!.Value, c.IdB!.Value));
+
+            var results =  await Task.WhenAll(tasks);
+            return results.Where(r => !r.IsCompatible).SelectMany(r => r.Issues).ToList();
+        }
+        public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, string userId, BuildDto dto)
+        {
+            var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
+                throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+
+            var mergedDto = new BuildDto
+            {
+                Name = dto.Name ?? build.Name,
+                CpuId = dto.CpuId ?? build.CpuId,
+                MotherboardId = dto.MotherboardId ?? build.MotherboardId,
+                RamId = dto.RamId ?? build.RamId,
+                GpuId = dto.GpuId ?? build.GpuId,
+                CpuCoolerId = dto.CpuCoolerId ?? build.CpuCoolerId,
+                CaseId = dto.CaseId ?? build.CaseId,
+                PsuId = dto.PsuId ?? build.PsuId,
+                MonitorId = dto.MonitorId ?? build.MonitorId,
+                HardDriveId = dto.HardDriveId ?? build.HardDriveId
+            };
+
+            return await RunCompatibilityChecksAsync(mergedDto);
+        }
+
+        public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, string userId, BuildComponentDto dto)
+        {
+            var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
+                throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+            var mergedDto = new BuildDto
+            {
+                Name = build.Name,
+                CpuId = build.CpuId,
+                MotherboardId = build.MotherboardId,
+                RamId = build.RamId,
+                GpuId = build.GpuId,
+                CpuCoolerId = build.CpuCoolerId,
+                CaseId = build.CaseId,
+                PsuId = build.PsuId,
+                MonitorId = build.MonitorId,
+                HardDriveId = build.HardDriveId
+            };
+            switch (dto.ComponentType)
+            {
+                case BuildComponentType.Cpu: mergedDto.CpuId = dto.ComponentId; break;
+                case BuildComponentType.CpuCooler: mergedDto.CpuCoolerId = dto.ComponentId; break;
+                case BuildComponentType.Gpu: mergedDto.GpuId = dto.ComponentId; break;
+                case BuildComponentType.Ram: mergedDto.RamId = dto.ComponentId; break;
+                case BuildComponentType.HardDrive: mergedDto.HardDriveId = dto.ComponentId; break;
+                case BuildComponentType.Motherboard: mergedDto.MotherboardId = dto.ComponentId; break;
+                case BuildComponentType.Psu: mergedDto.PsuId = dto.ComponentId; break;
+                case BuildComponentType.PcCase: mergedDto.CaseId = dto.ComponentId; break;
+                case BuildComponentType.PcMonitor: mergedDto.MonitorId = dto.ComponentId; break;
+                default: throw new ArgumentException($"Invalid component type: {dto.ComponentType}");
+            };
+            return await RunCompatibilityChecksAsync(mergedDto);
         }
 
         private void ApplyComponent(Build build, BuildComponentType componentType, int? componentId)

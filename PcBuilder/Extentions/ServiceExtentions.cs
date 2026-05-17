@@ -23,6 +23,7 @@ namespace PcBuilder.Extentions
             builder.Services.AddScoped<HardDriveService>();
             builder.Services.AddScoped<BrandService>();
             builder.Services.AddScoped<BuildService>();
+            builder.Services.AddScoped<CompatibilityCheckService>();
             builder.Services.AddOpenApi();
             builder.Services.AddDbContext<PcDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
