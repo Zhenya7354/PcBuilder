@@ -9,9 +9,9 @@ namespace PcBuilder.Services
         public async Task<CompatibilityCheckResponse> CheckCpuToMotherboardCompatibilityAsync(int cpuId, int motherboardId)
         {
             var cpu = await _context.Cpu.FindAsync(cpuId) ??
-                throw new ArgumentException($"Cpu with provided ID {cpuId} does not exist");
+                throw new KeyNotFoundException($"Cpu with provided ID {cpuId} does not exist");
             var motherboard = await _context.Motherboard.FindAsync(motherboardId) ??
-                throw new ArgumentException($"Motherboard with provided ID {motherboardId} does not exist");
+                throw new KeyNotFoundException($"Motherboard with provided ID {motherboardId} does not exist");
             var issues = new List<CompatibilityIssue>();
 
             if (motherboard.Socket != cpu.Socket)
@@ -56,16 +56,16 @@ namespace PcBuilder.Services
         public async Task<CompatibilityCheckResponse> CheckCpuCoolerToCpuCompatibilityAsync(int cpuId, int cpuCoolerId)
         {
             var cpu = await _context.Cpu.FindAsync(cpuId) ??
-                throw new ArgumentException($"CPU with provided ID {cpuId} does not exist");
+                throw new KeyNotFoundException($"CPU with provided ID {cpuId} does not exist");
             var cpuCooler = await _context.CpuCooler.FindAsync(cpuCoolerId) ??
-                throw new ArgumentException($"CPU cooler with provided ID {cpuCoolerId} does not exist");
+                throw new KeyNotFoundException($"CPU cooler with provided ID {cpuCoolerId} does not exist");
             var issues = new List<CompatibilityIssue>();
-            if (cpuCooler.SocketsSupported.Contains(cpu.Socket))
+            if (!cpuCooler.SocketsSupported.Contains(cpu.Socket))
             {
                 issues.Add(new CompatibilityIssue()
                 {
                     Field = nameof(cpu.Socket),
-                    Message = $"CPU cooler socket {cpuCooler.CoolerType} is not compatible with CPU socket {cpu.Socket}",
+                    Message = $"CPU cooler socket {cpuCooler.SocketsSupported} is not compatible with CPU socket {cpu.Socket}",
                     Severity = CompatibilityServerity.Error
                 });
             }
@@ -80,12 +80,12 @@ namespace PcBuilder.Services
             }
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
-        public async Task<CompatibilityCheckResponse> CheckCpuToRamCompatibility(int cpuId, int ramId)
+        public async Task<CompatibilityCheckResponse> CheckCpuToRamCompatibilityAsync(int cpuId, int ramId)
         {
             var cpu = await _context.Cpu.FindAsync(cpuId) ??
-                throw new ArgumentException($"CPU with provided ID {cpuId} does not exist");
+                throw new KeyNotFoundException($"CPU with provided ID {cpuId} does not exist");
             var ram = await _context.Ram.FindAsync(ramId) ??
-                throw new ArgumentException($"RAM with provided ID {ramId} does not exist");
+                throw new KeyNotFoundException($"RAM with provided ID {ramId} does not exist");
             var issues = new List<CompatibilityIssue>();
 
             if(ram.SpeedMhz > cpu.MaxMemorySpeedMhz)
@@ -111,9 +111,9 @@ namespace PcBuilder.Services
         public async Task<CompatibilityCheckResponse> CheckRamToMotherboardCompatibilityAsync(int ramId, int motherboardId)
         {
             var ram = await _context.Ram.FindAsync(ramId) ??
-                throw new ArgumentException($"RAM with provided ID {ramId} does not exist");
+                throw new KeyNotFoundException($"RAM with provided ID {ramId} does not exist");
             var motherboard = await _context.Motherboard.FindAsync(motherboardId) ??
-                throw new ArgumentException($"Motherboard with provided ID {motherboardId} does not exist");
+                throw new KeyNotFoundException($"Motherboard with provided ID {motherboardId} does not exist");
             var issues = new List<CompatibilityIssue>();
             if (motherboard.MemoryType != ram.MemoryType)
             {
@@ -154,12 +154,12 @@ namespace PcBuilder.Services
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
 
-        public async Task<CompatibilityCheckResponse> CheckCaseToMotherboardCompatibility(int caseId, int motherboardId)
+        public async Task<CompatibilityCheckResponse> CheckCaseToMotherboardCompatibilityAsync(int caseId, int motherboardId)
         {
             var pcCase = await _context.PcCase.FindAsync(caseId) ??
-                throw new ArgumentException($"PC case with provided ID {caseId} does not exist");
+                throw new KeyNotFoundException($"PC case with provided ID {caseId} does not exist");
             var motherboard = await _context.Motherboard.FindAsync(motherboardId) ??
-                throw new ArgumentException($"Motherboard with provided ID {motherboardId} does not exist");
+                throw new KeyNotFoundException($"Motherboard with provided ID {motherboardId} does not exist");
             var issues = new List<CompatibilityIssue>();
 
             if (!pcCase.SupportedFormFactors.Contains(motherboard.FormFactor))
@@ -173,12 +173,12 @@ namespace PcBuilder.Services
             }
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
-        public async Task<CompatibilityCheckResponse> CheckCaseToCpuCoolerCompatibility(int caseId, int cpuCoolerId)
+        public async Task<CompatibilityCheckResponse> CheckCaseToCpuCoolerCompatibilityAsync(int caseId, int cpuCoolerId)
         {
             var pcCase = await _context.PcCase.FindAsync(caseId) ??
-                throw new ArgumentException($"PC case with provided ID {caseId} does not exist");
+                throw new KeyNotFoundException($"PC case with provided ID {caseId} does not exist");
             var cpuCooler = await _context.CpuCooler.FindAsync(cpuCoolerId) ??
-                throw new ArgumentException($"CPU cooler with provided ID {cpuCoolerId} does not exist");
+                throw new KeyNotFoundException($"CPU cooler with provided ID {cpuCoolerId} does not exist");
             var issues = new List<CompatibilityIssue>();
             if (cpuCooler.HeightMm > pcCase.MaxCpuCoolerHeightMm)
             {
@@ -203,12 +203,12 @@ namespace PcBuilder.Services
             }
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
-        public async Task<CompatibilityCheckResponse> CheckCaseToGpuCompatibility(int caseId, int gpuId)
+        public async Task<CompatibilityCheckResponse> CheckCaseToGpuCompatibilityAsync(int caseId, int gpuId)
         {
             var pcCase = await _context.PcCase.FindAsync(caseId) ??
-                throw new ArgumentException($"PC case with provided ID {caseId} does not exist");
+                throw new KeyNotFoundException($"PC case with provided ID {caseId} does not exist");
             var gpu = await _context.Gpu.FindAsync(gpuId) ??
-                throw new ArgumentException($"GPU with provided ID {gpuId} does not exist");
+                throw new KeyNotFoundException($"GPU with provided ID {gpuId} does not exist");
             var issues = new List<CompatibilityIssue>();
             if (gpu.CardLengthMm > pcCase.MaxGpuLengthMm)
             {
@@ -221,12 +221,12 @@ namespace PcBuilder.Services
             }
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
-        public async Task<CompatibilityCheckResponse> CheckCaseToPsuCompatibility(int caseId, int psuId)
+        public async Task<CompatibilityCheckResponse> CheckCaseToPsuCompatibilityAsync(int caseId, int psuId)
         {
             var pcCase = await _context.PcCase.FindAsync(caseId) ??
-                throw new ArgumentException($"PC case with provided ID {caseId} does not exist");
+                throw new KeyNotFoundException($"PC case with provided ID {caseId} does not exist");
             var psu = await _context.Psu.FindAsync(psuId) ??
-                throw new ArgumentException($"PSU with provided ID {psuId} does not exist");
+                throw new KeyNotFoundException($"PSU with provided ID {psuId} does not exist");
             var issues = new List<CompatibilityIssue>();
             if (psu.LengthMm > pcCase.MaxPsuLengthMm)
             {
@@ -240,13 +240,13 @@ namespace PcBuilder.Services
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
         }
 
-        public async Task<CompatibilityCheckResponse> CheckPsuToGpuCompatibility(int psuId, int gpuId)
+        public async Task<CompatibilityCheckResponse> CheckPsuToGpuCompatibilityAsync(int psuId, int gpuId)
         {
             var psu = await _context.Psu.FindAsync(psuId) ??
-                throw new ArgumentException($"PSU with provided ID {psuId} does not exist");
+                throw new KeyNotFoundException($"PSU with provided ID {psuId} does not exist");
             var gpu = await _context.Gpu.FindAsync(gpuId) ??
-                throw new ArgumentException($"GPU with provided ID {gpuId} does not exist");
-            
+                throw new KeyNotFoundException($"GPU with provided ID {gpuId} does not exist");
+
             var issues = new List<CompatibilityIssue>();
             if (psu.Wattage < gpu.RecommendedPsuWattage)
             {
@@ -263,3 +263,4 @@ namespace PcBuilder.Services
     }
 }
 
+// CpuCooler id - 3. CpuId - 20. Not compatible because of socket mismatch. Cooler supports AM4, CPU has LGA1700 socket.
