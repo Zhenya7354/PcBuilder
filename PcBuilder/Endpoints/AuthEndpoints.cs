@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
+using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Services;
 
@@ -13,18 +14,18 @@ public static class AuthEndpoints
         var group = app.MapGroup("/auth");
 
 
-        group.MapPost("/register", async (RegisterDto dto, UserManager<User> userManager, PcDbContext db) =>
+        group.MapPost("/register", async (RegisterDto dto, UserManager<UserEntity> userManager, PcDbContext db) =>
         {
             if (dto is null || userManager is null) return Results.BadRequest();
 
-            var user = new User { UserName = dto.Email, Email = dto.Email };
+            var user = new UserEntity { UserName = dto.Email, Email = dto.Email };
             var result = await userManager.CreateAsync(user, dto.Password);
 
             if (!result.Succeeded) return Results.BadRequest(result.Errors);
 
             await userManager.AddToRoleAsync(user, "User");
 
-            db.RegularUser.Add(new RegularUser { UserId = user.Id });
+            db.RegularUser.Add(new RegularUserEntity { UserId = user.Id });
             await db.SaveChangesAsync();
 
             return Results.Ok(new { message = "Registration successful" });
@@ -33,8 +34,8 @@ public static class AuthEndpoints
 
         group.MapPost("/login", async (
             LoginDto dto,
-            SignInManager<User> singInManager,
-            UserManager<User> userManager,
+            SignInManager<UserEntity> singInManager,
+            UserManager<UserEntity> userManager,
             JwtService jwtService) =>
         {
             var user = await userManager.FindByEmailAsync(dto.Email);
@@ -60,7 +61,7 @@ public static class AuthEndpoints
         // Endpoint for making user an admin, have to be moved in future
         app.MapPost("/admin/{userId}/make-admin", async (
             string userId,
-            UserManager<User> userManager,
+            UserManager<UserEntity> userManager,
             PcDbContext db) =>
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -69,7 +70,7 @@ public static class AuthEndpoints
             try
             {
                 await userManager.AddToRoleAsync(user, "Admin");
-                db.Admin.Add(new Admin { UserId = user.Id });
+                db.Admin.Add(new AdminEntity { UserId = user.Id });
                 await db.SaveChangesAsync();
                 await transaction.CommitAsync();
             }

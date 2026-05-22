@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class BrandService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<Brand>> GetAllBrandsAsync()
+    public async Task<List<BrandEntity>> GetAllBrandsAsync()
     {
         return await _context.Brand.ToListAsync();
     }
 
-    public async Task<Brand> GetBrandByIdAsync(int id)
+    public async Task<BrandEntity> GetBrandByIdAsync(int id)
     {
         var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
         if (brand is null)
@@ -25,15 +25,15 @@ public class BrandService(PcDbContext context)
         return brand;
     }
 
-    public async Task<Brand> AddBrandAsync(BrandCreateDto dto)
+    public async Task<BrandEntity> AddBrandAsync(BrandCreateDto dto)
     {
-        var brand = new Brand { Name = dto.Name };
+        var brand = new BrandEntity { Name = dto.Name };
         _context.Brand.Add(brand);
         await _context.SaveChangesAsync();
         return brand;
     }
 
-    public async Task<Brand> UpdateBrandAsync(int id, BrandUpdateDto dto)
+    public async Task<BrandEntity> UpdateBrandAsync(int id, BrandUpdateDto dto)
     {
         var brand = await _context.Brand.FindAsync(id);
         if (brand is null)

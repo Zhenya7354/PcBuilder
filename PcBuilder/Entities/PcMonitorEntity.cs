@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class PcMonitor : Component
+public class PcMonitorEntity : Component
 {
     public double ScreenSizeInch { get; set; }
     public int ResolutionWidth { get; set; }

@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class HardDrive : Component
+public class HardDriveEntity : Component
 {
     public int CapacityGb { get; set; }
     public StorageInterface DriveInterface { get; set; }

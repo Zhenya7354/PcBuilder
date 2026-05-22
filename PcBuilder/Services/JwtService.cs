@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,7 +9,7 @@ namespace PcBuilder.Services;
 
 public class JwtService(IConfiguration configuration)
 {
-    public string GenerateToken(User user, IList<string> roles)
+    public string GenerateToken(UserEntity user, IList<string> roles)
     {
         var section = configuration.GetSection("Jwt");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(section["Key"]!));

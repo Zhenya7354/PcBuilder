@@ -1,10 +1,11 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 using System.Diagnostics.Eventing.Reader;
 using System.Net.Sockets;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class Cpu : Component
+public class CpuEntity : Component
 {
 
     public string? ModelNumber { get; set; }

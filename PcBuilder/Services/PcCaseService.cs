@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class PcCaseService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<PcCase>> GetAllCasesAsync()
+    public async Task<List<PcCaseEntity>> GetAllCasesAsync()
     {
         return await _context.PcCase.Include(c => c.Brand).ToListAsync();
     }
 
-    public async Task<PcCase> GetCaseByIdAsync(int id)
+    public async Task<PcCaseEntity> GetCaseByIdAsync(int id)
     {
         var pcCase = await _context.PcCase.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
         if (pcCase is null)
@@ -23,11 +23,11 @@ public class PcCaseService(PcDbContext context)
         return pcCase;
     }
 
-    public async Task<PcCase> AddCaseAsync(PcCaseCreateDto dto)
+    public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var pcCase = new PcCase
+        var pcCase = new PcCaseEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -53,7 +53,7 @@ public class PcCaseService(PcDbContext context)
         return pcCase;
     }
 
-    public async Task<PcCase> UpdateCaseAsync(int id, PcCaseUpdateDto dto)
+    public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdateDto dto)
     {
         var pcCase = await _context.PcCase.FindAsync(id);
         if (pcCase is null)

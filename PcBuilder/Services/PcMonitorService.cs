@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class PcMonitorService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<PcMonitor>> GetAllMonitorsAsync()
+    public async Task<List<PcMonitorEntity>> GetAllMonitorsAsync()
     {
         return await _context.PcMonitor.Include(m => m.Brand).ToListAsync();
     }
 
-    public async Task<PcMonitor> GetMonitorByIdAsync(int id)
+    public async Task<PcMonitorEntity> GetMonitorByIdAsync(int id)
     {
         var monitor = await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
         if (monitor is null)
@@ -23,11 +23,11 @@ public class PcMonitorService(PcDbContext context)
         return monitor;
     }
 
-    public async Task<PcMonitor> AddMonitorAsync(PcMonitorCreateDto dto)
+    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var monitor = new PcMonitor
+        var monitor = new PcMonitorEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -61,7 +61,7 @@ public class PcMonitorService(PcDbContext context)
         return monitor;
     }
 
-    public async Task<PcMonitor> UpdateMonitorAsync(int id, PcMonitorUpdateDto dto)
+    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateDto dto)
     {
         var monitor = await _context.PcMonitor.FindAsync(id);
         if (monitor is null)

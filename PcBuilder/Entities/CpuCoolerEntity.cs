@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class CpuCooler : Component
+public class CpuCoolerEntity : Component
 {
     public CoolerType CoolerType { get; set; }
     public List<PcSocketType> SocketsSupported { get; set; } = [];

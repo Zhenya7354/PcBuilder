@@ -1,9 +1,10 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 using System.Net.Sockets;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class Motherboard : Component
+public class MotherboardEntity : Component
 {
     public PcSocketType Socket { get; set; }
     public string Chipset { get; set; } = string.Empty;

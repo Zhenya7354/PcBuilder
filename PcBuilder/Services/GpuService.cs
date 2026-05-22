@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class GpuService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<Gpu>> GetGpusAsync()
+    public async Task<List<GpuEntity>> GetGpusAsync()
     {
         return await _context.Gpu.Include(g => g.Brand).ToListAsync();
     }
 
-    public async Task<Gpu> GetGpuById(int id)
+    public async Task<GpuEntity> GetGpuById(int id)
     {
         var gpu = await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
         if (gpu == null)
@@ -24,14 +24,14 @@ public class GpuService(PcDbContext context)
         return gpu;
     }
 
-    public async Task<Gpu> AddGpuAsync(GpuCreateDto gpuDto)
+    public async Task<GpuEntity> AddGpuAsync(GpuCreateDto gpuDto)
     {
         var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId);
         if (!brandExists)
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
-        var gpu = new Gpu
+        var gpu = new GpuEntity
         {
             Name = gpuDto.Name,
             BrandId = gpuDto.BrandId,
@@ -58,7 +58,7 @@ public class GpuService(PcDbContext context)
 
         return gpu;
     }
-    public async Task<Gpu> UpdateGpuAsync(int id, GpuUpdateDto gpuDto)
+    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateDto gpuDto)
     {
         var gpu = await _context.Gpu.FindAsync(id);
         if(gpu is null) 

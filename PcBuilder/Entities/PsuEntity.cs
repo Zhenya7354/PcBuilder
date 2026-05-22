@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class Psu : Component
+public class PsuEntity : Component
 {
     public int Wattage { get; set; }
     public PsuRating Efficiency { get; set; }

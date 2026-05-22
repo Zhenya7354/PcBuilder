@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class RamService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<Ram>> GetAllRamAsync()
+    public async Task<List<RamEntity>> GetAllRamAsync()
     {
         return await _context.Ram.Include(r => r.Brand).ToListAsync();
     }
 
-    public async Task<Ram> GetRamByIdAsync(int id)
+    public async Task<RamEntity> GetRamByIdAsync(int id)
     {
         var ram = await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
         if (ram is null)
@@ -23,11 +23,11 @@ public class RamService(PcDbContext context)
         return ram;
     }
 
-    public async Task<Ram> AddRamAsync(RamCreateDto dto)
+    public async Task<RamEntity> AddRamAsync(RamCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var ram = new Ram
+        var ram = new RamEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -48,7 +48,7 @@ public class RamService(PcDbContext context)
         return ram;
     }
 
-    public async Task<Ram> UpdateRamAsync(int id, RamUpdateDto dto)
+    public async Task<RamEntity> UpdateRamAsync(int id, RamUpdateDto dto)
     {
         var ram = await _context.Ram.FindAsync(id);
         if (ram is null)

@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class Gpu : Component
+public class GpuEntity : Component
 {
     public string GpuChip { get; set; } = string.Empty;
     public GpuInterface GpuInterface { get; set; }

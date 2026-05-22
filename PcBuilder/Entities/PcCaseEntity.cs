@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class PcCase : Component
+public class PcCaseEntity : Component
 {
     public List<FormFactor> SupportedFormFactors { get; set; } = [];
     public int MaxGpuLengthMm { get; set; }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class PsuService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<Psu>> GetAllPsusAsync()
+    public async Task<List<PsuEntity>> GetAllPsusAsync()
     {
         return await _context.Psu.Include(p => p.Brand).ToListAsync();
     }
 
-    public async Task<Psu> GetPsuByIdAsync(int id)
+    public async Task<PsuEntity> GetPsuByIdAsync(int id)
     {
         var psu = await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
         if (psu is null)
@@ -23,11 +23,11 @@ public class PsuService(PcDbContext context)
         return psu;
     }
 
-    public async Task<Psu> AddPsuAsync(PsuCreateDto dto)
+    public async Task<PsuEntity> AddPsuAsync(PsuCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var psu = new Psu
+        var psu = new PsuEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -49,7 +49,7 @@ public class PsuService(PcDbContext context)
         return psu;
     }
 
-    public async Task<Psu> UpdatePsuAsync(int id, PsuUpdateDto dto)
+    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateDto dto)
     {
         var psu = await _context.Psu.FindAsync(id);
         if (psu is null)

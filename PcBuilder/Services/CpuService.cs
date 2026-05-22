@@ -2,18 +2,18 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
 public class CpuService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
-    public async Task<List<Cpu>> GetAllCpuAsync()
+    public async Task<List<CpuEntity>> GetAllCpuAsync()
     {
         return await _context.Cpu.Include(c => c.Brand).ToListAsync();
     }
-    public async Task<Cpu> GetCpuByIdAsync(int id)
+    public async Task<CpuEntity> GetCpuByIdAsync(int id)
     {
         var cpu = await _context.Cpu.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
         if (cpu == null)
@@ -22,11 +22,11 @@ public class CpuService(PcDbContext context)
         }
         return cpu;
     }
-    public async Task<Cpu> AddCpuAsync(CpuCreateDto cpuDto)
+    public async Task<CpuEntity> AddCpuAsync(CpuCreateDto cpuDto)
     {
         var brandExists = await _context.Brand.AnyAsync(b => b.Id == cpuDto.BrandId);
         await EnsureBrandExistsAsync(cpuDto.BrandId);
-        var cpu = new Cpu
+        var cpu = new CpuEntity
         {
             Name = cpuDto.Name,
             BrandId = cpuDto.BrandId,
@@ -56,7 +56,7 @@ public class CpuService(PcDbContext context)
 
         return cpu;
     }
-    public async Task<Cpu> UpdateCpuAsync(int id, CpuUpdateDto cpuDto)
+    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateDto cpuDto)
     {
         var cpu = await _context.Cpu.FindAsync(id);
         if (cpu is null)

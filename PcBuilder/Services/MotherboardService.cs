@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class MotherboardService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<Motherboard>> GetAllMotherboardsAsync()
+    public async Task<List<MotherboardEntity>> GetAllMotherboardsAsync()
     {
         return await _context.Motherboard.Include(m => m.Brand).ToListAsync();
     }
 
-    public async Task<Motherboard> GetMotherboardByIdAsync(int id)
+    public async Task<MotherboardEntity> GetMotherboardByIdAsync(int id)
     {
         var motherboard = await _context.Motherboard.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
         if (motherboard is null)
@@ -23,11 +23,11 @@ public class MotherboardService(PcDbContext context)
         return motherboard;
     }
 
-    public async Task<Motherboard> AddMotherboardAsync(MotherboardCreateDto dto)
+    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var motherboard = new Motherboard
+        var motherboard = new MotherboardEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -62,7 +62,7 @@ public class MotherboardService(PcDbContext context)
         return motherboard;
     }
 
-    public async Task<Motherboard> UpdateMotherboardAsync(int id, MotherboardUpdateDto dto)
+    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateDto dto)
     {
         var motherboard = await _context.Motherboard.FindAsync(id);
         if (motherboard is null)

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
-using PcBuilder.Models;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
 
@@ -9,12 +9,12 @@ public class HardDriveService(PcDbContext context)
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<HardDrive>> GetAllHardDrivesAsync()
+    public async Task<List<HardDriveEntity>> GetAllHardDrivesAsync()
     {
         return await _context.HardDrive.Include(h => h.Brand).ToListAsync();
     }
 
-    public async Task<HardDrive> GetHardDriveByIdAsync(int id)
+    public async Task<HardDriveEntity> GetHardDriveByIdAsync(int id)
     {
         var hardDrive = await _context.HardDrive.Include(h => h.Brand).FirstOrDefaultAsync(h => h.Id == id);
         if (hardDrive is null)
@@ -23,11 +23,11 @@ public class HardDriveService(PcDbContext context)
         return hardDrive;
     }
 
-    public async Task<HardDrive> AddHardDriveAsync(HardDriveCreateDto dto)
+    public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateDto dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
-        var hardDrive = new HardDrive
+        var hardDrive = new HardDriveEntity
         {
             Name = dto.Name,
             BrandId = dto.BrandId,
@@ -49,7 +49,7 @@ public class HardDriveService(PcDbContext context)
         return hardDrive;
     }
 
-    public async Task<HardDrive> UpdateHardDriveAsync(int id, HardDriveUpdateDto dto)
+    public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateDto dto)
     {
         var hardDrive = await _context.HardDrive.FindAsync(id);
         if (hardDrive is null)

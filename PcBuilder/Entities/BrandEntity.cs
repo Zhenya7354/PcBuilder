@@ -1,7 +1,6 @@
+namespace PcBuilder.Entities;
 
-namespace PcBuilder.Models;
-
-public class Brand
+public class BrandEntity
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

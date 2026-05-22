@@ -1,3 +1,4 @@
+using PcBuilder.Entities;
 using System.Text.Json.Serialization;
 
 namespace PcBuilder.Models;
@@ -11,5 +12,5 @@ public abstract class Component
     [JsonPropertyOrder(-1)]
     public string Name { get; set; } = string.Empty;
     //Navigation property for the brand relationship
-    public Brand? Brand { get; set; }
+    public BrandEntity? Brand { get; set; }
 }

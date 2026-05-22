@@ -1,8 +1,9 @@
 using PcBuilder.Enums;
+using PcBuilder.Models;
 
-namespace PcBuilder.Models;
+namespace PcBuilder.Entities;
 
-public class Ram : Component
+public class RamEntity : Component
 {
     public MemoryType MemoryType { get; set; }
     public int CapacityGb { get; set; }
