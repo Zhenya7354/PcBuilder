@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] MotherboardService service, [FromBody] MotherboardCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] MotherboardService service, [FromBody] MotherboardCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -37,7 +37,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] MotherboardService service, [FromBody] MotherboardUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] MotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try

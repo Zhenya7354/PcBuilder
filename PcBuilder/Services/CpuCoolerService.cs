@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -25,7 +25,7 @@ public class CpuCoolerService(PcDbContext context)
         return cpuCooler;
     }
 
-    public async Task<CpuCoolerEntity> AddCpuCoolerAsync(CpuCoolerCreateDto dto)
+    public async Task<CpuCoolerEntity> AddCpuCoolerAsync(CpuCoolerCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -50,7 +50,7 @@ public class CpuCoolerService(PcDbContext context)
         return cpuCooler;
     }
 
-    public async Task<CpuCoolerEntity> UpdateCpuCoolerAsync(int id, CpuCoolerUpdateDto dto)
+    public async Task<CpuCoolerEntity> UpdateCpuCoolerAsync(int id, CpuCoolerUpdate dto)
     {
         var cpuCooler = await _context.CpuCooler.FindAsync(id);
         if (cpuCooler is null)

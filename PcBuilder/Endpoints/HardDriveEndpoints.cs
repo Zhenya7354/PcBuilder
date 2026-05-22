@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] HardDriveService service, [FromBody] HardDriveCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] HardDriveService service, [FromBody] HardDriveCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -37,7 +37,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] HardDriveService service, [FromBody] HardDriveUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] HardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try

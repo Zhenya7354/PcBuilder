@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record MotherboardCreateDto(
+public record MotherboardCreate(
     [Required] string Name,
     [Required] int BrandId,
     [Required] PcSocketType Socket,

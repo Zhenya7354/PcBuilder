@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -29,7 +29,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -43,7 +43,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try

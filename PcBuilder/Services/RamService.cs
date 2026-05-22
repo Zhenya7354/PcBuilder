@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class RamService(PcDbContext context)
         return ram;
     }
 
-    public async Task<RamEntity> AddRamAsync(RamCreateDto dto)
+    public async Task<RamEntity> AddRamAsync(RamCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -48,7 +48,7 @@ public class RamService(PcDbContext context)
         return ram;
     }
 
-    public async Task<RamEntity> UpdateRamAsync(int id, RamUpdateDto dto)
+    public async Task<RamEntity> UpdateRamAsync(int id, RamUpdate dto)
     {
         var ram = await _context.Ram.FindAsync(id);
         if (ram is null)

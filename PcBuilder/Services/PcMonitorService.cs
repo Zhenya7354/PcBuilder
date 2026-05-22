@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class PcMonitorService(PcDbContext context)
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateDto dto)
+    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -61,7 +61,7 @@ public class PcMonitorService(PcDbContext context)
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateDto dto)
+    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdate dto)
     {
         var monitor = await _context.PcMonitor.FindAsync(id);
         if (monitor is null)

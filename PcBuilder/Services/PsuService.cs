@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class PsuService(PcDbContext context)
         return psu;
     }
 
-    public async Task<PsuEntity> AddPsuAsync(PsuCreateDto dto)
+    public async Task<PsuEntity> AddPsuAsync(PsuCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -49,7 +49,7 @@ public class PsuService(PcDbContext context)
         return psu;
     }
 
-    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateDto dto)
+    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdate dto)
     {
         var psu = await _context.Psu.FindAsync(id);
         if (psu is null)

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class MotherboardService(PcDbContext context)
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateDto dto)
+    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -62,7 +62,7 @@ public class MotherboardService(PcDbContext context)
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateDto dto)
+    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdate dto)
     {
         var motherboard = await _context.Motherboard.FindAsync(id);
         if (motherboard is null)

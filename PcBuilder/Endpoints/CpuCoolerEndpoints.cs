@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -29,7 +29,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -43,7 +43,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try

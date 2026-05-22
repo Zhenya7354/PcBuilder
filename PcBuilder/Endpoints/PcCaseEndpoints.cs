@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PcCaseService service, [FromBody] PcCaseCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] PcCaseService service, [FromBody] PcCaseCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -37,7 +37,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PcCaseService service, [FromBody] PcCaseUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] PcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try

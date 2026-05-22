@@ -2,9 +2,9 @@ using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record GpuCreateDto
+public record GpuCreate
 (
     [Required] string Name,
     [Required] int BrandId,

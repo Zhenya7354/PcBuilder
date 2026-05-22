@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class PcCaseService(PcDbContext context)
         return pcCase;
     }
 
-    public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreateDto dto)
+    public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -53,7 +53,7 @@ public class PcCaseService(PcDbContext context)
         return pcCase;
     }
 
-    public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdateDto dto)
+    public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdate dto)
     {
         var pcCase = await _context.PcCase.FindAsync(id);
         if (pcCase is null)

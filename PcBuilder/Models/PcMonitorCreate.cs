@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record PcMonitorCreateDto(
+public record PcMonitorCreate(
     [Required] string Name,
     [Required] int BrandId,
     [Required, Range(1, 100)] double ScreenSizeInch,

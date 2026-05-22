@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 using System.Xml;
 
@@ -31,7 +31,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromBody] GpuCreateDto dto, [FromServices] GpuService gpuService) =>
+        group.MapPost("/add", async ([FromBody] GpuCreate dto, [FromServices] GpuService gpuService) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -45,7 +45,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] GpuService gpuService, [FromBody] GpuUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] GpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try

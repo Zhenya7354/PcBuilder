@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -37,7 +37,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try

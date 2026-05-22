@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] RamService service, [FromBody] RamCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] RamService service, [FromBody] RamCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -37,7 +37,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] RamService service, [FromBody] RamUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] RamService service, [FromBody] RamUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try

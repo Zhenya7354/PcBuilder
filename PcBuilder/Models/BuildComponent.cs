@@ -1,8 +1,8 @@
 using PcBuilder.Enums;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record BuildComponentDto(
+public record BuildComponent(
     BuildComponentType ComponentType,
     int? ComponentId
     );

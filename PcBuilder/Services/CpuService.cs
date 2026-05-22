@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -22,7 +22,7 @@ public class CpuService(PcDbContext context)
         }
         return cpu;
     }
-    public async Task<CpuEntity> AddCpuAsync(CpuCreateDto cpuDto)
+    public async Task<CpuEntity> AddCpuAsync(CpuCreate cpuDto)
     {
         var brandExists = await _context.Brand.AnyAsync(b => b.Id == cpuDto.BrandId);
         await EnsureBrandExistsAsync(cpuDto.BrandId);
@@ -56,7 +56,7 @@ public class CpuService(PcDbContext context)
 
         return cpu;
     }
-    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateDto cpuDto)
+    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdate cpuDto)
     {
         var cpu = await _context.Cpu.FindAsync(id);
         if (cpu is null)

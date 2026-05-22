@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -23,7 +23,7 @@ public class HardDriveService(PcDbContext context)
         return hardDrive;
     }
 
-    public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateDto dto)
+    public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreate dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -49,7 +49,7 @@ public class HardDriveService(PcDbContext context)
         return hardDrive;
     }
 
-    public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateDto dto)
+    public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdate dto)
     {
         var hardDrive = await _context.HardDrive.FindAsync(id);
         if (hardDrive is null)

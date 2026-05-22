@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
-using PcBuilder.Enums;
 using PcBuilder.Models;
+using PcBuilder.Enums;
 using PcBuilder.Services;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -45,7 +44,7 @@ public static class BuildEndpoints
 
         });
 
-        group.MapPost("/add", async ([FromServices] BuildService service, ClaimsPrincipal user, [FromBody] BuildDto dto) =>
+        group.MapPost("/add", async ([FromServices] BuildService service, ClaimsPrincipal user, [FromBody] Build dto) =>
         {
 
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -70,7 +69,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildDto dto) =>
+        group.MapPut("/update/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] Build dto) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -109,7 +108,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapPost("/set-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentDto dto) =>
+        group.MapPost("/set-component/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponent dto) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)

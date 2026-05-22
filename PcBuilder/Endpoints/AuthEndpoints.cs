@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
-using PcBuilder.Entities;
 using PcBuilder.Models;
+using PcBuilder.Entities;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -14,7 +13,7 @@ public static class AuthEndpoints
         var group = app.MapGroup("/auth");
 
 
-        group.MapPost("/register", async (RegisterDto dto, UserManager<UserEntity> userManager, PcDbContext db) =>
+        group.MapPost("/register", async (Register dto, UserManager<UserEntity> userManager, PcDbContext db) =>
         {
             if (dto is null || userManager is null) return Results.BadRequest();
 
@@ -33,7 +32,7 @@ public static class AuthEndpoints
 
 
         group.MapPost("/login", async (
-            LoginDto dto,
+            Login dto,
             SignInManager<UserEntity> singInManager,
             UserManager<UserEntity> userManager,
             JwtService jwtService) =>
@@ -55,7 +54,7 @@ public static class AuthEndpoints
             var token = jwtService.GenerateToken(user, roles);
             var expires = DateTime.UtcNow.AddMinutes(60);
 
-            return Results.Ok(new AuthResponseDto(token, user.Email!, roles, expires));
+            return Results.Ok(new AuthResponse(token, user.Email!, roles, expires));
         });
 
         // Endpoint for making user an admin, have to be moved in future

@@ -1,6 +1,6 @@
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record AuthResponseDto(
+public record AuthResponse(
    string Token,
    string Email,
    IList<string> Roles,

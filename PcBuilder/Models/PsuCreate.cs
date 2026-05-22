@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record PsuCreateDto(
+public record PsuCreate(
     [Required] string Name,
     [Required] int BrandId,
     [Required, Range(1, 3000)] int Wattage,

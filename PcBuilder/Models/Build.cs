@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-    public class BuildDto
+    public class Build
     {
         public string? Name { get; set; }
         public int? CpuId { get; set; }

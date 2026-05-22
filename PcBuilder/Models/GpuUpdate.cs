@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record GpuUpdateDto(
+public record GpuUpdate(
     string? Name,
     int? BrandId,
     string? gpuChip,

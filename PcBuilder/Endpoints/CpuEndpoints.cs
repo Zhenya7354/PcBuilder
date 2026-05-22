@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -29,7 +29,7 @@ public static class CpuEndpoints
                 return Results.NotFound(ex.Message);
             }
         });
-        group.MapPost("/add", async ([FromServices] CpuService cpuService, [FromBody] CpuCreateDto cpuDto) =>
+        group.MapPost("/add", async ([FromServices] CpuService cpuService, [FromBody] CpuCreate cpuDto) =>
         {
             if(cpuDto is null) return Results.BadRequest("Cpu data is required");
             try
@@ -42,7 +42,7 @@ public static class CpuEndpoints
                 return Results.BadRequest(ex.Message);
             }
         });
-        group.MapPut("/update/{id}", async ([FromServices] CpuService cpuService, [FromBody] CpuUpdateDto cpuDto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] CpuService cpuService, [FromBody] CpuUpdate cpuDto, int id) =>
         {
             var cpu = await cpuService.GetCpuByIdAsync(id);
             if (cpu is null) return Results.NotFound("Cpu not found");

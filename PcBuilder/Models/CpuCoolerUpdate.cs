@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record CpuCoolerUpdateDto(
+public record CpuCoolerUpdate(
     string? Name,
     int? BrandId,
     CoolerType? CoolerType,

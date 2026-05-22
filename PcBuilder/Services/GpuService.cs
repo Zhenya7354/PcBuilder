@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Entities;
 
 namespace PcBuilder.Services;
@@ -24,7 +24,7 @@ public class GpuService(PcDbContext context)
         return gpu;
     }
 
-    public async Task<GpuEntity> AddGpuAsync(GpuCreateDto gpuDto)
+    public async Task<GpuEntity> AddGpuAsync(GpuCreate gpuDto)
     {
         var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId);
         if (!brandExists)
@@ -58,7 +58,7 @@ public class GpuService(PcDbContext context)
 
         return gpu;
     }
-    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateDto gpuDto)
+    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdate gpuDto)
     {
         var gpu = await _context.Gpu.FindAsync(id);
         if(gpu is null) 

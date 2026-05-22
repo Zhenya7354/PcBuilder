@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PcBuilder.Dtos;
+using PcBuilder.Models;
 using PcBuilder.Services;
 
 namespace PcBuilder.Endpoints;
@@ -24,7 +24,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PsuService service, [FromBody] PsuCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] PsuService service, [FromBody] PsuCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -37,7 +37,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PsuService service, [FromBody] PsuUpdateDto dto, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] PsuService service, [FromBody] PsuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try

@@ -1,9 +1,9 @@
 using PcBuilder.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace PcBuilder.Dtos;
+namespace PcBuilder.Models;
 
-public record HardDriveUpdateDto(
+public record HardDriveUpdate(
     string? Name,
     int? BrandId,
     [Range(1, 1000000)] int? CapacityGb,
