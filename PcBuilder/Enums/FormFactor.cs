@@ -1,20 +1,19 @@
-﻿using NpgsqlTypes;
+using NpgsqlTypes;
 
-namespace PcBuilder.Enums
+namespace PcBuilder.Enums;
+
+public enum FormFactor
 {
-    public enum FormFactor
-    {
-        [PgName("ATX")]
-        ATX,
-        [PgName("Micro-ATX")]
-        MicroATX,
-        [PgName("Mini-ITX")]
-        MiniITX,
-        [PgName("E-ATX")]
-        EATX,
-        [PgName("SSI-CEB")]
-        SSICEB,
-        [PgName("XL-ATX")]
-        XLATX
-    }
+    [PgName("ATX")]
+    ATX,
+    [PgName("Micro-ATX")]
+    MicroATX,
+    [PgName("Mini-ITX")]
+    MiniITX,
+    [PgName("E-ATX")]
+    EATX,
+    [PgName("SSI-CEB")]
+    SSICEB,
+    [PgName("XL-ATX")]
+    XLATX
 }

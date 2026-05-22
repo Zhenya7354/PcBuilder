@@ -2,75 +2,74 @@ using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Dtos;
 using PcBuilder.Services;
 
-namespace PcBuilder.Endpoints
+namespace PcBuilder.Endpoints;
+
+public static class CpuCoolerEndpoints
 {
-    public static class CpuCoolerEndpoints
+    public static WebApplication MapCpuCoolerEndpoints(this WebApplication webApplication)
     {
-        public static WebApplication MapCpuCoolerEndpoints(this WebApplication webApplication)
+        var group = webApplication.MapGroup("/cpu-cooler");
+
+        group.MapGet("/all", async ([FromServices] CpuCoolerService service) =>
         {
-            var group = webApplication.MapGroup("/cpu-cooler");
+            var cpuCoolers = await service.GetAllCpuCoolersAsync();
+            return Results.Ok(cpuCoolers);
+        });
 
-            group.MapGet("/all", async ([FromServices] CpuCoolerService service) =>
+        group.MapGet("/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        {
+            try
             {
-                var cpuCoolers = await service.GetAllCpuCoolersAsync();
-                return Results.Ok(cpuCoolers);
-            });
-
-            group.MapGet("/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+                var cpuCooler = await service.GetCpuCoolerByIdAsync(id);
+                return Results.Ok(cpuCooler);
+            }
+            catch (KeyNotFoundException ex)
             {
-                try
-                {
-                    var cpuCooler = await service.GetCpuCoolerByIdAsync(id);
-                    return Results.Ok(cpuCooler);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.NotFound(ex.Message);
-                }
-            });
+                return Results.NotFound(ex.Message);
+            }
+        });
 
-            group.MapPost("/add", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreateDto dto) =>
+        {
+            if (dto is null) return Results.BadRequest("Cpu cooler data is required");
+            try
             {
-                if (dto is null) return Results.BadRequest("Cpu cooler data is required");
-                try
-                {
-                    var cpuCooler = await service.AddCpuCoolerAsync(dto);
-                    return Results.Ok(cpuCooler);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
-
-            group.MapPut("/update/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdateDto dto, int id) =>
+                var cpuCooler = await service.AddCpuCoolerAsync(dto);
+                return Results.Ok(cpuCooler);
+            }
+            catch (KeyNotFoundException ex)
             {
-                if (dto is null) return Results.BadRequest("Cpu cooler data is required");
-                try
-                {
-                    var cpuCooler = await service.UpdateCpuCoolerAsync(id, dto);
-                    return Results.Ok(cpuCooler);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
+                return Results.BadRequest(ex.Message);
+            }
+        });
 
-            group.MapDelete("/delete/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdateDto dto, int id) =>
+        {
+            if (dto is null) return Results.BadRequest("Cpu cooler data is required");
+            try
             {
-                try
-                {
-                    await service.DeleteCpuCoolerAsync(id);
-                    return Results.Ok($"Cpu cooler with id {id} deleted successfully");
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
+                var cpuCooler = await service.UpdateCpuCoolerAsync(id, dto);
+                return Results.Ok(cpuCooler);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
 
-            return webApplication;
-        }
+        group.MapDelete("/delete/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        {
+            try
+            {
+                await service.DeleteCpuCoolerAsync(id);
+                return Results.Ok($"Cpu cooler with id {id} deleted successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
+
+        return webApplication;
     }
 }

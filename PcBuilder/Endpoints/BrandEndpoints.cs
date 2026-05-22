@@ -2,75 +2,74 @@ using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Dtos;
 using PcBuilder.Services;
 
-namespace PcBuilder.Endpoints
+namespace PcBuilder.Endpoints;
+
+public static class BrandEndpoints
 {
-    public static class BrandEndpoints
+    public static WebApplication MapBrandEndpoints(this WebApplication webApplication)
     {
-        public static WebApplication MapBrandEndpoints(this WebApplication webApplication)
+        var group = webApplication.MapGroup("/brand");
+
+        group.MapGet("/all", async ([FromServices] BrandService brandService) =>
         {
-            var group = webApplication.MapGroup("/brand");
+            var brands = await brandService.GetAllBrandsAsync();
+            return Results.Ok(brands);
+        });
 
-            group.MapGet("/all", async ([FromServices] BrandService brandService) =>
+        group.MapGet("/{id}", async ([FromServices] BrandService brandService, int id) =>
+        {
+            try
             {
-                var brands = await brandService.GetAllBrandsAsync();
-                return Results.Ok(brands);
-            });
-
-            group.MapGet("/{id}", async ([FromServices] BrandService brandService, int id) =>
+                var brand = await brandService.GetBrandByIdAsync(id);
+                return Results.Ok(brand);
+            }
+            catch (KeyNotFoundException ex)
             {
-                try
-                {
-                    var brand = await brandService.GetBrandByIdAsync(id);
-                    return Results.Ok(brand);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.NotFound(ex.Message);
-                }
-            });
+                return Results.NotFound(ex.Message);
+            }
+        });
 
-            group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreateDto dto) =>
+        group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreateDto dto) =>
+        {
+            if (dto is null) return Results.BadRequest("Brand data is required");
+            try
             {
-                if (dto is null) return Results.BadRequest("Brand data is required");
-                try
-                {
-                    var brand = await brandService.AddBrandAsync(dto);
-                    return Results.Ok(brand);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
-
-            group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdateDto dto, int id) =>
+                var brand = await brandService.AddBrandAsync(dto);
+                return Results.Ok(brand);
+            }
+            catch (KeyNotFoundException ex)
             {
-                if (dto is null) return Results.BadRequest("Brand data is required");
-                try
-                {
-                    var brand = await brandService.UpdateBrandAsync(id, dto);
-                    return Results.Ok(brand);
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
+                return Results.BadRequest(ex.Message);
+            }
+        });
 
-            group.MapDelete("/delete/{id}", async ([FromServices] BrandService brandService, int id) =>
+        group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdateDto dto, int id) =>
+        {
+            if (dto is null) return Results.BadRequest("Brand data is required");
+            try
             {
-                try
-                {
-                    await brandService.DeleteBrandAsync(id);
-                    return Results.Ok($"Brand with id {id} deleted successfully");
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    return Results.BadRequest(ex.Message);
-                }
-            });
+                var brand = await brandService.UpdateBrandAsync(id, dto);
+                return Results.Ok(brand);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
 
-            return webApplication;
-        }
+        group.MapDelete("/delete/{id}", async ([FromServices] BrandService brandService, int id) =>
+        {
+            try
+            {
+                await brandService.DeleteBrandAsync(id);
+                return Results.Ok($"Brand with id {id} deleted successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
+
+        return webApplication;
     }
 }

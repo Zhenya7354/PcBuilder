@@ -1,4 +1,3 @@
-namespace PcBuilder.Dtos
-{
-    public record BrandUpdateDto(string? Name);
-}
+namespace PcBuilder.Dtos;
+
+public record BrandUpdateDto(string? Name);

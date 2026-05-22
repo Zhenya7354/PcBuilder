@@ -1,58 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Dtos;
 using PcBuilder.Models;
 
-namespace PcBuilder.Services
+namespace PcBuilder.Services;
+
+public class BrandService(PcDbContext context)
 {
-    public class BrandService(PcDbContext context)
+    private readonly PcDbContext _context = context;
+
+    public async Task<List<Brand>> GetAllBrandsAsync()
     {
-        private readonly PcDbContext _context = context;
+        return await _context.Brand.ToListAsync();
+    }
 
-        public async Task<List<Brand>> GetAllBrandsAsync()
+    public async Task<Brand> GetBrandByIdAsync(int id)
+    {
+        var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
+        if (brand is null)
         {
-            return await _context.Brand.ToListAsync();
+            throw new KeyNotFoundException($"Brand with ID {id} not found.");
         }
 
-        public async Task<Brand> GetBrandByIdAsync(int id)
-        {
-            var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
-            if (brand is null)
-            {
-                throw new KeyNotFoundException($"Brand with ID {id} not found.");
-            }
+        return brand;
+    }
 
-            return brand;
-        }
+    public async Task<Brand> AddBrandAsync(BrandCreateDto dto)
+    {
+        var brand = new Brand { Name = dto.Name };
+        _context.Brand.Add(brand);
+        await _context.SaveChangesAsync();
+        return brand;
+    }
 
-        public async Task<Brand> AddBrandAsync(BrandCreateDto dto)
-        {
-            var brand = new Brand { Name = dto.Name };
-            _context.Brand.Add(brand);
-            await _context.SaveChangesAsync();
-            return brand;
-        }
+    public async Task<Brand> UpdateBrandAsync(int id, BrandUpdateDto dto)
+    {
+        var brand = await _context.Brand.FindAsync(id);
+        if (brand is null)
+            throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
-        public async Task<Brand> UpdateBrandAsync(int id, BrandUpdateDto dto)
-        {
-            var brand = await _context.Brand.FindAsync(id);
-            if (brand is null)
-                throw new KeyNotFoundException($"Brand with ID {id} not found.");
+        if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
 
-            if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
+        await _context.SaveChangesAsync();
+        return brand;
+    }
 
-            await _context.SaveChangesAsync();
-            return brand;
-        }
+    public async Task DeleteBrandAsync(int id)
+    {
+        var brand = await _context.Brand.FindAsync(id);
+        if (brand is null)
+            throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
-        public async Task DeleteBrandAsync(int id)
-        {
-            var brand = await _context.Brand.FindAsync(id);
-            if (brand is null)
-                throw new KeyNotFoundException($"Brand with ID {id} not found.");
-
-            _context.Brand.Remove(brand);
-            await _context.SaveChangesAsync();
-        }
+        _context.Brand.Remove(brand);
+        await _context.SaveChangesAsync();
     }
 }

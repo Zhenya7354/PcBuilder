@@ -1,14 +1,13 @@
-﻿using NpgsqlTypes;
+using NpgsqlTypes;
 
-namespace PcBuilder.Enums
+namespace PcBuilder.Enums;
+
+public enum CoolerType
 {
-    public enum CoolerType
-    {
-        [PgName("Air")]
-        Air,
-        [PgName("AIO Liquid")]
-        Liquid,
-        [PgName("Custom Liquid")]
-        CustomLiquid
-    }
+    [PgName("Air")]
+    Air,
+    [PgName("AIO Liquid")]
+    Liquid,
+    [PgName("Custom Liquid")]
+    CustomLiquid
 }

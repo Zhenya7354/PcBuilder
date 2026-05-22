@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PcBuilder.Models
+namespace PcBuilder.Models;
+
+public class Brand
 {
-    public class Brand
-    {
-        [Column("id")]
-        public int Id { get; set; }
-        [Column("name")]
-        public string Name { get; set; } = string.Empty;
-    }
+    [Column("id")]
+    public int Id { get; set; }
+    [Column("name")]
+    public string Name { get; set; } = string.Empty;
 }

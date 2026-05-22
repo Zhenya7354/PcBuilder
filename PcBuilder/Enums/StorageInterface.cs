@@ -1,18 +1,17 @@
-﻿using NpgsqlTypes;
+using NpgsqlTypes;
 
-namespace PcBuilder.Enums
+namespace PcBuilder.Enums;
+
+public enum StorageInterface
 {
-    public enum StorageInterface
-    {
-        [PgName("SATA III")]
-        Sata_3,
-        [PgName("NVMe PCIe 3.0")]
-        NvmePcie_Gen3,
-        [PgName("NVMe PCIe 4.0")]
-        NvmePcie_Gen4,
-        [PgName("NVMe PCIe 5.0")]
-        NvmePcie_Gen5,
-        [PgName("SAS")]
-        SAS
-    }
+    [PgName("SATA III")]
+    Sata_3,
+    [PgName("NVMe PCIe 3.0")]
+    NvmePcie_Gen3,
+    [PgName("NVMe PCIe 4.0")]
+    NvmePcie_Gen4,
+    [PgName("NVMe PCIe 5.0")]
+    NvmePcie_Gen5,
+    [PgName("SAS")]
+    SAS
 }

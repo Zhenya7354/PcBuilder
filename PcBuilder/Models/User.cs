@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
-namespace PcBuilder.Models
+namespace PcBuilder.Models;
+
+public class User : IdentityUser
 {
-    public class User : IdentityUser
-    {
-    }
 }
