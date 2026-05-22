@@ -10,6 +10,8 @@ namespace PcBuilder.Extentions;
 
 public static class IdentityExtentions
 {
+    private const string AdminPolicyName = "AdminOnly";
+    private const string AuthenticatedUserPolicyName = "Authenticated";
     public static WebApplicationBuilder AddIdentityAndJwt(this WebApplicationBuilder builder)
     {
         var identitySection = builder.Configuration.GetSection("Identity");
@@ -66,8 +68,8 @@ public static class IdentityExtentions
                 };
             });
         builder.Services.AddAuthorizationBuilder()
-            .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"))
-            .AddPolicy("Authenticated", policy => policy.RequireAuthenticatedUser());
+            .AddPolicy(AdminPolicyName, policy => policy.RequireRole("Admin"))
+            .AddPolicy(AuthenticatedUserPolicyName, policy => policy.RequireAuthenticatedUser());
 
         return builder;
     }
