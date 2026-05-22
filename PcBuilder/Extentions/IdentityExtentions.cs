@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using PcBuilder.Data;
-using PcBuilder.Models;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using PcBuilder.Entities;
 
 namespace PcBuilder.Extentions;
 
@@ -12,15 +12,16 @@ public static class IdentityExtentions
 {
     public static WebApplicationBuilder AddIdentityAndJwt(this WebApplicationBuilder builder)
     {
-        builder.Services.AddIdentity<User, IdentityRole>(options =>
+        var identitySection = builder.Configuration.GetSection("Identity");
+        builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
         {
-            options.Password.RequireDigit = true;
-            options.Password.RequiredLength = 8;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = bool.Parse(identitySection.GetSection("Password")["RequireDigit"]!);
+            options.Password.RequiredLength = int.Parse(identitySection.GetSection("Password")["RequiredLength"]!);
+            options.Password.RequireUppercase = bool.Parse(identitySection.GetSection("Password")["RequireUppercase"]!);
+            options.Password.RequireNonAlphanumeric = bool.Parse(identitySection.GetSection("Password")["RequireNonAlphanumeric"]!);
+            options.Lockout.MaxFailedAccessAttempts = int.Parse(identitySection.GetSection("Lockout")["MaxFailedAccessAttempts"]!);
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(int.Parse(identitySection.GetSection("Lockout")["DefaultLockoutTimeSpan"]!));
+            options.User.RequireUniqueEmail = bool.Parse(identitySection.GetSection("User")["RequireUniqueEmail"]!);
         }
         ).AddEntityFrameworkStores<PcDbContext>()
         .AddDefaultTokenProviders();
