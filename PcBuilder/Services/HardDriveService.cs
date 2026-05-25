@@ -1,23 +1,21 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class HardDriveService(PcDbContext context)
+public class HardDriveService(IHardDriveRepository hardDriveRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IHardDriveRepository _hardDriveRepository = hardDriveRepository;
 
     public async Task<List<HardDriveEntity>> GetAllHardDrivesAsync()
     {
-        return await _context.HardDrive.Include(h => h.Brand).ToListAsync();
+        return await _hardDriveRepository.GetAllHardDrivesAsync();
     }
 
     public async Task<HardDriveEntity> GetHardDriveByIdAsync(int id)
     {
-        var hardDrive = await _context.HardDrive.Include(h => h.Brand).FirstOrDefaultAsync(h => h.Id == id);
-        if (hardDrive is null)
+        var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 
         return hardDrive;
@@ -44,22 +42,17 @@ public class HardDriveService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.HardDrive.Add(hardDrive);
-        await _context.SaveChangesAsync();
+        await _hardDriveRepository.AddHardDriveAsync(hardDrive);
+        await _hardDriveRepository.SaveChangesAsync();
         return hardDrive;
     }
 
     public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdate dto)
     {
-        var hardDrive = await _context.HardDrive.FindAsync(id);
-        if (hardDrive is null)
+        var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            hardDrive.BrandId = dto.BrandId.Value;
-        }
+       await EnsureBrandExistsAsync(dto.BrandId ?? hardDrive.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) hardDrive.Name = dto.Name;
         if (dto.CapacityGb.HasValue) hardDrive.CapacityGb = dto.CapacityGb.Value;
@@ -74,24 +67,21 @@ public class HardDriveService(PcDbContext context)
         if (dto.PowerWatts.HasValue) hardDrive.PowerWatts = dto.PowerWatts.Value;
         if (dto.PriceUsd.HasValue) hardDrive.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _hardDriveRepository.SaveChangesAsync();
         return hardDrive;
     }
 
     public async Task DeleteHardDriveAsync(int id)
     {
-        var hardDrive = await _context.HardDrive.FindAsync(id);
-        if (hardDrive is null)
+        var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
-
-        _context.HardDrive.Remove(hardDrive);
-        await _context.SaveChangesAsync();
+        await _hardDriveRepository.DeleteHardDriveAsync(hardDrive);
+        await _hardDriveRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _hardDriveRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
