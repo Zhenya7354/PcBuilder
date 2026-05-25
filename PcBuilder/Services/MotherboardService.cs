@@ -1,23 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class MotherboardService(PcDbContext context)
+public class MotherboardService(IMotherboardRepository motherboardRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IMotherboardRepository _motherboardRepository = motherboardRepository;
 
     public async Task<List<MotherboardEntity>> GetAllMotherboardsAsync()
     {
-        return await _context.Motherboard.Include(m => m.Brand).ToListAsync();
+        return await _motherboardRepository.GetAllMotherboardsAsync();
     }
 
     public async Task<MotherboardEntity> GetMotherboardByIdAsync(int id)
     {
-        var motherboard = await _context.Motherboard.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
-        if (motherboard is null)
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
         return motherboard;
@@ -57,22 +56,17 @@ public class MotherboardService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.Motherboard.Add(motherboard);
-        await _context.SaveChangesAsync();
+        await _motherboardRepository.AddMotherboardAsync(motherboard);
+        await _motherboardRepository.SaveChangesAsync();
         return motherboard;
     }
 
     public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdate dto)
     {
-        var motherboard = await _context.Motherboard.FindAsync(id);
-        if (motherboard is null)
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            motherboard.BrandId = dto.BrandId.Value;
-        }
+        await EnsureBrandExistsAsync(dto.BrandId ?? motherboard.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) motherboard.Name = dto.Name;
         if (dto.Socket.HasValue) motherboard.Socket = dto.Socket.Value;
@@ -100,24 +94,22 @@ public class MotherboardService(PcDbContext context)
         if (dto.RearDisplayPort.HasValue) motherboard.RearDisplayPort = dto.RearDisplayPort.Value;
         if (dto.PriceUsd.HasValue) motherboard.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _motherboardRepository.SaveChangesAsync();
         return motherboard;
     }
 
     public async Task DeleteMotherboardAsync(int id)
     {
-        var motherboard = await _context.Motherboard.FindAsync(id);
-        if (motherboard is null)
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
-        _context.Motherboard.Remove(motherboard);
-        await _context.SaveChangesAsync();
+        await _motherboardRepository.DeleteMotherboardAsync(motherboard);
+        await _motherboardRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _motherboardRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
