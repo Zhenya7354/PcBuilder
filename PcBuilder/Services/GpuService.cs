@@ -2,35 +2,31 @@ using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class GpuService(PcDbContext context)
+public class GpuService(IGpuRepository gpuRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IGpuRepository _gpuRepository = gpuRepository;
 
     public async Task<List<GpuEntity>> GetGpusAsync()
     {
-        return await _context.Gpu.Include(g => g.Brand).ToListAsync();
+        return await _gpuRepository.GetAllGpusAsync();
     }
 
     public async Task<GpuEntity> GetGpuById(int id)
     {
-        var gpu = await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
-        if (gpu == null)
-        {
-            throw new KeyNotFoundException($"GPU with ID {id} not found.");
-        }
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Gpu not found");
         return gpu;
     }
 
     public async Task<GpuEntity> AddGpuAsync(GpuCreate gpuDto)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId);
-        if (!brandExists)
-        {
+        if (!await _gpuRepository.BrandExistsAsync(gpuDto.BrandId))
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
-        }
+
         var gpu = new GpuEntity
         {
             Name = gpuDto.Name,
@@ -53,26 +49,19 @@ public class GpuService(PcDbContext context)
             HasRgb = gpuDto.hasRgb,
             Price = gpuDto.price
         };
-        _context.Gpu.Add(gpu);
-        await _context.SaveChangesAsync();
+        await _gpuRepository.AddGpuAsync(gpu);
+        await _gpuRepository.SaveChangesAsync();
 
         return gpu;
     }
     public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdate gpuDto)
     {
-        var gpu = await _context.Gpu.FindAsync(id);
-        if(gpu is null) 
-            throw new KeyNotFoundException($"GPU with ID {id} not found.");
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Gpu not found");
 
-        if(gpuDto.BrandId.HasValue)
-        {
-            var brandExists = await _context.Brand.AnyAsync(b => b.Id == gpuDto.BrandId.Value);
-            if (!brandExists)
-            {
-                throw new KeyNotFoundException("Brand with the specified ID does not exist.");
-            }
-            gpu.BrandId = gpuDto.BrandId.Value;
-        }
+        if (!await _gpuRepository.BrandExistsAsync(gpuDto.BrandId ?? gpu.BrandId))
+            throw new KeyNotFoundException("Brand not found");
+
         if (!string.IsNullOrWhiteSpace(gpuDto.Name)) gpu.Name = gpuDto.Name;
         if (!string.IsNullOrWhiteSpace(gpuDto.gpuChip)) gpu.GpuChip = gpuDto.gpuChip;
         if (gpuDto.gpuInterface.HasValue) gpu.GpuInterface = gpuDto.gpuInterface.Value;
@@ -92,20 +81,17 @@ public class GpuService(PcDbContext context)
         if (gpuDto.hasRgb.HasValue) gpu.HasRgb = gpuDto.hasRgb.Value;
         if (gpuDto.price.HasValue) gpu.Price = gpuDto.price.Value;
 
-        await _context.SaveChangesAsync();
+        await _gpuRepository.SaveChangesAsync();
         return gpu;
     }
 
     public async Task DeleteGpuAsync(int id)
     {
-        var gpu = await _context.Gpu.FindAsync(id);
-        if(gpu is null)
-        {
-            throw new KeyNotFoundException($"GPU with ID {id} not found.");
-        }
-        _context.Gpu.Remove(gpu);
-        await _context.SaveChangesAsync();
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Gpu not found");
+        await _gpuRepository.DeleteGpuAsync(gpu);
+        await _gpuRepository.SaveChangesAsync();
     }
 }
-               
-    
+
+
