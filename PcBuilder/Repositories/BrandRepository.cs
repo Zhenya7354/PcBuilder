@@ -19,13 +19,13 @@ public class BrandRepository(PcDbContext context) : IBrandRepository
         return await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
     }
 
-    public Task AddBrandAsync(BrandEntity brand)
+    public Task AddBrand(BrandEntity brand)
     {
         _context.Brand.Add(brand);
         return Task.CompletedTask;
     }
 
-    public Task DeleteBrandAsync(BrandEntity brand)
+    public Task DeleteBrand(BrandEntity brand)
     {
         _context.Brand.Remove(brand);
         return Task.CompletedTask;

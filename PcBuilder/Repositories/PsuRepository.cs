@@ -19,13 +19,13 @@ public class PsuRepository(PcDbContext context) : IPsuRepository
         return await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Task AddPsuAsync(PsuEntity psu)
+    public Task AddPsu(PsuEntity psu)
     {
         _context.Psu.Add(psu);
         return Task.CompletedTask;
     }
 
-    public Task DeletePsuAsync(PsuEntity psu)
+    public Task DeletePsu(PsuEntity psu)
     {
         _context.Psu.Remove(psu);
         return Task.CompletedTask;

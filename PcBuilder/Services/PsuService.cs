@@ -43,7 +43,7 @@ public class PsuService(IPsuRepository psuRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _psuRepository.AddPsuAsync(psu);
+        await _psuRepository.AddPsu(psu);
         await _psuRepository.SaveChangesAsync();
         return psu;
     }
@@ -77,7 +77,7 @@ public class PsuService(IPsuRepository psuRepository)
         var psu = await _psuRepository.GetPsuByIdAsync(id) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
-        await _psuRepository.DeletePsuAsync(psu);
+        await _psuRepository.DeletePsu(psu);
         await _psuRepository.SaveChangesAsync();
     }
 

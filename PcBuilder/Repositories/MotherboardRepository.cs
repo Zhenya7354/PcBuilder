@@ -19,13 +19,13 @@ public class MotherboardRepository(PcDbContext context) : IMotherboardRepository
         return await _context.Motherboard.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public Task AddMotherboardAsync(MotherboardEntity motherboard)
+    public Task AddMotherboard(MotherboardEntity motherboard)
     {
         _context.Motherboard.Add(motherboard);
         return Task.CompletedTask;
     }
 
-    public Task DeleteMotherboardAsync(MotherboardEntity motherboard)
+    public Task DeleteMotherboard(MotherboardEntity motherboard)
     {
         _context.Motherboard.Remove(motherboard);
         return Task.CompletedTask;

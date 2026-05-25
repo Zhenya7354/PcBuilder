@@ -19,13 +19,13 @@ public class RamRepository(PcDbContext context) : IRamRepository
         return await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public Task AddRamAsync(RamEntity ram)
+    public Task AddRam(RamEntity ram)
     {
         _context.Ram.Add(ram);
         return Task.CompletedTask;
     }
 
-    public Task DeleteRamAsync(RamEntity ram)
+    public Task DeleteRam(RamEntity ram)
     {
         _context.Ram.Remove(ram);
         return Task.CompletedTask;

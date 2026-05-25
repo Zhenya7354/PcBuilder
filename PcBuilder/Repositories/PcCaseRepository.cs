@@ -19,13 +19,13 @@ public class PcCaseRepository(PcDbContext context) : IPcCaseRepository
         return await _context.PcCase.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCaseAsync(PcCaseEntity pcCase)
+    public Task AddCase(PcCaseEntity pcCase)
     {
         _context.PcCase.Add(pcCase);
         return Task.CompletedTask;
     }
 
-    public Task DeleteCaseAsync(PcCaseEntity pcCase)
+    public Task DeleteCase(PcCaseEntity pcCase)
     {
         _context.PcCase.Remove(pcCase);
         return Task.CompletedTask;

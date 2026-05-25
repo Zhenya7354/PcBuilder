@@ -24,7 +24,7 @@ public class BrandService(IBrandRepository brandRepository)
     public async Task<BrandEntity> AddBrandAsync(BrandCreate dto)
     {
         var brand = new BrandEntity { Name = dto.Name };
-        await _brandRepository.AddBrandAsync(brand);
+        await _brandRepository.AddBrand(brand);
         await _brandRepository.SaveChangesAsync();
         return brand;
     }
@@ -45,7 +45,7 @@ public class BrandService(IBrandRepository brandRepository)
         var brand = await _brandRepository.GetBrandByIdAsync(id) ??
            throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
-        await _brandRepository.DeleteBrandAsync(brand);
+        await _brandRepository.DeleteBrand(brand);
         await _brandRepository.SaveChangesAsync();
     }
 }

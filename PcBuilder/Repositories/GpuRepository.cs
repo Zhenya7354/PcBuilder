@@ -17,12 +17,12 @@ public class GpuRepository(PcDbContext context) : IGpuRepository
         return await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
     }
 
-    public  Task AddGpuAsync(GpuEntity gpu)
+    public  Task AddGpu(GpuEntity gpu)
     {
         _context.Gpu.Add(gpu);
         return Task.CompletedTask;
     }
-    public  Task DeleteGpuAsync(GpuEntity gpu)
+    public  Task DeleteGpu(GpuEntity gpu)
     {
         _context.Gpu.Remove(gpu);
         return Task.CompletedTask;

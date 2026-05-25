@@ -19,13 +19,13 @@ public class PcMonitorRepository(PcDbContext context) : IPcMonitorRepository
         return await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public Task AddMonitorAsync(PcMonitorEntity monitor)
+    public Task AddMonitor(PcMonitorEntity monitor)
     {
         _context.PcMonitor.Add(monitor);
         return Task.CompletedTask;
     }
 
-    public Task DeleteMonitorAsync(PcMonitorEntity monitor)
+    public Task DeleteMonitor(PcMonitorEntity monitor)
     {
         _context.PcMonitor.Remove(monitor);
         return Task.CompletedTask;

@@ -19,13 +19,13 @@ public class CpuCoolerRepository(PcDbContext context) : ICpuCoolerRepository
         return await _context.CpuCooler.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCpuCoolerAsync(CpuCoolerEntity cpuCooler)
+    public Task AddCpuCooler(CpuCoolerEntity cpuCooler)
     {
         _context.CpuCooler.Add(cpuCooler);
         return Task.CompletedTask;
     }
 
-    public Task DeleteCpuCoolerAsync(CpuCoolerEntity cpuCooler)
+    public Task DeleteCpuCooler(CpuCoolerEntity cpuCooler)
     {
         _context.CpuCooler.Remove(cpuCooler);
         return Task.CompletedTask;

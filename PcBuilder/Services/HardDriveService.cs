@@ -42,7 +42,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _hardDriveRepository.AddHardDriveAsync(hardDrive);
+        await _hardDriveRepository.AddHardDrive(hardDrive);
         await _hardDriveRepository.SaveChangesAsync();
         return hardDrive;
     }
@@ -75,7 +75,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository)
     {
         var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
-        await _hardDriveRepository.DeleteHardDriveAsync(hardDrive);
+        await _hardDriveRepository.DeleteHardDrive(hardDrive);
         await _hardDriveRepository.SaveChangesAsync();
     }
 

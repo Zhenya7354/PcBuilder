@@ -19,13 +19,13 @@ public class HardDriveRepository(PcDbContext context) : IHardDriveRepository
         return await _context.HardDrive.Include(h => h.Brand).FirstOrDefaultAsync(h => h.Id == id);
     }
 
-    public Task AddHardDriveAsync(HardDriveEntity hardDrive)
+    public Task AddHardDrive(HardDriveEntity hardDrive)
     {
         _context.HardDrive.Add(hardDrive);
         return Task.CompletedTask;
     }
 
-    public Task DeleteHardDriveAsync(HardDriveEntity hardDrive)
+    public Task DeleteHardDrive(HardDriveEntity hardDrive)
     {
         _context.HardDrive.Remove(hardDrive);
         return Task.CompletedTask;

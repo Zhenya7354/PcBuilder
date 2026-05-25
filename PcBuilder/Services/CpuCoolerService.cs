@@ -41,7 +41,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _cpuCoolerRepository.AddCpuCoolerAsync(cpuCooler);
+        await _cpuCoolerRepository.AddCpuCooler(cpuCooler);
         await _cpuCoolerRepository.SaveChangesAsync();
         return cpuCooler;
     }
@@ -73,7 +73,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository)
         var cpuCooler = await _cpuCoolerRepository.GetCpuCoolerByIdAsync(id) ??
             throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
 
-        await _cpuCoolerRepository.DeleteCpuCoolerAsync(cpuCooler);
+        await _cpuCoolerRepository.DeleteCpuCooler(cpuCooler);
         await _cpuCoolerRepository.SaveChangesAsync();
     }
 

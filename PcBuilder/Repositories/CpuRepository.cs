@@ -27,13 +27,13 @@ public class CpuRepository(PcDbContext context) : ICpuRepository
         return await _context.Cpu.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCpuAsync(CpuEntity cpu)
+    public Task AddCpu(CpuEntity cpu)
     {
          _context.Cpu.Add(cpu);
         return Task.CompletedTask;
     }
 
-    public Task DeleteCpuAsync(CpuEntity cpu)
+    public Task DeleteCpu(CpuEntity cpu)
     {
         _context.Cpu.Remove(cpu);
         return Task.CompletedTask;

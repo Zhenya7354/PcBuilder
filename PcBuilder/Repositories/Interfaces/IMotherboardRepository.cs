@@ -6,8 +6,8 @@ public interface IMotherboardRepository
 {
     public Task<List<MotherboardEntity>> GetAllMotherboardsAsync();
     public Task<MotherboardEntity?> GetMotherboardByIdAsync(int id);
-    public Task AddMotherboardAsync(MotherboardEntity motherboard);
-    public Task DeleteMotherboardAsync(MotherboardEntity motherboard);
+    public Task AddMotherboard(MotherboardEntity motherboard);
+    public Task DeleteMotherboard(MotherboardEntity motherboard);
     public Task<bool> BrandExistsAsync(int brandId);
     public Task SaveChangesAsync();
 }
