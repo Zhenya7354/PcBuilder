@@ -1,23 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class RamService(PcDbContext context)
+public class RamService(IRamRepository ramRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IRamRepository _ramRepository = ramRepository;
 
     public async Task<List<RamEntity>> GetAllRamAsync()
     {
-        return await _context.Ram.Include(r => r.Brand).ToListAsync();
+        return await _ramRepository.GetAllRamAsync();
     }
 
     public async Task<RamEntity> GetRamByIdAsync(int id)
     {
-        var ram = await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
-        if (ram is null)
+        var ram = await _ramRepository.GetRamByIdAsync(id) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
         return ram;
@@ -43,22 +42,17 @@ public class RamService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.Ram.Add(ram);
-        await _context.SaveChangesAsync();
+        await _ramRepository.AddRamAsync(ram);
+        await _ramRepository.SaveChangesAsync();
         return ram;
     }
 
     public async Task<RamEntity> UpdateRamAsync(int id, RamUpdate dto)
     {
-        var ram = await _context.Ram.FindAsync(id);
-        if (ram is null)
+        var ram = await _ramRepository.GetRamByIdAsync(id) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            ram.BrandId = dto.BrandId.Value;
-        }
+        await EnsureBrandExistsAsync(dto.BrandId ?? ram.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) ram.Name = dto.Name;
         if (dto.MemoryType.HasValue) ram.MemoryType = dto.MemoryType.Value;
@@ -72,24 +66,22 @@ public class RamService(PcDbContext context)
         if (dto.HeightMm.HasValue) ram.HeightMm = dto.HeightMm.Value;
         if (dto.PriceUsd.HasValue) ram.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _ramRepository.SaveChangesAsync();
         return ram;
     }
 
     public async Task DeleteRamAsync(int id)
     {
-        var ram = await _context.Ram.FindAsync(id);
-        if (ram is null)
+        var ram = await _ramRepository.GetRamByIdAsync(id) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
-        _context.Ram.Remove(ram);
-        await _context.SaveChangesAsync();
+        await _ramRepository.DeleteRamAsync(ram);
+        await _ramRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _ramRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
