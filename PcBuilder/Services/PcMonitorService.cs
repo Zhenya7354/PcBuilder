@@ -1,23 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcMonitorService(PcDbContext context)
+public class PcMonitorService(IPcMonitorRepository pcMonitorRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IPcMonitorRepository _pcMonitorRepository = pcMonitorRepository;
 
     public async Task<List<PcMonitorEntity>> GetAllMonitorsAsync()
     {
-        return await _context.PcMonitor.Include(m => m.Brand).ToListAsync();
+        return await _pcMonitorRepository.GetAllMonitorsAsync();
     }
 
     public async Task<PcMonitorEntity> GetMonitorByIdAsync(int id)
     {
-        var monitor = await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
-        if (monitor is null)
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
         return monitor;
@@ -56,22 +55,17 @@ public class PcMonitorService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.PcMonitor.Add(monitor);
-        await _context.SaveChangesAsync();
+        await _pcMonitorRepository.AddMonitorAsync(monitor);
+        await _pcMonitorRepository.SaveChangesAsync();
         return monitor;
     }
 
     public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdate dto)
     {
-        var monitor = await _context.PcMonitor.FindAsync(id);
-        if (monitor is null)
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            monitor.BrandId = dto.BrandId.Value;
-        }
+        await EnsureBrandExistsAsync(dto.BrandId ?? monitor.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) monitor.Name = dto.Name;
         if (dto.ScreenSizeInch.HasValue) monitor.ScreenSizeInch = dto.ScreenSizeInch.Value;
@@ -98,24 +92,22 @@ public class PcMonitorService(PcDbContext context)
         if (!string.IsNullOrWhiteSpace(dto.VesaMount)) monitor.VesaMount = dto.VesaMount;
         if (dto.PriceUsd.HasValue) monitor.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _pcMonitorRepository.SaveChangesAsync();
         return monitor;
     }
 
     public async Task DeleteMonitorAsync(int id)
     {
-        var monitor = await _context.PcMonitor.FindAsync(id);
-        if (monitor is null)
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
-        _context.PcMonitor.Remove(monitor);
-        await _context.SaveChangesAsync();
+        await _pcMonitorRepository.DeleteMonitorAsync(monitor);
+        await _pcMonitorRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _pcMonitorRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
