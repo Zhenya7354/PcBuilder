@@ -1,26 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class BrandService(PcDbContext context)
+public class BrandService(IBrandRepository brandRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IBrandRepository _brandRepository = brandRepository;
 
     public async Task<List<BrandEntity>> GetAllBrandsAsync()
     {
-        return await _context.Brand.ToListAsync();
+        return await _brandRepository.GetAllBrandsAsync();
     }
 
     public async Task<BrandEntity> GetBrandByIdAsync(int id)
     {
-        var brand = await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
-        if (brand is null)
-        {
-            throw new KeyNotFoundException($"Brand with ID {id} not found.");
-        }
+        var brand = await _brandRepository.GetBrandByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
         return brand;
     }
@@ -28,30 +24,28 @@ public class BrandService(PcDbContext context)
     public async Task<BrandEntity> AddBrandAsync(BrandCreate dto)
     {
         var brand = new BrandEntity { Name = dto.Name };
-        _context.Brand.Add(brand);
-        await _context.SaveChangesAsync();
+        await _brandRepository.AddBrandAsync(brand);
+        await _brandRepository.SaveChangesAsync();
         return brand;
     }
 
     public async Task<BrandEntity> UpdateBrandAsync(int id, BrandUpdate dto)
     {
-        var brand = await _context.Brand.FindAsync(id);
-        if (brand is null)
+        var brand = await _brandRepository.GetBrandByIdAsync(id) ??
             throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
 
-        await _context.SaveChangesAsync();
+        await _brandRepository.SaveChangesAsync();
         return brand;
     }
 
     public async Task DeleteBrandAsync(int id)
     {
-        var brand = await _context.Brand.FindAsync(id);
-        if (brand is null)
-            throw new KeyNotFoundException($"Brand with ID {id} not found.");
+        var brand = await _brandRepository.GetBrandByIdAsync(id) ??
+           throw new KeyNotFoundException($"Brand with ID {id} not found.");
 
-        _context.Brand.Remove(brand);
-        await _context.SaveChangesAsync();
+        await _brandRepository.DeleteBrandAsync(brand);
+        await _brandRepository.SaveChangesAsync();
     }
 }
