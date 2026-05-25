@@ -1,31 +1,26 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class CpuService(PcDbContext context)
+public class CpuService(ICpuRepository cpuRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly ICpuRepository _cpuRepository = cpuRepository;
     public async Task<List<CpuEntity>> GetAllCpuAsync()
     {
-        return await _context.Cpu.Include(c => c.Brand).ToListAsync();
+        return await _cpuRepository.GetAllCpusAsync();
     }
     public async Task<CpuEntity> GetCpuByIdAsync(int id)
     {
-        var cpu = await _context.Cpu.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
-        if (cpu == null)
-        {
-            throw new KeyNotFoundException($"CPU with ID {id} not found.");
-        }
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Cpu not found");
         return cpu;
     }
     public async Task<CpuEntity> AddCpuAsync(CpuCreate cpuDto)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == cpuDto.BrandId);
-        await EnsureBrandExistsAsync(cpuDto.BrandId);
+        if (!await _cpuRepository.BrandExistsAsync(cpuDto.BrandId))
+            throw new KeyNotFoundException("Brand not found");
         var cpu = new CpuEntity
         {
             Name = cpuDto.Name,
@@ -51,22 +46,18 @@ public class CpuService(PcDbContext context)
             LaunchedYear = cpuDto.LaunchedYear,
             PriceUsd = cpuDto.PriceUsd
         };
-        _context.Cpu.Add(cpu);
-        await _context.SaveChangesAsync();
 
+        await _cpuRepository.AddCpuAsync(cpu);
+        await _cpuRepository.SaveChangesAsync();
         return cpu;
     }
     public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdate cpuDto)
     {
-        var cpu = await _context.Cpu.FindAsync(id);
-        if (cpu is null)
-            throw new KeyNotFoundException($"CPU with Id {id} not found");
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Cpu not found");
 
-        if (cpuDto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(cpuDto.BrandId.Value);
-            cpu.BrandId = cpuDto.BrandId.Value;
-        }
+        if (!await _cpuRepository.BrandExistsAsync(cpuDto.BrandId ?? cpu.BrandId))
+            throw new KeyNotFoundException("Brand not found");
 
         if (cpuDto.Socket.HasValue) cpu.Socket = cpuDto.Socket.Value;
         if (cpuDto.MemoryType.HasValue) cpu.MemoryType = cpuDto.MemoryType.Value;
@@ -90,25 +81,15 @@ public class CpuService(PcDbContext context)
         if (cpuDto.LaunchedYear.HasValue) cpu.LaunchedYear = cpuDto.LaunchedYear.Value;
         if (cpuDto.PriceUsd.HasValue) cpu.PriceUsd = cpuDto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _cpuRepository.SaveChangesAsync();
         return cpu;
     }
     public async Task DeleteCpuAsync(int id)
     {
-        var cpu = await _context.Cpu.FindAsync(id);
-        if (cpu == null)
-        {
-            throw new KeyNotFoundException($"CPU with ID {id} not found.");
-        }
-        _context.Cpu.Remove(cpu);
-        await _context.SaveChangesAsync();
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+            throw new KeyNotFoundException("Cpu not found");
+        await _cpuRepository.DeleteCpuAsync(cpu);
+        await _cpuRepository.SaveChangesAsync();
     }
-    private async Task EnsureBrandExistsAsync(int brandId)
-    {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
-        {
-            throw new KeyNotFoundException("Brand with the specified ID does not exist.");
-        }
-    }
+       
 }
