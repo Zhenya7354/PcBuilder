@@ -1,23 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcCaseService(PcDbContext context)
+public class PcCaseService(IPcCaseRepository pcCaseRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IPcCaseRepository _pcCaseRepository = pcCaseRepository;
 
     public async Task<List<PcCaseEntity>> GetAllCasesAsync()
     {
-        return await _context.PcCase.Include(c => c.Brand).ToListAsync();
+        return await _pcCaseRepository.GetAllCasesAsync();
     }
 
     public async Task<PcCaseEntity> GetCaseByIdAsync(int id)
     {
-        var pcCase = await _context.PcCase.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
-        if (pcCase is null)
+        var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");
 
         return pcCase;
@@ -48,22 +47,17 @@ public class PcCaseService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.PcCase.Add(pcCase);
-        await _context.SaveChangesAsync();
+        await _pcCaseRepository.AddCaseAsync(pcCase);
+        await _pcCaseRepository.SaveChangesAsync();
         return pcCase;
     }
 
     public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdate dto)
     {
-        var pcCase = await _context.PcCase.FindAsync(id);
-        if (pcCase is null)
+        var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            pcCase.BrandId = dto.BrandId.Value;
-        }
+        await EnsureBrandExistsAsync(dto.BrandId ?? pcCase.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) pcCase.Name = dto.Name;
         if (dto.SupportedFormFactors is { Count: > 0 }) pcCase.SupportedFormFactors = dto.SupportedFormFactors;
@@ -82,24 +76,22 @@ public class PcCaseService(PcDbContext context)
         if (dto.IncludedFans.HasValue) pcCase.IncludedFans = dto.IncludedFans.Value;
         if (dto.PriceUsd.HasValue) pcCase.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _pcCaseRepository.SaveChangesAsync();
         return pcCase;
     }
 
     public async Task DeleteCaseAsync(int id)
     {
-        var pcCase = await _context.PcCase.FindAsync(id);
-        if (pcCase is null)
+        var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");
 
-        _context.PcCase.Remove(pcCase);
-        await _context.SaveChangesAsync();
+        await _pcCaseRepository.DeleteCaseAsync(pcCase);
+        await _pcCaseRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _pcCaseRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
