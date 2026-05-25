@@ -1,5 +1,5 @@
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
 using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
@@ -56,8 +56,7 @@ public class CpuService(ICpuRepository cpuRepository)
         var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
             throw new KeyNotFoundException("Cpu not found");
 
-        if (!await _cpuRepository.BrandExistsAsync(cpuDto.BrandId ?? cpu.BrandId))
-            throw new KeyNotFoundException("Brand not found");
+        await EnsureBrandExistsAsync(cpuDto.BrandId ?? cpu.BrandId);
 
         if (cpuDto.Socket.HasValue) cpu.Socket = cpuDto.Socket.Value;
         if (cpuDto.MemoryType.HasValue) cpu.MemoryType = cpuDto.MemoryType.Value;
@@ -91,5 +90,11 @@ public class CpuService(ICpuRepository cpuRepository)
         await _cpuRepository.DeleteCpuAsync(cpu);
         await _cpuRepository.SaveChangesAsync();
     }
-       
+    private async Task EnsureBrandExistsAsync(int brandId)
+    {
+        if (!await _cpuRepository.BrandExistsAsync(brandId))
+        {
+            throw new KeyNotFoundException("Brand with the specified ID does not exist.");
+        }
+    }
 }
