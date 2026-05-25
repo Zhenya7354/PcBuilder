@@ -5,6 +5,7 @@ using PcBuilder.Enums;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 using System.Text.Json.Serialization;
 
 namespace PcBuilder.Extentions;
@@ -36,6 +37,8 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IPcCaseRepository, PcCaseRepository>();
         builder.Services.AddScoped<IPcMonitorRepository, PcMonitorRepository>();
         builder.Services.AddScoped<IHardDriveRepository, HardDriveRepository>();
+        builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>

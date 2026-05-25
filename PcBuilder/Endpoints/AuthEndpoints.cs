@@ -3,6 +3,8 @@ using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Services;
+using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -60,24 +62,9 @@ public static class AuthEndpoints
         // Endpoint for making user an admin, have to be moved elsewhere in future
         app.MapPost("/admin/{userId}/make-admin", async (
             string userId,
-            UserManager<UserEntity> userManager,
-            PcDbContext db) =>
+            AdminService adminService) =>
         {
-            var user = await userManager.FindByIdAsync(userId);
-            if (user is null) return Results.NotFound();
-            using var transaction = await db.Database.BeginTransactionAsync();
-            try
-            {
-                await userManager.AddToRoleAsync(user, "Admin");
-                db.Admin.Add(new AdminEntity { UserId = user.Id });
-                await db.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            await adminService.PromoteToAdminAsync(userId);
             return Results.Ok(new { message = "User promoted to Admin" });
         }).RequireAuthorization();
 
