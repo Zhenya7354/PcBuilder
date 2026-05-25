@@ -1,23 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
-using PcBuilder.Models;
 using PcBuilder.Entities;
+using PcBuilder.Models;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PsuService(PcDbContext context)
+public class PsuService(IPsuRepository psuRepository)
 {
-    private readonly PcDbContext _context = context;
+    private readonly IPsuRepository _psuRepository = psuRepository;
 
     public async Task<List<PsuEntity>> GetAllPsusAsync()
     {
-        return await _context.Psu.Include(p => p.Brand).ToListAsync();
+        return await _psuRepository.GetAllPsusAsync();
     }
 
     public async Task<PsuEntity> GetPsuByIdAsync(int id)
     {
-        var psu = await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
-        if (psu is null)
+        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
         return psu;
@@ -44,22 +43,17 @@ public class PsuService(PcDbContext context)
             PriceUsd = dto.PriceUsd
         };
 
-        _context.Psu.Add(psu);
-        await _context.SaveChangesAsync();
+        await _psuRepository.AddPsuAsync(psu);
+        await _psuRepository.SaveChangesAsync();
         return psu;
     }
 
     public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdate dto)
     {
-        var psu = await _context.Psu.FindAsync(id);
-        if (psu is null)
+        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
-        if (dto.BrandId.HasValue)
-        {
-            await EnsureBrandExistsAsync(dto.BrandId.Value);
-            psu.BrandId = dto.BrandId.Value;
-        }
+        await EnsureBrandExistsAsync(dto.BrandId ?? psu.BrandId);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) psu.Name = dto.Name;
         if (dto.Wattage.HasValue) psu.Wattage = dto.Wattage.Value;
@@ -74,24 +68,22 @@ public class PsuService(PcDbContext context)
         if (dto.LengthMm.HasValue) psu.LengthMm = dto.LengthMm.Value;
         if (dto.PriceUsd.HasValue) psu.PriceUsd = dto.PriceUsd.Value;
 
-        await _context.SaveChangesAsync();
+        await _psuRepository.SaveChangesAsync();
         return psu;
     }
 
     public async Task DeletePsuAsync(int id)
     {
-        var psu = await _context.Psu.FindAsync(id);
-        if (psu is null)
+        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
-        _context.Psu.Remove(psu);
-        await _context.SaveChangesAsync();
+        await _psuRepository.DeletePsuAsync(psu);
+        await _psuRepository.SaveChangesAsync();
     }
 
     private async Task EnsureBrandExistsAsync(int brandId)
     {
-        var brandExists = await _context.Brand.AnyAsync(b => b.Id == brandId);
-        if (!brandExists)
+        if (!await _psuRepository.BrandExistsAsync(brandId))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
