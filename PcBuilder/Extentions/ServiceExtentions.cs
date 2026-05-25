@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Enums;
+using PcBuilder.Repositories;
+using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services;
 using System.Text.Json.Serialization;
 
@@ -24,6 +26,16 @@ public static class ServiceExtentions
         builder.Services.AddScoped<BrandService>();
         builder.Services.AddScoped<BuildService>();
         builder.Services.AddScoped<CompatibilityCheckService>();
+        builder.Services.AddScoped<ICpuRepository, CpuRepository>();
+        builder.Services.AddScoped<IGpuRepository, GpuRepository>();
+        builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+        builder.Services.AddScoped<ICpuCoolerRepository, CpuCoolerRepository>();
+        builder.Services.AddScoped<IMotherboardRepository, MotherboardRepository>();
+        builder.Services.AddScoped<IRamRepository, RamRepository>();
+        builder.Services.AddScoped<IPsuRepository, PsuRepository>();
+        builder.Services.AddScoped<IPcCaseRepository, PcCaseRepository>();
+        builder.Services.AddScoped<IPcMonitorRepository, PcMonitorRepository>();
+        builder.Services.AddScoped<IHardDriveRepository, HardDriveRepository>();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
