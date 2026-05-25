@@ -8,9 +8,9 @@ public static class PcCaseEndpoints
 {
     public static WebApplication MapPcCaseEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/case");
+        var group = webApplication.MapGroup("/pc-cases");
 
-        group.MapGet("/all", async ([FromServices] PcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
+        group.MapGet("", async ([FromServices] PcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
 
         group.MapGet("/{id}", async ([FromServices] PcCaseService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PcCaseService service, [FromBody] PcCaseCreate dto) =>
+        group.MapPost("", async ([FromServices] PcCaseService service, [FromBody] PcCaseCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -37,7 +37,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] PcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -50,7 +50,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] PcCaseService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] PcCaseService service, int id) =>
         {
             try
             {

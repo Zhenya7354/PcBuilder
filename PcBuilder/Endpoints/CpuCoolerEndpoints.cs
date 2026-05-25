@@ -8,9 +8,9 @@ public static class CpuCoolerEndpoints
 {
     public static WebApplication MapCpuCoolerEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/cpu-cooler");
+        var group = webApplication.MapGroup("/cpu-coolers");
 
-        group.MapGet("/all", async ([FromServices] CpuCoolerService service) =>
+        group.MapGet("", async ([FromServices] CpuCoolerService service) =>
         {
             var cpuCoolers = await service.GetAllCpuCoolersAsync();
             return Results.Ok(cpuCoolers);
@@ -29,7 +29,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
+        group.MapPost("", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -43,7 +43,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -57,7 +57,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] CpuCoolerService service, int id) =>
         {
             try
             {

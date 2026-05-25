@@ -8,9 +8,9 @@ public static class PsuEndpoints
 {
     public static WebApplication MapPsuEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/psu");
+        var group = webApplication.MapGroup("/psus");
 
-        group.MapGet("/all", async ([FromServices] PsuService service) => Results.Ok(await service.GetAllPsusAsync()));
+        group.MapGet("", async ([FromServices] PsuService service) => Results.Ok(await service.GetAllPsusAsync()));
 
         group.MapGet("/{id}", async ([FromServices] PsuService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PsuService service, [FromBody] PsuCreate dto) =>
+        group.MapPost("", async ([FromServices] PsuService service, [FromBody] PsuCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -37,7 +37,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PsuService service, [FromBody] PsuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] PsuService service, [FromBody] PsuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -50,7 +50,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] PsuService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] PsuService service, int id) =>
         {
             try
             {

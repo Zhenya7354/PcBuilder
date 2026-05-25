@@ -8,9 +8,9 @@ public static class MotherboardEndpoints
 {
     public static WebApplication MapMotherboardEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/motherboard");
+        var group = webApplication.MapGroup("/motherboards");
 
-        group.MapGet("/all", async ([FromServices] MotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
+        group.MapGet("", async ([FromServices] MotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
 
         group.MapGet("/{id}", async ([FromServices] MotherboardService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] MotherboardService service, [FromBody] MotherboardCreate dto) =>
+        group.MapPost("", async ([FromServices] MotherboardService service, [FromBody] MotherboardCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -37,7 +37,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] MotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] MotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -50,7 +50,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] MotherboardService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] MotherboardService service, int id) =>
         {
             try
             {

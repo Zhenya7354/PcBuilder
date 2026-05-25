@@ -57,7 +57,7 @@ public static class AuthEndpoints
             return Results.Ok(new AuthResponse(token, user.Email!, roles, expires));
         });
 
-        // Endpoint for making user an admin, have to be moved in future
+        // Endpoint for making user an admin, have to be moved elsewhere in future
         app.MapPost("/admin/{userId}/make-admin", async (
             string userId,
             UserManager<UserEntity> userManager,

@@ -9,9 +9,9 @@ public static class GpuEndpoints
 {
     public static WebApplication MapGpuEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/gpu");
+        var group = webApplication.MapGroup("/gpus");
 
-        group.MapGet("/all", async ([FromServices]GpuService gpuService) =>
+        group.MapGet("", async ([FromServices]GpuService gpuService) =>
         {
             var gpus = await gpuService.GetGpusAsync();
             if(gpus is null) return Results.NotFound("Gpus not found");
@@ -31,7 +31,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromBody] GpuCreate dto, [FromServices] GpuService gpuService) =>
+        group.MapPost("", async ([FromBody] GpuCreate dto, [FromServices] GpuService gpuService) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -45,7 +45,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] GpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] GpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -59,7 +59,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] GpuService gpuService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] GpuService gpuService, int id) =>
         {
             try
             {

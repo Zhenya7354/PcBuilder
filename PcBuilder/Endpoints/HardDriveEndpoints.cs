@@ -8,9 +8,9 @@ public static class HardDriveEndpoints
 {
     public static WebApplication MapHardDriveEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/hard-drive");
+        var group = webApplication.MapGroup("/hard-drives");
 
-        group.MapGet("/all", async ([FromServices] HardDriveService service) => Results.Ok(await service.GetAllHardDrivesAsync()));
+        group.MapGet("", async ([FromServices] HardDriveService service) => Results.Ok(await service.GetAllHardDrivesAsync()));
 
         group.MapGet("/{id}", async ([FromServices] HardDriveService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] HardDriveService service, [FromBody] HardDriveCreate dto) =>
+        group.MapPost("", async ([FromServices] HardDriveService service, [FromBody] HardDriveCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -37,7 +37,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] HardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] HardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -50,7 +50,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] HardDriveService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] HardDriveService service, int id) =>
         {
             try
             {

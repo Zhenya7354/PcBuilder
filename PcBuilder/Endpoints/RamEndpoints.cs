@@ -8,9 +8,9 @@ public static class RamEndpoints
 {
     public static WebApplication MapRamEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/ram");
+        var group = webApplication.MapGroup("/rams");
 
-        group.MapGet("/all", async ([FromServices] RamService service) => Results.Ok(await service.GetAllRamAsync()));
+        group.MapGet("", async ([FromServices] RamService service) => Results.Ok(await service.GetAllRamAsync()));
 
         group.MapGet("/{id}", async ([FromServices] RamService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] RamService service, [FromBody] RamCreate dto) =>
+        group.MapPost("", async ([FromServices] RamService service, [FromBody] RamCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -37,7 +37,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] RamService service, [FromBody] RamUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] RamService service, [FromBody] RamUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -50,7 +50,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] RamService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] RamService service, int id) =>
         {
             try
             {

@@ -8,9 +8,9 @@ public static class PcMonitorEndpoints
 {
     public static WebApplication MapPcMonitorEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/monitor");
+        var group = webApplication.MapGroup("/pc-monitors");
 
-        group.MapGet("/all", async ([FromServices] PcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
+        group.MapGet("", async ([FromServices] PcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
 
         group.MapGet("/{id}", async ([FromServices] PcMonitorService service, int id) =>
         {
@@ -24,7 +24,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorCreate dto) =>
+        group.MapPost("", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -37,7 +37,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -50,7 +50,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] PcMonitorService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] PcMonitorService service, int id) =>
         {
             try
             {

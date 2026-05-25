@@ -8,9 +8,9 @@ public static class BrandEndpoints
 {
     public static WebApplication MapBrandEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/brand");
+        var group = webApplication.MapGroup("/brands");
 
-        group.MapGet("/all", async ([FromServices] BrandService brandService) =>
+        group.MapGet("", async ([FromServices] BrandService brandService) =>
         {
             var brands = await brandService.GetAllBrandsAsync();
             return Results.Ok(brands);
@@ -29,7 +29,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPost("/add", async ([FromServices] BrandService brandService, [FromBody] BrandCreate dto) =>
+        group.MapPost("", async ([FromServices] BrandService brandService, [FromBody] BrandCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -43,7 +43,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPut("/update/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -57,7 +57,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] BrandService brandService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] BrandService brandService, int id) =>
         {
             try
             {

@@ -8,9 +8,9 @@ public static class CpuEndpoints
 {
     public static WebApplication MapCpuEndpoints(this WebApplication webApplication)
     {
-        var group = webApplication.MapGroup("/cpu");
+        var group = webApplication.MapGroup("/cpus");
 
-        group.MapGet("/all", async ([FromServices] CpuService cpuService) =>
+        group.MapGet("", async ([FromServices] CpuService cpuService) =>
         {
             var cpus = await cpuService.GetAllCpuAsync();
             if (cpus is null) return Results.NotFound("Cpus not found");
@@ -29,7 +29,7 @@ public static class CpuEndpoints
                 return Results.NotFound(ex.Message);
             }
         });
-        group.MapPost("/add", async ([FromServices] CpuService cpuService, [FromBody] CpuCreate cpuDto) =>
+        group.MapPost("", async ([FromServices] CpuService cpuService, [FromBody] CpuCreate cpuDto) =>
         {
             if(cpuDto is null) return Results.BadRequest("Cpu data is required");
             try
@@ -42,7 +42,7 @@ public static class CpuEndpoints
                 return Results.BadRequest(ex.Message);
             }
         });
-        group.MapPut("/update/{id}", async ([FromServices] CpuService cpuService, [FromBody] CpuUpdate cpuDto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] CpuService cpuService, [FromBody] CpuUpdate cpuDto, int id) =>
         {
             var cpu = await cpuService.GetCpuByIdAsync(id);
             if (cpu is null) return Results.NotFound("Cpu not found");
@@ -58,7 +58,7 @@ public static class CpuEndpoints
             }
         });
 
-        group.MapDelete("/delete/{id}", async ([FromServices] CpuService cpuService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] CpuService cpuService, int id) =>
         {
             var cpu = await cpuService.GetCpuByIdAsync(id);
             if (cpu is null) return Results.NotFound("Cpu not found");
