@@ -11,24 +11,22 @@ public class HardDriveRepository(PcDbContext context) : IHardDriveRepository
 
     public async Task<List<HardDriveEntity>> GetAllHardDrivesAsync()
     {
-        return await _context.HardDrive.Include(h => h.Brand).ToListAsync();
+        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<HardDriveEntity?> GetHardDriveByIdAsync(int id)
     {
-        return await _context.HardDrive.Include(h => h.Brand).FirstOrDefaultAsync(h => h.Id == id);
+        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
     }
 
-    public Task AddHardDrive(HardDriveEntity hardDrive)
+    public async Task AddHardDriveAsync(HardDriveEntity hardDrive)
     {
-        _context.HardDrive.Add(hardDrive);
-        return Task.CompletedTask;
+        await _context.HardDrive.AddAsync(hardDrive);
     }
 
-    public Task DeleteHardDrive(HardDriveEntity hardDrive)
+    public async Task DeleteHardDriveAsync(HardDriveEntity hardDrive)
     {
-        _context.HardDrive.Remove(hardDrive);
-        return Task.CompletedTask;
+        await _context.HardDrive.Where(h => h.Id == hardDrive.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

@@ -55,7 +55,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _pcMonitorRepository.AddMonitor(monitor);
+        await _pcMonitorRepository.AddMonitorAsync(monitor);
         await _pcMonitorRepository.SaveChangesAsync();
         return monitor;
     }
@@ -101,7 +101,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository)
         var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
-        await _pcMonitorRepository.DeleteMonitor(monitor);
+        await _pcMonitorRepository.DeleteMonitorAsync(monitor);
         await _pcMonitorRepository.SaveChangesAsync();
     }
 

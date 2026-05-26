@@ -42,7 +42,7 @@ public class RamService(IRamRepository ramRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _ramRepository.AddRam(ram);
+        await _ramRepository.AddRamAsync(ram);
         await _ramRepository.SaveChangesAsync();
         return ram;
     }
@@ -75,7 +75,7 @@ public class RamService(IRamRepository ramRepository)
         var ram = await _ramRepository.GetRamByIdAsync(id) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
-        await _ramRepository.DeleteRam(ram);
+        await _ramRepository.DeleteRamAsync(ram);
         await _ramRepository.SaveChangesAsync();
     }
 

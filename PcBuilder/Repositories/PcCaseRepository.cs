@@ -11,24 +11,22 @@ public class PcCaseRepository(PcDbContext context) : IPcCaseRepository
 
     public async Task<List<PcCaseEntity>> GetAllCasesAsync()
     {
-        return await _context.PcCase.Include(c => c.Brand).ToListAsync();
+        return await _context.PcCase.Include(c => c.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<PcCaseEntity?> GetCaseByIdAsync(int id)
     {
-        return await _context.PcCase.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.PcCase.Include(c => c.Brand).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCase(PcCaseEntity pcCase)
+    public async Task AddCaseAsync(PcCaseEntity pcCase)
     {
-        _context.PcCase.Add(pcCase);
-        return Task.CompletedTask;
+        await _context.PcCase.AddAsync(pcCase);
     }
 
-    public Task DeleteCase(PcCaseEntity pcCase)
+    public async Task DeleteCaseAsync(PcCaseEntity pcCase)
     {
-        _context.PcCase.Remove(pcCase);
-        return Task.CompletedTask;
+        await _context.PcCase.Where(c => c.Id == pcCase.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

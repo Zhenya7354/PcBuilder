@@ -9,11 +9,11 @@ public class AdminRepository(PcDbContext context) : IAdminRepository
     private readonly PcDbContext _context = context;
     public async Task<List<AdminEntity>> GetAdminsAsync()
     {
-        return await _context.Admin.Include(a => a.User).ToListAsync();
+        return await _context.Admin.Include(a => a.User).AsNoTracking().ToListAsync();
     }
     public async Task<AdminEntity?> GetAdminByIdAsync(int id)
     {
-        var admin = await _context.Admin.Include(a => a.User).FirstOrDefaultAsync(a => a.Id == id) ??
+        var admin = await _context.Admin.Include(a => a.User).AsNoTracking().FirstOrDefaultAsync(a => a.Id == id) ??
             throw new KeyNotFoundException("Admin not found");
         return admin;
     }

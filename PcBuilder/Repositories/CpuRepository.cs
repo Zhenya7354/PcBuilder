@@ -19,24 +19,22 @@ public class CpuRepository(PcDbContext context) : ICpuRepository
 
     public async Task<List<CpuEntity>> GetAllCpusAsync()
     {
-        return await _context.Cpu.Include(c => c.Brand).ToListAsync();
+        return await _context.Cpu.Include(c => c.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<CpuEntity?> GetCpuByIdAsync(int id)
     {
-        return await _context.Cpu.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.Cpu.Include(c => c.Brand).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCpu(CpuEntity cpu)
+    public async Task AddCpuAsync(CpuEntity cpu)
     {
-         _context.Cpu.Add(cpu);
-        return Task.CompletedTask;
+        await _context.Cpu.AddAsync(cpu);
     }
 
-    public Task DeleteCpu(CpuEntity cpu)
+    public async Task DeleteCpuAsync(CpuEntity cpu)
     {
-        _context.Cpu.Remove(cpu);
-        return Task.CompletedTask;
+        await _context.Cpu.Where(c => c.Id == cpu.Id).ExecuteDeleteAsync(); 
     }
     public async Task SaveChangesAsync()
     {

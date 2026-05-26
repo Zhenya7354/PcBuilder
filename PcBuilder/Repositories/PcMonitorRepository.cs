@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
+using System.Xml.Schema;
 
 namespace PcBuilder.Repositories;
 
@@ -11,24 +12,22 @@ public class PcMonitorRepository(PcDbContext context) : IPcMonitorRepository
 
     public async Task<List<PcMonitorEntity>> GetAllMonitorsAsync()
     {
-        return await _context.PcMonitor.Include(m => m.Brand).ToListAsync();
+        return await _context.PcMonitor.Include(m => m.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<PcMonitorEntity?> GetMonitorByIdAsync(int id)
     {
-        return await _context.PcMonitor.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
+        return await _context.PcMonitor.Include(m => m.Brand).AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public Task AddMonitor(PcMonitorEntity monitor)
+    public async Task AddMonitorAsync(PcMonitorEntity monitor)
     {
-        _context.PcMonitor.Add(monitor);
-        return Task.CompletedTask;
+        await _context.PcMonitor.AddAsync(monitor);
     }
 
-    public Task DeleteMonitor(PcMonitorEntity monitor)
+    public async Task DeleteMonitorAsync(PcMonitorEntity monitor)
     {
-        _context.PcMonitor.Remove(monitor);
-        return Task.CompletedTask;
+        await _context.PcMonitor.Where(m => m.Id == monitor.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

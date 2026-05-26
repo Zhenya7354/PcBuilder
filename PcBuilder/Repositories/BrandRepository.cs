@@ -11,24 +11,22 @@ public class BrandRepository(PcDbContext context) : IBrandRepository
 
     public async Task<List<BrandEntity>> GetAllBrandsAsync()
     {
-        return await _context.Brand.ToListAsync();
+        return await _context.Brand.AsNoTracking().ToListAsync();
     }
 
     public async Task<BrandEntity?> GetBrandByIdAsync(int id)
     {
-        return await _context.Brand.FirstOrDefaultAsync(b => b.Id == id);
+        return await _context.Brand.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
     }
 
-    public Task AddBrand(BrandEntity brand)
+    public async Task AddBrandAsync(BrandEntity brand)
     {
-        _context.Brand.Add(brand);
-        return Task.CompletedTask;
+        await _context.Brand.AddAsync(brand);
     }
 
-    public Task DeleteBrand(BrandEntity brand)
+    public async Task DeleteBrandAsync(BrandEntity brand)
     {
-        _context.Brand.Remove(brand);
-        return Task.CompletedTask;
+        await _context.Brand.Where(b => b.Id == brand.Id).ExecuteDeleteAsync(); 
     }
 
     public async Task SaveChangesAsync()

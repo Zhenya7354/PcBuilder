@@ -47,7 +47,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _pcCaseRepository.AddCase(pcCase);
+        await _pcCaseRepository.AddCaseAsync(pcCase);
         await _pcCaseRepository.SaveChangesAsync();
         return pcCase;
     }
@@ -85,7 +85,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository)
         var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");
 
-        await _pcCaseRepository.DeleteCase(pcCase);
+        await _pcCaseRepository.DeleteCaseAsync(pcCase);
         await _pcCaseRepository.SaveChangesAsync();
     }
 

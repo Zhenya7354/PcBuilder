@@ -10,22 +10,20 @@ public class GpuRepository(PcDbContext context) : IGpuRepository
     private readonly PcDbContext _context = context;
     public async Task<List<GpuEntity>> GetAllGpusAsync()
     {
-        return await _context.Gpu.Include(g => g.Brand).ToListAsync();
+        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().ToListAsync();
     }
     public async Task<GpuEntity?> GetGpuByIdAsync(int id)
     {
-        return await _context.Gpu.Include(g => g.Brand).FirstOrDefaultAsync(g => g.Id == id);
+        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
     }
 
-    public  Task AddGpu(GpuEntity gpu)
+    public async Task AddGpuAsync(GpuEntity gpu)
     {
-        _context.Gpu.Add(gpu);
-        return Task.CompletedTask;
+        await _context.Gpu.AddAsync(gpu);
     }
-    public  Task DeleteGpu(GpuEntity gpu)
+    public async Task DeleteGpuAsync(GpuEntity gpu)
     {
-        _context.Gpu.Remove(gpu);
-        return Task.CompletedTask;
+        await _context.Gpu.Where(g => g.Id == gpu.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

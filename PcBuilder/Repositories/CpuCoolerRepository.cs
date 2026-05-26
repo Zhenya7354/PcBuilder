@@ -11,24 +11,22 @@ public class CpuCoolerRepository(PcDbContext context) : ICpuCoolerRepository
 
     public async Task<List<CpuCoolerEntity>> GetAllCpuCoolersAsync()
     {
-        return await _context.CpuCooler.Include(c => c.Brand).ToListAsync();
+        return await _context.CpuCooler.Include(c => c.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<CpuCoolerEntity?> GetCpuCoolerByIdAsync(int id)
     {
-        return await _context.CpuCooler.Include(c => c.Brand).FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.CpuCooler.Include(c => c.Brand).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task AddCpuCooler(CpuCoolerEntity cpuCooler)
+    public async Task AddCpuCoolerAsync(CpuCoolerEntity cpuCooler)
     {
-        _context.CpuCooler.Add(cpuCooler);
-        return Task.CompletedTask;
+        await _context.CpuCooler.AddAsync(cpuCooler);
     }
 
-    public Task DeleteCpuCooler(CpuCoolerEntity cpuCooler)
+    public async Task DeleteCpuCoolerAsync(CpuCoolerEntity cpuCooler)
     {
-        _context.CpuCooler.Remove(cpuCooler);
-        return Task.CompletedTask;
+        await _context.CpuCooler.Where(c => c.Id == cpuCooler.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

@@ -11,24 +11,22 @@ public class PsuRepository(PcDbContext context) : IPsuRepository
 
     public async Task<List<PsuEntity>> GetAllPsusAsync()
     {
-        return await _context.Psu.Include(p => p.Brand).ToListAsync();
+        return await _context.Psu.Include(p => p.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<PsuEntity?> GetPsuByIdAsync(int id)
     {
-        return await _context.Psu.Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
+        return await _context.Psu.Include(p => p.Brand).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Task AddPsu(PsuEntity psu)
+    public async Task AddPsuAsync(PsuEntity psu)
     {
-        _context.Psu.Add(psu);
-        return Task.CompletedTask;
+        await _context.Psu.AddAsync(psu);
     }
 
-    public Task DeletePsu(PsuEntity psu)
+    public async Task DeletePsuAsync(PsuEntity psu)
     {
-        _context.Psu.Remove(psu);
-        return Task.CompletedTask;
+        await _context.Psu.Where(p => p.Id == psu.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

@@ -11,24 +11,22 @@ public class MotherboardRepository(PcDbContext context) : IMotherboardRepository
 
     public async Task<List<MotherboardEntity>> GetAllMotherboardsAsync()
     {
-        return await _context.Motherboard.Include(m => m.Brand).ToListAsync();
+        return await _context.Motherboard.Include(m => m.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<MotherboardEntity?> GetMotherboardByIdAsync(int id)
     {
-        return await _context.Motherboard.Include(m => m.Brand).FirstOrDefaultAsync(m => m.Id == id);
+        return await _context.Motherboard.Include(m => m.Brand).AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public Task AddMotherboard(MotherboardEntity motherboard)
+    public async Task AddMotherboardAsync(MotherboardEntity motherboard)
     {
-        _context.Motherboard.Add(motherboard);
-        return Task.CompletedTask;
+        await _context.Motherboard.AddAsync(motherboard);
     }
 
-    public Task DeleteMotherboard(MotherboardEntity motherboard)
+    public async Task DeleteMotherboardAsync(MotherboardEntity motherboard)
     {
-        _context.Motherboard.Remove(motherboard);
-        return Task.CompletedTask;
+        await _context.Motherboard.Where(m => m.Id == motherboard.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

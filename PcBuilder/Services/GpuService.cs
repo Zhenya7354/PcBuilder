@@ -46,7 +46,7 @@ public class GpuService(IGpuRepository gpuRepository)
             HasRgb = gpuDto.hasRgb,
             Price = gpuDto.price
         };
-        await _gpuRepository.AddGpu(gpu);
+        await _gpuRepository.AddGpuAsync(gpu);
         await _gpuRepository.SaveChangesAsync();
 
         return gpu;
@@ -85,7 +85,7 @@ public class GpuService(IGpuRepository gpuRepository)
     {
         var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
             throw new KeyNotFoundException("Gpu not found");
-        await _gpuRepository.DeleteGpu(gpu);
+        await _gpuRepository.DeleteGpuAsync(gpu);
         await _gpuRepository.SaveChangesAsync();
     }
     private async Task EnsureBrandExistsAsync(int brandId)

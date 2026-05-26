@@ -56,7 +56,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _motherboardRepository.AddMotherboard(motherboard);
+        await _motherboardRepository.AddMotherboardAsync(motherboard);
         await _motherboardRepository.SaveChangesAsync();
         return motherboard;
     }
@@ -103,7 +103,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository)
         var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
-        await _motherboardRepository.DeleteMotherboard(motherboard);
+        await _motherboardRepository.DeleteMotherboardAsync(motherboard);
         await _motherboardRepository.SaveChangesAsync();
     }
 

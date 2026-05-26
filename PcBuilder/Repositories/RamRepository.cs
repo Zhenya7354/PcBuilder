@@ -11,24 +11,22 @@ public class RamRepository(PcDbContext context) : IRamRepository
 
     public async Task<List<RamEntity>> GetAllRamAsync()
     {
-        return await _context.Ram.Include(r => r.Brand).ToListAsync();
+        return await _context.Ram.Include(r => r.Brand).AsNoTracking().ToListAsync();
     }
 
     public async Task<RamEntity?> GetRamByIdAsync(int id)
     {
-        return await _context.Ram.Include(r => r.Brand).FirstOrDefaultAsync(r => r.Id == id);
+        return await _context.Ram.Include(r => r.Brand).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public Task AddRam(RamEntity ram)
+    public async Task AddRamAsync(RamEntity ram)
     {
-        _context.Ram.Add(ram);
-        return Task.CompletedTask;
+        await _context.Ram.AddAsync(ram);
     }
 
-    public Task DeleteRam(RamEntity ram)
+    public async Task DeleteRamAsync(RamEntity ram)
     {
-        _context.Ram.Remove(ram);
-        return Task.CompletedTask;
+        await _context.Ram.Where(r => r.Id == ram.Id).ExecuteDeleteAsync();
     }
 
     public async Task<bool> BrandExistsAsync(int brandId)

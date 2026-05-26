@@ -47,7 +47,7 @@ public class CpuService(ICpuRepository cpuRepository)
             PriceUsd = cpuDto.PriceUsd
         };
 
-        await _cpuRepository.AddCpu(cpu);
+        await _cpuRepository.AddCpuAsync(cpu);
         await _cpuRepository.SaveChangesAsync();
         return cpu;
     }
@@ -87,7 +87,7 @@ public class CpuService(ICpuRepository cpuRepository)
     {
         var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
             throw new KeyNotFoundException("Cpu not found");
-        await _cpuRepository.DeleteCpu(cpu);
+        await _cpuRepository.DeleteCpuAsync(cpu);
         await _cpuRepository.SaveChangesAsync();
     }
     private async Task EnsureBrandExistsAsync(int brandId)
