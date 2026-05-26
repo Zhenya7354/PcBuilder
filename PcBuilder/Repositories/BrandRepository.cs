@@ -14,9 +14,10 @@ public class BrandRepository(PcDbContext context) : IBrandRepository
         return await _context.Brand.AsNoTracking().ToListAsync();
     }
 
-    public async Task<BrandEntity?> GetBrandByIdAsync(int id)
+    public async Task<BrandEntity> GetBrandByIdAsync(int id)
     {
-        return await _context.Brand.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+        return await _context.Brand.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id) ??
+            throw new KeyNotFoundException("Brand not found");
     }
 
     public async Task AddBrandAsync(BrandEntity brand)

@@ -4,21 +4,22 @@ using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
 using PcBuilder.Services.Interfaces;
+using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class BuildService(PcDbContext context, ICompatibilityCheckService compatibilityCheckService) : IBuildService
+public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckService compatibilityCheckService) : IBuildService
 {
-    private readonly PcDbContext _context = context;
+    private readonly IBuildRepository _buildRepository = buildRepository;
     private readonly ICompatibilityCheckService _compatibilityCheckService = compatibilityCheckService;
     public async Task<BuildEntity> GetBuildByIdAsync(string userId, int buildId)
     {
-        return await BuildWithAllComponents().FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
+        return await _buildRepository.GetByIdAsync(buildId, userId) ??
             throw new KeyNotFoundException($"Build with Id {buildId} not found");
     }
     public async Task<List<BuildEntity>> GetUserBuildsAsync(string userId)
     {
-        return await BuildWithAllComponents().Where(b => b.UserId == userId).ToListAsync();
+        return await _buildRepository.GetAllAsync(userId);
     }
     public async Task<BuildEntity> AddBuildAsync(string userId, Build dto)
     {
@@ -36,17 +37,16 @@ public class BuildService(PcDbContext context, ICompatibilityCheckService compat
             MonitorId = dto.MonitorId,
             UserId = userId
         };
-        _context.Build.Add(build);
-        await _context.SaveChangesAsync();
+        await _buildRepository.AddBuildAsync(build);
+        await _buildRepository.SaveChangesAsync();
         return build;
     }
 
     public async Task<BuildEntity> UpdateBuildAsync(int buildId, string userId, Build dto)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} for user with Id {userId} not found");
+        var build = await GetBuildById(buildId, userId);
 
-        if(!string.IsNullOrEmpty(dto.Name)) { build.Name = dto.Name; }
+        if (!string.IsNullOrEmpty(dto.Name)) { build.Name = dto.Name; }
         if (dto.CpuId.HasValue) build.CpuId = dto.CpuId;
         if (dto.CpuCoolerId.HasValue) build.CpuCoolerId = dto.CpuCoolerId;
         if (dto.GpuId.HasValue) build.GpuId = dto.GpuId;
@@ -57,36 +57,33 @@ public class BuildService(PcDbContext context, ICompatibilityCheckService compat
         if (dto.CaseId.HasValue) build.CaseId = dto.CaseId;
         if (dto.MonitorId.HasValue) build.MonitorId = dto.MonitorId;
 
-        await _context.SaveChangesAsync();
+        await _buildRepository.SaveChangesAsync();
         return build;
     }
 
     public async Task DeleteBuildAsync(int buildId, string userId)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
-        _context.Remove(build);
-        await _context.SaveChangesAsync();
+        var build = await GetBuildById(buildId, userId);
+        await _buildRepository.DeleteBuildAsync(build);
+        await _buildRepository.SaveChangesAsync();
     }
 
     public async Task<BuildEntity> SetComponentAsync(int buildId, string userId, BuildComponent dto)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+        var build = await GetBuildById(buildId, userId);
         if (!await ComponentExists(dto.ComponentType, dto.ComponentId))
         {
             throw new KeyNotFoundException($"Component with Id {dto.ComponentId} not found for type {dto.ComponentType}");
         }
         ApplyComponent(build, dto.ComponentType, dto.ComponentId);
-        await _context.SaveChangesAsync();
+        await _buildRepository.SaveChangesAsync();
         return build;
     }
     public async Task<BuildEntity> RemoveComponentAsync(int buildId, string userId, BuildComponentType componentType)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+        var build = await GetBuildById(buildId, userId);
         ApplyComponent(build, componentType, null);
-        await _context.SaveChangesAsync();
+        await _buildRepository.SaveChangesAsync();
         return build;
     }
 
@@ -113,8 +110,7 @@ public class BuildService(PcDbContext context, ICompatibilityCheckService compat
     }
     public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, string userId, Build dto)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+        var build = await GetBuildById(buildId, userId);
 
         var mergedDto = new Build
         {
@@ -135,8 +131,7 @@ public class BuildService(PcDbContext context, ICompatibilityCheckService compat
 
     public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, string userId, BuildComponent dto)
     {
-        var build = await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+        var build = await GetBuildById(buildId, userId);
         var mergedDto = new Build
         {
             Name = build.Name,
@@ -205,29 +200,22 @@ public class BuildService(PcDbContext context, ICompatibilityCheckService compat
     {
         return componentType switch
         {
-            BuildComponentType.Cpu => await _context.Cpu.AnyAsync(c => c.Id == componentId),
-            BuildComponentType.CpuCooler => await _context.CpuCooler.AnyAsync(c => c.Id == componentId),
-            BuildComponentType.Gpu => await _context.Gpu.AnyAsync(g => g.Id == componentId),
-            BuildComponentType.Ram => await _context.Ram.AnyAsync(r => r.Id == componentId),
-            BuildComponentType.HardDrive => await _context.HardDrive.AnyAsync(h => h.Id == componentId),
-            BuildComponentType.Motherboard => await _context.Motherboard.AnyAsync(m => m.Id == componentId),
-            BuildComponentType.Psu => await _context.Psu.AnyAsync(p => p.Id == componentId),
-            BuildComponentType.PcCase => await _context.PcCase.AnyAsync(c => c.Id == componentId),
-            BuildComponentType.PcMonitor => await _context.PcMonitor.AnyAsync(m => m.Id == componentId),
+            BuildComponentType.Cpu => await _buildRepository.CpuExistsAsync(componentId ?? 0),
+            BuildComponentType.CpuCooler => await _buildRepository.CpuCoolerExistsAsync(componentId ?? 0),
+            BuildComponentType.Gpu => await _buildRepository.GpuExistsAsync(componentId ?? 0),
+            BuildComponentType.Ram => await _buildRepository.RamExistsAsync(componentId ?? 0),
+            BuildComponentType.HardDrive => await _buildRepository.HardDriveExistsAsync(componentId ?? 0),
+            BuildComponentType.Motherboard => await _buildRepository.MotherboardExistsAsync(componentId ?? 0),
+            BuildComponentType.Psu => await _buildRepository.PsuExistsAsync(componentId ?? 0),
+            BuildComponentType.PcCase => await _buildRepository.CaseExistsAsync(componentId ?? 0),
+            BuildComponentType.PcMonitor => await _buildRepository.MonitorExistsAsync(componentId ?? 0),
             _ => throw new ArgumentException($"Invalid component type: {componentType}")
         };
     }
 
-    private IQueryable<BuildEntity> BuildWithAllComponents()
+    private async Task<BuildEntity> GetBuildById(int buildId, string userId)
     {
-        return _context.Build.Include(b => b.Cpu)
-                    .Include(b => b.CpuCooler)
-                    .Include(b => b.Gpu)
-                    .Include(b => b.Ram)
-                    .Include(b => b.HardDrive)
-                    .Include(b => b.Motherboard)
-                    .Include(b => b.Psu)
-                    .Include(b => b.PcCase)
-                    .Include(b => b.Monitor);
+        return await _buildRepository.GetByIdAsync(buildId, userId) ??
+            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
     }
 }
