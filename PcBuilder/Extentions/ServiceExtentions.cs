@@ -28,6 +28,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IBuildService, BuildService>();
         builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddScoped<ICpuRepository, CpuRepository>();
         builder.Services.AddScoped<IGpuRepository, GpuRepository>();
         builder.Services.AddScoped<IBrandRepository, BrandRepository>();
@@ -39,7 +40,8 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IPcMonitorRepository, PcMonitorRepository>();
         builder.Services.AddScoped<IHardDriveRepository, HardDriveRepository>();
         builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-        builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IBuildRepository, BuildRepository>();
+        builder.Services.AddScoped<ICompatibilityCheckRepository, CompatibilityCheckRepository>();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
