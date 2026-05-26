@@ -1,10 +1,11 @@
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class GpuService(IGpuRepository gpuRepository)
+public class GpuService(IGpuRepository gpuRepository) : IGpuService
 {
     private readonly IGpuRepository _gpuRepository = gpuRepository;
 

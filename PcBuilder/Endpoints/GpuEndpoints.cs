@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 using System.Xml;
 
 namespace PcBuilder.Endpoints;
@@ -11,14 +12,14 @@ public static class GpuEndpoints
     {
         var group = webApplication.MapGroup("/gpus");
 
-        group.MapGet("", async ([FromServices]GpuService gpuService) =>
+        group.MapGet("", async ([FromServices]IGpuService gpuService) =>
         {
             var gpus = await gpuService.GetGpusAsync();
             if(gpus is null) return Results.NotFound("Gpus not found");
         return Results.Ok(gpus);
         });
 
-        group.MapGet("/{id}", async ([FromServices] GpuService gpuService, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IGpuService gpuService, int id) =>
         {
             try
             {
@@ -31,7 +32,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost("", async ([FromBody] GpuCreate dto, [FromServices] GpuService gpuService) =>
+        group.MapPost("", async ([FromBody] GpuCreate dto, [FromServices] IGpuService gpuService) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -45,7 +46,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] GpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -59,7 +60,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] GpuService gpuService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IGpuService gpuService, int id) =>
         {
             try
             {

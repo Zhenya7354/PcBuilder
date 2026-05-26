@@ -1,10 +1,11 @@
 using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class CpuService(ICpuRepository cpuRepository)
+public class CpuService(ICpuRepository cpuRepository) : ICpuService
 {
     private readonly ICpuRepository _cpuRepository = cpuRepository;
     public async Task<List<CpuEntity>> GetAllCpuAsync()

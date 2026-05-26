@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class PcMonitorEndpoints
     {
         var group = webApplication.MapGroup("/pc-monitors");
 
-        group.MapGet("", async ([FromServices] PcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
+        group.MapGet("", async ([FromServices] IPcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] PcMonitorService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IPcMonitorService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorCreate dto) =>
+        group.MapPost("", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -37,7 +38,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] PcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -50,7 +51,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] PcMonitorService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IPcMonitorService service, int id) =>
         {
             try
             {

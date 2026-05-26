@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,13 +11,13 @@ public static class CpuCoolerEndpoints
     {
         var group = webApplication.MapGroup("/cpu-coolers");
 
-        group.MapGet("", async ([FromServices] CpuCoolerService service) =>
+        group.MapGet("", async ([FromServices] ICpuCoolerService service) =>
         {
             var cpuCoolers = await service.GetAllCpuCoolersAsync();
             return Results.Ok(cpuCoolers);
         });
 
-        group.MapGet("/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] ICpuCoolerService service, int id) =>
         {
             try
             {
@@ -29,7 +30,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
+        group.MapPost("", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -43,7 +44,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] CpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -57,7 +58,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] CpuCoolerService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] ICpuCoolerService service, int id) =>
         {
             try
             {

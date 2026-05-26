@@ -1,10 +1,11 @@
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class BrandService(IBrandRepository brandRepository)
+public class BrandService(IBrandRepository brandRepository) : IBrandService
 {
     private readonly IBrandRepository _brandRepository = brandRepository;
 

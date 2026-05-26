@@ -1,10 +1,11 @@
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository)
+public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCoolerService
 {
     private readonly ICpuCoolerRepository _cpuCoolerRepository = cpuCoolerRepository;
 
@@ -41,7 +42,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository)
             PriceUsd = dto.PriceUsd
         };
 
-        await _cpuCoolerRepository.AddCpuCooler(cpuCooler);
+        await _cpuCoolerRepository.AddCpuCoolerAsync(cpuCooler);
         await _cpuCoolerRepository.SaveChangesAsync();
         return cpuCooler;
     }
@@ -73,7 +74,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository)
         var cpuCooler = await _cpuCoolerRepository.GetCpuCoolerByIdAsync(id) ??
             throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
 
-        await _cpuCoolerRepository.DeleteCpuCooler(cpuCooler);
+        await _cpuCoolerRepository.DeleteCpuCoolerAsync(cpuCooler);
         await _cpuCoolerRepository.SaveChangesAsync();
     }
 

@@ -1,9 +1,10 @@
 using PcBuilder.Data;
 using PcBuilder.Models;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class CompatibilityCheckService(PcDbContext context)
+public class CompatibilityCheckService(PcDbContext context) : ICompatibilityCheckService
 {
     private readonly PcDbContext _context = context;
     public async Task<CompatibilityCheckResponse> CheckCpuToMotherboardCompatibilityAsync(int cpuId, int motherboardId)

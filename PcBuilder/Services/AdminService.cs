@@ -5,7 +5,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class AdminService(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager, IAdminRepository adminRepository, ITransactionService transactionService)
+public class AdminService(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager, IAdminRepository adminRepository, ITransactionService transactionService) : IAdminService
 {
     private readonly UserManager<UserEntity> _userManager= userManager;
     private readonly RoleManager<IdentityRole> _roleManager= roleManager;

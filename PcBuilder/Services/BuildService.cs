@@ -3,13 +3,14 @@ using PcBuilder.Data;
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class BuildService(PcDbContext context, CompatibilityCheckService compatibilityCheckService)
+public class BuildService(PcDbContext context, ICompatibilityCheckService compatibilityCheckService) : IBuildService
 {
     private readonly PcDbContext _context = context;
-    private readonly CompatibilityCheckService _compatibilityCheckService = compatibilityCheckService;
+    private readonly ICompatibilityCheckService _compatibilityCheckService = compatibilityCheckService;
     public async Task<BuildEntity> GetBuildByIdAsync(string userId, int buildId)
     {
         return await BuildWithAllComponents().FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId) ??

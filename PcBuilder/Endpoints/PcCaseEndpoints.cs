@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class PcCaseEndpoints
     {
         var group = webApplication.MapGroup("/pc-cases");
 
-        group.MapGet("", async ([FromServices] PcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
+        group.MapGet("", async ([FromServices] IPcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] PcCaseService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IPcCaseService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] PcCaseService service, [FromBody] PcCaseCreate dto) =>
+        group.MapPost("", async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -37,7 +38,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] PcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -50,7 +51,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] PcCaseService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IPcCaseService service, int id) =>
         {
             try
             {

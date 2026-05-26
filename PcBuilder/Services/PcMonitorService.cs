@@ -2,10 +2,11 @@ using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcMonitorService(IPcMonitorRepository pcMonitorRepository)
+public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMonitorService
 {
     private readonly IPcMonitorRepository _pcMonitorRepository = pcMonitorRepository;
 

@@ -37,7 +37,7 @@ public static class AuthEndpoints
             Login dto,
             SignInManager<UserEntity> singInManager,
             UserManager<UserEntity> userManager,
-            JwtService jwtService) =>
+            IJwtService jwtService) =>
         {
             var user = await userManager.FindByEmailAsync(dto.Email);
             if (user is null) return Results.Unauthorized();
@@ -62,7 +62,7 @@ public static class AuthEndpoints
         // Endpoint for making user an admin, have to be moved elsewhere in future
         app.MapPost("/admin/{userId}/make-admin", async (
             string userId,
-            AdminService adminService) =>
+            IAdminService adminService) =>
         {
             await adminService.PromoteToAdminAsync(userId);
             return Results.Ok(new { message = "User promoted to Admin" });

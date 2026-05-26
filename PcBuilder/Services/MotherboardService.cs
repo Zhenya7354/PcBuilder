@@ -2,10 +2,11 @@ using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class MotherboardService(IMotherboardRepository motherboardRepository)
+public class MotherboardService(IMotherboardRepository motherboardRepository) : IMotherboardService
 {
     private readonly IMotherboardRepository _motherboardRepository = motherboardRepository;
 

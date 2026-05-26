@@ -14,19 +14,20 @@ public static class ServiceExtentions
 {
     public static WebApplicationBuilder AddAppServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<JwtService>();
-        builder.Services.AddScoped<CpuService>();
-        builder.Services.AddScoped<GpuService>();
-        builder.Services.AddScoped<CpuCoolerService>();
-        builder.Services.AddScoped<MotherboardService>();
-        builder.Services.AddScoped<RamService>();
-        builder.Services.AddScoped<PsuService>();
-        builder.Services.AddScoped<PcCaseService>();
-        builder.Services.AddScoped<PcMonitorService>();
-        builder.Services.AddScoped<HardDriveService>();
-        builder.Services.AddScoped<BrandService>();
-        builder.Services.AddScoped<BuildService>();
-        builder.Services.AddScoped<CompatibilityCheckService>();
+        builder.Services.AddScoped<IJwtService, JwtService>();
+        builder.Services.AddScoped<ICpuService, CpuService>();
+        builder.Services.AddScoped<IGpuService, GpuService>();
+        builder.Services.AddScoped<ICpuCoolerService, CpuCoolerService>();
+        builder.Services.AddScoped<IMotherboardService, MotherboardService>();
+        builder.Services.AddScoped<IRamService, RamService>();
+        builder.Services.AddScoped<IPsuService, PsuService>();
+        builder.Services.AddScoped<IPcCaseService, PcCaseService>();
+        builder.Services.AddScoped<IPcMonitorService, PcMonitorService>();
+        builder.Services.AddScoped<IHardDriveService, HardDriveService>();
+        builder.Services.AddScoped<IBrandService, BrandService>();
+        builder.Services.AddScoped<IBuildService, BuildService>();
+        builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
+        builder.Services.AddScoped<IAdminService, AdminService>();
         builder.Services.AddScoped<ICpuRepository, CpuRepository>();
         builder.Services.AddScoped<IGpuRepository, GpuRepository>();
         builder.Services.AddScoped<IBrandRepository, BrandRepository>();

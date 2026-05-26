@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class RamEndpoints
     {
         var group = webApplication.MapGroup("/rams");
 
-        group.MapGet("", async ([FromServices] RamService service) => Results.Ok(await service.GetAllRamAsync()));
+        group.MapGet("", async ([FromServices] IRamService service) => Results.Ok(await service.GetAllRamAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] RamService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IRamService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] RamService service, [FromBody] RamCreate dto) =>
+        group.MapPost("", async ([FromServices] IRamService service, [FromBody] RamCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -37,7 +38,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] RamService service, [FromBody] RamUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IRamService service, [FromBody] RamUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -50,7 +51,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] RamService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IRamService service, int id) =>
         {
             try
             {

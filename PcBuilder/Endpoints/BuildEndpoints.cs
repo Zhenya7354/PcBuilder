@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Enums;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
@@ -13,7 +14,7 @@ public static class BuildEndpoints
     {
         var group = app.MapGroup("/builds");
 
-        group.MapGet("", async ([FromServices] BuildService service, ClaimsPrincipal user) =>
+        group.MapGet("", async ([FromServices] IBuildService service, ClaimsPrincipal user) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -28,7 +29,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapGet("/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -44,7 +45,7 @@ public static class BuildEndpoints
 
         });
 
-        group.MapPost("", async ([FromServices] BuildService service, ClaimsPrincipal user, [FromBody] Build dto) =>
+        group.MapPost("", async ([FromServices] IBuildService service, ClaimsPrincipal user, [FromBody] Build dto) =>
         {
 
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -69,7 +70,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapPut("/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] Build dto) =>
+        group.MapPut("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] Build dto) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -93,7 +94,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] BuildService service, ClaimsPrincipal user, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -108,7 +109,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapPost("/{id}/components", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponent dto) =>
+        group.MapPost("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponent dto) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -132,7 +133,7 @@ public static class BuildEndpoints
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
         });
 
-        group.MapDelete("/{id}/components", async ([FromServices] BuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType) =>
+        group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)

@@ -2,10 +2,11 @@ using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PsuService(IPsuRepository psuRepository)
+public class PsuService(IPsuRepository psuRepository) : IPsuService
 {
     private readonly IPsuRepository _psuRepository = psuRepository;
 

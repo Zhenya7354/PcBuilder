@@ -1,10 +1,11 @@
 using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class HardDriveService(IHardDriveRepository hardDriveRepository)
+public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardDriveService
 {
     private readonly IHardDriveRepository _hardDriveRepository = hardDriveRepository;
 

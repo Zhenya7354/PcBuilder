@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class MotherboardEndpoints
     {
         var group = webApplication.MapGroup("/motherboards");
 
-        group.MapGet("", async ([FromServices] MotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
+        group.MapGet("", async ([FromServices] IMotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] MotherboardService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IMotherboardService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] MotherboardService service, [FromBody] MotherboardCreate dto) =>
+        group.MapPost("", async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -37,7 +38,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] MotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IMotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -50,7 +51,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] MotherboardService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IMotherboardService service, int id) =>
         {
             try
             {

@@ -2,10 +2,11 @@ using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcCaseService(IPcCaseRepository pcCaseRepository)
+public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
 {
     private readonly IPcCaseRepository _pcCaseRepository = pcCaseRepository;
 

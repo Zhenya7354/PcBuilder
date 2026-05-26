@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class HardDriveEndpoints
     {
         var group = webApplication.MapGroup("/hard-drives");
 
-        group.MapGet("", async ([FromServices] HardDriveService service) => Results.Ok(await service.GetAllHardDrivesAsync()));
+        group.MapGet("", async ([FromServices] IHardDriveService service) => Results.Ok(await service.GetAllHardDrivesAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] HardDriveService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IHardDriveService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] HardDriveService service, [FromBody] HardDriveCreate dto) =>
+        group.MapPost("", async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -37,7 +38,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] HardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -50,7 +51,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] HardDriveService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IHardDriveService service, int id) =>
         {
             try
             {

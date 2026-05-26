@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,9 +11,9 @@ public static class PsuEndpoints
     {
         var group = webApplication.MapGroup("/psus");
 
-        group.MapGet("", async ([FromServices] PsuService service) => Results.Ok(await service.GetAllPsusAsync()));
+        group.MapGet("", async ([FromServices] IPsuService service) => Results.Ok(await service.GetAllPsusAsync()));
 
-        group.MapGet("/{id}", async ([FromServices] PsuService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IPsuService service, int id) =>
         {
             try
             {
@@ -24,7 +25,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] PsuService service, [FromBody] PsuCreate dto) =>
+        group.MapPost("", async ([FromServices] IPsuService service, [FromBody] PsuCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -37,7 +38,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] PsuService service, [FromBody] PsuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPsuService service, [FromBody] PsuUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -50,7 +51,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] PsuService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IPsuService service, int id) =>
         {
             try
             {

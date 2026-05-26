@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using PcBuilder.Entities;
+using PcBuilder.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace PcBuilder.Services;
 
-public class JwtService(IConfiguration configuration)
+public class JwtService(IConfiguration configuration) : IJwtService
 {
     public string GenerateToken(UserEntity user, IList<string> roles)
     {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PcBuilder.Models;
 using PcBuilder.Services;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Endpoints;
 
@@ -10,13 +11,13 @@ public static class BrandEndpoints
     {
         var group = webApplication.MapGroup("/brands");
 
-        group.MapGet("", async ([FromServices] BrandService brandService) =>
+        group.MapGet("", async ([FromServices] IBrandService brandService) =>
         {
             var brands = await brandService.GetAllBrandsAsync();
             return Results.Ok(brands);
         });
 
-        group.MapGet("/{id}", async ([FromServices] BrandService brandService, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IBrandService brandService, int id) =>
         {
             try
             {
@@ -29,7 +30,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] BrandService brandService, [FromBody] BrandCreate dto) =>
+        group.MapPost("", async ([FromServices] IBrandService brandService, [FromBody] BrandCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -43,7 +44,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] BrandService brandService, [FromBody] BrandUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IBrandService brandService, [FromBody] BrandUpdate dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -57,7 +58,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] BrandService brandService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IBrandService brandService, int id) =>
         {
             try
             {

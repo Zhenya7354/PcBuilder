@@ -2,10 +2,11 @@ using PcBuilder.Entities;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
+using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class RamService(IRamRepository ramRepository)
+public class RamService(IRamRepository ramRepository) : IRamService
 {
     private readonly IRamRepository _ramRepository = ramRepository;
 
