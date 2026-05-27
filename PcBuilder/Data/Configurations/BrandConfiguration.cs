@@ -11,7 +11,6 @@ public class BrandConfiguration : IEntityTypeConfiguration<BrandEntity>
         builder.ToTable("Brand")
             .Metadata.SetIsTableExcludedFromMigrations(true);
 
-        builder.Property(e => e.Id).HasColumnName("id");
-        builder.Property(e => e.Name).HasColumnName("name");
+        
     }
 }
