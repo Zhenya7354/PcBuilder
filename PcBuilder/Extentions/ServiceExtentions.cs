@@ -44,19 +44,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<ICompatibilityCheckRepository, CompatibilityCheckRepository>();
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<PcDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
-            {
-                o.MapEnum<CoolerType>("cooler_type");
-                o.MapEnum<FormFactor>("form_factor");
-                o.MapEnum<GpuInterface>("gpu_interface");
-                o.MapEnum<MemoryType>("memory_type");
-                o.MapEnum<PanelType>("panel_type");
-                o.MapEnum<PsuModular>("psu_modular");
-                o.MapEnum<PsuRating>("psu_rating");
-                o.MapEnum<PcSocketType>("socket_type");
-                o.MapEnum<StorageFormFactor>("storage_form_factor");
-                o.MapEnum<StorageInterface>("storage_interface");
-            }));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
