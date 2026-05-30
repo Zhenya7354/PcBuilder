@@ -12,11 +12,9 @@ public static class GpuEndpoints
     {
         var group = webApplication.MapGroup("/gpus");
 
-        group.MapGet("", async ([FromServices]IGpuService gpuService) =>
+        group.MapGet(string.Empty, async ([FromServices]IGpuService gpuService) =>
         {
-            var gpus = await gpuService.GetGpusAsync();
-            if(gpus is null) return Results.NotFound("Gpus not found");
-        return Results.Ok(gpus);
+        return Results.Ok(await gpuService.GetGpusAsync());
         });
 
         group.MapGet("/{id}", async ([FromServices] IGpuService gpuService, int id) =>
@@ -32,7 +30,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost("", async ([FromBody] GpuCreate dto, [FromServices] IGpuService gpuService) =>
+        group.MapPost(string.Empty, async ([FromBody] GpuCreate dto, [FromServices] IGpuService gpuService) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try

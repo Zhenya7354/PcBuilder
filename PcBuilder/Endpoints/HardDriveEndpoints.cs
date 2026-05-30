@@ -11,7 +11,10 @@ public static class HardDriveEndpoints
     {
         var group = webApplication.MapGroup("/hard-drives");
 
-        group.MapGet("", async ([FromServices] IHardDriveService service) => Results.Ok(await service.GetAllHardDrivesAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IHardDriveService service) =>
+        {
+            return Results.Ok(await service.GetAllHardDrivesAsync());
+        });
 
         group.MapGet("/{id}", async ([FromServices] IHardDriveService service, int id) =>
         {
@@ -25,7 +28,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try

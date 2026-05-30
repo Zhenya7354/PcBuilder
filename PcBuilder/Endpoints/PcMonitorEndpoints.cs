@@ -11,7 +11,7 @@ public static class PcMonitorEndpoints
     {
         var group = webApplication.MapGroup("/pc-monitors");
 
-        group.MapGet("", async ([FromServices] IPcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IPcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
 
         group.MapGet("/{id}", async ([FromServices] IPcMonitorService service, int id) =>
         {
@@ -25,7 +25,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try

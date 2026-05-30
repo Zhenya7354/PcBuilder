@@ -11,7 +11,7 @@ public static class RamEndpoints
     {
         var group = webApplication.MapGroup("/rams");
 
-        group.MapGet("", async ([FromServices] IRamService service) => Results.Ok(await service.GetAllRamAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IRamService service) => Results.Ok(await service.GetAllRamAsync()));
 
         group.MapGet("/{id}", async ([FromServices] IRamService service, int id) =>
         {
@@ -25,7 +25,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IRamService service, [FromBody] RamCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IRamService service, [FromBody] RamCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try

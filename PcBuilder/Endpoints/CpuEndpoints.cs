@@ -11,11 +11,9 @@ public static class CpuEndpoints
     {
         var group = webApplication.MapGroup("/cpus");
 
-        group.MapGet("", async ([FromServices] ICpuService cpuService) =>
+        group.MapGet(string.Empty, async ([FromServices] ICpuService cpuService) =>
         {
-            var cpus = await cpuService.GetAllCpuAsync();
-            if (cpus is null) return Results.NotFound("Cpus not found");
-            return Results.Ok(cpus);
+            return Results.Ok(await cpuService.GetAllCpuAsync());
         });
 
         group.MapGet("/{id}", async ([FromServices] ICpuService cpuService, int id) =>
@@ -30,7 +28,7 @@ public static class CpuEndpoints
                 return Results.NotFound(ex.Message);
             }
         });
-        group.MapPost("", async ([FromServices] ICpuService cpuService, [FromBody] CpuCreate cpuDto) =>
+        group.MapPost(string.Empty, async ([FromServices] ICpuService cpuService, [FromBody] CpuCreate cpuDto) =>
         {
             if(cpuDto is null) return Results.BadRequest("Cpu data is required");
             try

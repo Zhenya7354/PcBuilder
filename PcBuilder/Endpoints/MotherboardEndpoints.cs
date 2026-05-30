@@ -11,7 +11,7 @@ public static class MotherboardEndpoints
     {
         var group = webApplication.MapGroup("/motherboards");
 
-        group.MapGet("", async ([FromServices] IMotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IMotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
 
         group.MapGet("/{id}", async ([FromServices] IMotherboardService service, int id) =>
         {
@@ -25,7 +25,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try

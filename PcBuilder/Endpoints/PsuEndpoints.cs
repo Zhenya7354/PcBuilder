@@ -11,7 +11,7 @@ public static class PsuEndpoints
     {
         var group = webApplication.MapGroup("/psus");
 
-        group.MapGet("", async ([FromServices] IPsuService service) => Results.Ok(await service.GetAllPsusAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IPsuService service) => Results.Ok(await service.GetAllPsusAsync()));
 
         group.MapGet("/{id}", async ([FromServices] IPsuService service, int id) =>
         {
@@ -25,7 +25,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IPsuService service, [FromBody] PsuCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPsuService service, [FromBody] PsuCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try

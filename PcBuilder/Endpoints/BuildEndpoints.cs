@@ -14,7 +14,7 @@ public static class BuildEndpoints
     {
         var group = app.MapGroup("/builds");
 
-        group.MapGet("", async ([FromServices] IBuildService service, ClaimsPrincipal user) =>
+        group.MapGet(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -45,7 +45,7 @@ public static class BuildEndpoints
 
         });
 
-        group.MapPost("", async ([FromServices] IBuildService service, ClaimsPrincipal user, [FromBody] Build dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user, [FromBody] Build dto) =>
         {
 
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);

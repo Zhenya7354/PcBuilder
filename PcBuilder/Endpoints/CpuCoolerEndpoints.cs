@@ -11,10 +11,9 @@ public static class CpuCoolerEndpoints
     {
         var group = webApplication.MapGroup("/cpu-coolers");
 
-        group.MapGet("", async ([FromServices] ICpuCoolerService service) =>
+        group.MapGet(string.Empty, async ([FromServices] ICpuCoolerService service) =>
         {
-            var cpuCoolers = await service.GetAllCpuCoolersAsync();
-            return Results.Ok(cpuCoolers);
+            return Results.Ok(await service.GetAllCpuCoolersAsync());
         });
 
         group.MapGet("/{id}", async ([FromServices] ICpuCoolerService service, int id) =>
@@ -30,7 +29,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try

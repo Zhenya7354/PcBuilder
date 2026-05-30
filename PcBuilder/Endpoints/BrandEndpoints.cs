@@ -11,7 +11,7 @@ public static class BrandEndpoints
     {
         var group = webApplication.MapGroup("/brands");
 
-        group.MapGet("", async ([FromServices] IBrandService brandService) =>
+        group.MapGet(string.Empty, async ([FromServices] IBrandService brandService) =>
         {
             var brands = await brandService.GetAllBrandsAsync();
             return Results.Ok(brands);
@@ -30,7 +30,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IBrandService brandService, [FromBody] BrandCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IBrandService brandService, [FromBody] BrandCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try

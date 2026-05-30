@@ -11,7 +11,7 @@ public static class PcCaseEndpoints
     {
         var group = webApplication.MapGroup("/pc-cases");
 
-        group.MapGet("", async ([FromServices] IPcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IPcCaseService service) => Results.Ok(await service.GetAllCasesAsync()));
 
         group.MapGet("/{id}", async ([FromServices] IPcCaseService service, int id) =>
         {
@@ -25,7 +25,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPost("", async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreate dto) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
