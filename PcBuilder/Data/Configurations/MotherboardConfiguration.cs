@@ -9,8 +9,7 @@ public class MotherboardConfiguration : IEntityTypeConfiguration<MotherboardEnti
 {
     public void Configure(EntityTypeBuilder<MotherboardEntity> builder)
     {
-        builder.ToTable("Motherboard")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
+        
 
         builder.HasOne(e => e.Brand)
             .WithMany()

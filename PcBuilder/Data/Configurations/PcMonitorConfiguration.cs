@@ -9,8 +9,7 @@ public class PcMonitorConfiguration : IEntityTypeConfiguration<PcMonitorEntity>
 {
     public void Configure(EntityTypeBuilder<PcMonitorEntity> builder)
     {
-        builder.ToTable("PcMonitor")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
+        
 
         builder.HasOne(e => e.Brand)
             .WithMany()

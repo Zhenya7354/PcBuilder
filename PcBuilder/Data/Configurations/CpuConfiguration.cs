@@ -9,9 +9,7 @@ public class CpuConfiguration : IEntityTypeConfiguration<CpuEntity>
 {
     public void Configure(EntityTypeBuilder<CpuEntity> builder)
     {
-        builder.ToTable("Cpu")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
-
+        
         builder.HasOne(e => e.Brand)
             .WithMany()
             .HasForeignKey(e => e.BrandId);

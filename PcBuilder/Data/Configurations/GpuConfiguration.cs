@@ -9,8 +9,7 @@ public class GpuConfiguration : IEntityTypeConfiguration<GpuEntity>
 {
     public void Configure(EntityTypeBuilder<GpuEntity> builder)
     {
-        builder.ToTable("Gpu")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
+        
 
         builder.HasOne(e => e.Brand)
             .WithMany()

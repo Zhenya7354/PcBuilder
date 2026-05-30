@@ -187,10 +187,7 @@ namespace PcBuilder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.BuildEntity", b =>
@@ -302,18 +299,15 @@ namespace PcBuilder.Migrations
                     b.Property<int?>("RadiatorSizeMm")
                         .HasColumnType("integer");
 
-                    b.Property<List<string>>("SocketsSupported")
+                    b.PrimitiveCollection<int[]>("SocketsSupported")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("CpuCooler", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("CpuCooler");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.CpuEntity", b =>
@@ -398,10 +392,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Cpu", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Cpu");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.GpuEntity", b =>
@@ -477,10 +468,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Gpu", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Gpu");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.HardDriveEntity", b =>
@@ -537,10 +525,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("HardDrive", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("HardDrive");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.MotherboardEntity", b =>
@@ -638,10 +623,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Motherboard", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Motherboard");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.PcCaseEntity", b =>
@@ -702,18 +684,15 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<List<string>>("SupportedFormFactors")
+                    b.PrimitiveCollection<int[]>("SupportedFormFactors")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("PcCase", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("PcCase");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.PcMonitorEntity", b =>
@@ -806,10 +785,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("PcMonitor", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("PcMonitor");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.PsuEntity", b =>
@@ -867,10 +843,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Psu", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Psu");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.RamEntity", b =>
@@ -923,10 +896,7 @@ namespace PcBuilder.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Ram", null, t =>
-                        {
-                            t.ExcludeFromMigrations();
-                        });
+                    b.ToTable("Ram");
                 });
 
             modelBuilder.Entity("PcBuilder.Entities.RegularUserEntity", b =>

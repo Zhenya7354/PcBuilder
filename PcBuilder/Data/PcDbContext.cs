@@ -6,7 +6,7 @@ namespace PcBuilder.Data;
 
 public class PcDbContext(DbContextOptions<PcDbContext> options) : IdentityDbContext<UserEntity>(options)
 {
-    public DbSet<UserEntity> user { get; set; }
+    public DbSet<UserEntity> User { get; set; }
     public DbSet<BuildEntity> Build { get; set; }
     public DbSet<RegularUserEntity> RegularUser { get; set; }
     public DbSet<AdminEntity> Admin { get; set; }

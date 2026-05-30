@@ -9,8 +9,7 @@ public class RamConfiguration : IEntityTypeConfiguration<RamEntity>
 {
     public void Configure(EntityTypeBuilder<RamEntity> builder)
     {
-        builder.ToTable("Ram")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
+        
 
         builder.HasOne(e => e.Brand)
             .WithMany()

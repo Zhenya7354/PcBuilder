@@ -9,8 +9,7 @@ public class HardDriveConfiguration : IEntityTypeConfiguration<HardDriveEntity>
 {
     public void Configure(EntityTypeBuilder<HardDriveEntity> builder)
     {
-        builder.ToTable("HardDrive")
-            .Metadata.SetIsTableExcludedFromMigrations(true);
+        
 
         builder.HasOne(e => e.Brand)
             .WithMany()
