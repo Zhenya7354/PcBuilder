@@ -13,21 +13,17 @@ public class AdminRepository(PcDbContext context) : IAdminRepository
     }
     public async Task<AdminEntity?> GetAdminByIdAsync(int id)
     {
-        var admin = await _context.Admin.Include(a => a.User).AsNoTracking().FirstOrDefaultAsync(a => a.Id == id) ??
-            throw new KeyNotFoundException("Admin not found");
-        return admin;
+        return await _context.Admin.Include(a => a.User).AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task AddAdmin(AdminEntity admin)
+    public async Task AddAdminAsync(AdminEntity admin)
     {
         _context.Admin.Add(admin);
-        await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAdmin(AdminEntity admin)
+    public async Task DeleteAdminAsync(AdminEntity admin)
     {
         _context.Admin.Remove(admin);
-        await _context.SaveChangesAsync();
     }
 
 

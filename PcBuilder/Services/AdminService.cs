@@ -20,7 +20,7 @@ public class AdminService(UserManager<UserEntity> userManager, RoleManager<Ident
         try
         {
             await _userManager.AddToRoleAsync(user, "Admin");
-            await _adminRepository.AddAdmin(new AdminEntity { UserId = user.Id });
+            await _adminRepository.AddAdminAsync(new AdminEntity { UserId = user.Id });
             await _adminRepository.SaveChangesAsync();
             await transaction.CommitAsync();
         }
