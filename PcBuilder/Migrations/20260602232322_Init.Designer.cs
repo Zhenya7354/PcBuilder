@@ -13,7 +13,7 @@ using PcBuilder.Data;
 namespace PcBuilder.Migrations
 {
     [DbContext(typeof(PcDbContext))]
-    [Migration("20260530184900_Init")]
+    [Migration("20260602232322_Init")]
     partial class Init
     {
         /// <inheritdoc />

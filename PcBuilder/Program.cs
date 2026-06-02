@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using PcBuilder.Data;
+using PcBuilder.Data.Seeding;
+using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Endpoints;
 using PcBuilder.Extentions;
 using PcBuilder.Services;
@@ -18,9 +19,9 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<PcDbContext>();
-    await db.Database.MigrateAsync();
-    await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
+    var seeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>();
+    await seeder.SeedRolesAsync(scope.ServiceProvider);
+    await seeder.SeedDataAsync();
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

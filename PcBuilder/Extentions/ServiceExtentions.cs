@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data;
+using PcBuilder.Data.Seeding;
+using PcBuilder.Data.Seeding.Interfaces;
+using PcBuilder.Data.Seeding.Seeders;
 using PcBuilder.Enums;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
@@ -29,6 +32,18 @@ public static class ServiceExtentions
         builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IDataSeeder, BrandSeeder>();
+        builder.Services.AddScoped<IDataSeeder, CpuCoolerSeeder>();
+        builder.Services.AddScoped<IDataSeeder, CpuSeeder>();
+        builder.Services.AddScoped<IDataSeeder, GpuSeeder>();
+        builder.Services.AddScoped<IDataSeeder, HardDriveSeeder>();
+        builder.Services.AddScoped<IDataSeeder, MotherboardSeeder>();
+        builder.Services.AddScoped<IDataSeeder, PcCaseSeeder>();
+        builder.Services.AddScoped<IDataSeeder, PcMonitorSeeder>();
+        builder.Services.AddScoped<IDataSeeder, PsuSeeder>();
+        builder.Services.AddScoped<IDataSeeder, RamSeeder>();
+        builder.Services.AddScoped<IDbSeeder, DbSeeder>();
+
         builder.Services.AddScoped<ICpuRepository, CpuRepository>();
         builder.Services.AddScoped<IGpuRepository, GpuRepository>();
         builder.Services.AddScoped<IBrandRepository, BrandRepository>();
