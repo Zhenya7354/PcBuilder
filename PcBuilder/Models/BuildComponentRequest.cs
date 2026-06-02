@@ -2,7 +2,7 @@ using PcBuilder.Enums;
 
 namespace PcBuilder.Models;
 
-public record BuildComponent(
+public record BuildComponentRequest(
     BuildComponentType ComponentType,
     int? ComponentId
     );

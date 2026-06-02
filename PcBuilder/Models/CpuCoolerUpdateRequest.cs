@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record CpuCoolerUpdate(
+public record CpuCoolerUpdateRequest(
     string? Name,
     int? BrandId,
     CoolerType? CoolerType,

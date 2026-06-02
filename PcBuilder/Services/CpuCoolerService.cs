@@ -22,7 +22,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
         return cpuCooler;
     }
 
-    public async Task<CpuCoolerEntity> AddCpuCoolerAsync(CpuCoolerCreate dto)
+    public async Task<CpuCoolerEntity> AddCpuCoolerAsync(CpuCoolerCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -47,7 +47,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
         return cpuCooler;
     }
 
-    public async Task<CpuCoolerEntity> UpdateCpuCoolerAsync(int id, CpuCoolerUpdate dto)
+    public async Task<CpuCoolerEntity> UpdateCpuCoolerAsync(int id, CpuCoolerUpdateRequest dto)
     {
         var cpuCooler = await _cpuCoolerRepository.GetCpuCoolerByIdAsync(id) ??
             throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");

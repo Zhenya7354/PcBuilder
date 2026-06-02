@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record CpuUpdate
+public record CpuUpdateRequest
     (
     string? Name,
     int? BrandId,

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record MotherboardUpdate(
+public record MotherboardUpdateRequest(
     string? Name,
     int? BrandId,
     PcSocketType? Socket,

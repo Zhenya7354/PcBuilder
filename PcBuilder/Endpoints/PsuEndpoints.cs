@@ -25,7 +25,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IPsuService service, [FromBody] PsuCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPsuService service, [FromBody] PsuCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try
@@ -38,7 +38,7 @@ public static class PsuEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IPsuService service, [FromBody] PsuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPsuService service, [FromBody] PsuUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Psu data is required");
             try

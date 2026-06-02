@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record CpuCreate
+public record CpuCreateRequest
     (
     [Required] string Name,
     [Required] int BrandId,

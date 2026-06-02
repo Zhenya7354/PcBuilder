@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record PsuUpdate(
+public record PsuUpdateRequest(
     string? Name,
     int? BrandId,
     [Range(1, 3000)] int? Wattage,

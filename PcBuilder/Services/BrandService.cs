@@ -22,7 +22,7 @@ public class BrandService(IBrandRepository brandRepository) : IBrandService
         return brand;
     }
 
-    public async Task<BrandEntity> AddBrandAsync(BrandCreate dto)
+    public async Task<BrandEntity> AddBrandAsync(BrandCreateRequest dto)
     {
         var brand = new BrandEntity { Name = dto.Name };
         await _brandRepository.AddBrandAsync(brand);
@@ -30,7 +30,7 @@ public class BrandService(IBrandRepository brandRepository) : IBrandService
         return brand;
     }
 
-    public async Task<BrandEntity> UpdateBrandAsync(int id, BrandUpdate dto)
+    public async Task<BrandEntity> UpdateBrandAsync(int id, BrandUpdateRequest dto)
     {
         var brand = await _brandRepository.GetBrandByIdAsync(id) ??
             throw new KeyNotFoundException($"Brand with ID {id} not found.");

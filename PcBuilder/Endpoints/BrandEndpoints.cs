@@ -30,7 +30,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IBrandService brandService, [FromBody] BrandCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IBrandService brandService, [FromBody] BrandCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try
@@ -44,7 +44,7 @@ public static class BrandEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IBrandService brandService, [FromBody] BrandUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IBrandService brandService, [FromBody] BrandUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Brand data is required");
             try

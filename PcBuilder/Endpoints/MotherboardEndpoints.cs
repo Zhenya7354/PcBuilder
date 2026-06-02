@@ -25,7 +25,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
@@ -38,7 +38,7 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IMotherboardService service, [FromBody] MotherboardUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IMotherboardService service, [FromBody] MotherboardUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try

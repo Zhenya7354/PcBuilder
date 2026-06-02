@@ -28,7 +28,7 @@ public static class CpuEndpoints
                 return Results.NotFound(ex.Message);
             }
         });
-        group.MapPost(string.Empty, async ([FromServices] ICpuService cpuService, [FromBody] CpuCreate cpuDto) =>
+        group.MapPost(string.Empty, async ([FromServices] ICpuService cpuService, [FromBody] CpuCreateRequest cpuDto) =>
         {
             if(cpuDto is null) return Results.BadRequest("Cpu data is required");
             try
@@ -41,7 +41,7 @@ public static class CpuEndpoints
                 return Results.BadRequest(ex.Message);
             }
         });
-        group.MapPut("/{id}", async ([FromServices] ICpuService cpuService, [FromBody] CpuUpdate cpuDto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] ICpuService cpuService, [FromBody] CpuUpdateRequest cpuDto, int id) =>
         {
             var cpu = await cpuService.GetCpuByIdAsync(id);
             if (cpu is null) return Results.NotFound("Cpu not found");

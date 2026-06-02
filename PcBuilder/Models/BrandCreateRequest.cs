@@ -2,4 +2,4 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record BrandCreate([Required] string Name);
+public record BrandCreateRequest([Required] string Name);

@@ -28,7 +28,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
@@ -41,7 +41,7 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try

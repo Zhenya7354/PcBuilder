@@ -30,7 +30,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromBody] GpuCreate dto, [FromServices] IGpuService gpuService) =>
+        group.MapPost(string.Empty, async ([FromBody] GpuCreateRequest dto, [FromServices] IGpuService gpuService) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
@@ -44,7 +44,7 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try

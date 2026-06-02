@@ -25,7 +25,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
@@ -38,7 +38,7 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try

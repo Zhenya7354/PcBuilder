@@ -23,7 +23,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreate dto)
+    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -62,7 +62,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdate dto)
+    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateRequest dto)
     {
         var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");

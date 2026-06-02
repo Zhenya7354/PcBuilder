@@ -7,7 +7,7 @@ public interface IHardDriveService
 {
     public Task<List<HardDriveEntity>> GetAllHardDrivesAsync();
     public Task<HardDriveEntity> GetHardDriveByIdAsync(int id);
-    public Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreate dto);
-    public Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdate dto);
+    public Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateRequest dto);
+    public Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateRequest dto);
     public Task DeleteHardDriveAsync(int id);
 }

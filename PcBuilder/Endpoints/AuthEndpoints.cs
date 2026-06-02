@@ -15,7 +15,7 @@ public static class AuthEndpoints
         var group = app.MapGroup("/auth");
 
 
-        group.MapPost("/register", async (Register dto, UserManager<UserEntity> userManager, PcDbContext db) =>
+        group.MapPost("/register", async (RegisterRequest dto, UserManager<UserEntity> userManager, PcDbContext db) =>
         {
             if (dto is null || userManager is null) return Results.BadRequest();
 
@@ -34,7 +34,7 @@ public static class AuthEndpoints
 
 
         group.MapPost("/login", async (
-            Login dto,
+            LoginRequest dto,
             SignInManager<UserEntity> singInManager,
             UserManager<UserEntity> userManager,
             IJwtService jwtService) =>

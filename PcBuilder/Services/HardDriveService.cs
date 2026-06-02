@@ -22,7 +22,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
         return hardDrive;
     }
 
-    public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreate dto)
+    public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -48,7 +48,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
         return hardDrive;
     }
 
-    public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdate dto)
+    public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateRequest dto)
     {
         var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");

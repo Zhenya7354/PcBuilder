@@ -23,7 +23,7 @@ public class RamService(IRamRepository ramRepository) : IRamService
         return ram;
     }
 
-    public async Task<RamEntity> AddRamAsync(RamCreate dto)
+    public async Task<RamEntity> AddRamAsync(RamCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -48,7 +48,7 @@ public class RamService(IRamRepository ramRepository) : IRamService
         return ram;
     }
 
-    public async Task<RamEntity> UpdateRamAsync(int id, RamUpdate dto)
+    public async Task<RamEntity> UpdateRamAsync(int id, RamUpdateRequest dto)
     {
         var ram = await _ramRepository.GetRamByIdAsync(id) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");

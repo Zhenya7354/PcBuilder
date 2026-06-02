@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PcBuilder.Models;
 
-public record GpuCreate
+public record GpuCreateRequest
 (
     [Required] string Name,
     [Required] int BrandId,

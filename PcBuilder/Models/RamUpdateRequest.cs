@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record RamUpdate(
+public record RamUpdateRequest(
     string? Name,
     int? BrandId,
     MemoryType? MemoryType,

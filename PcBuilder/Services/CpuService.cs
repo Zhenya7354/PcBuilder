@@ -18,7 +18,7 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
             throw new KeyNotFoundException("Cpu not found");
         return cpu;
     }
-    public async Task<CpuEntity> AddCpuAsync(CpuCreate cpuDto)
+    public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest cpuDto)
     {
         if (!await _cpuRepository.BrandExistsAsync(cpuDto.BrandId))
             throw new KeyNotFoundException("Brand not found");
@@ -52,7 +52,7 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
         await _cpuRepository.SaveChangesAsync();
         return cpu;
     }
-    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdate cpuDto)
+    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest cpuDto)
     {
         var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
             throw new KeyNotFoundException("Cpu not found");

@@ -21,7 +21,7 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
         return gpu;
     }
 
-    public async Task<GpuEntity> AddGpuAsync(GpuCreate gpuDto)
+    public async Task<GpuEntity> AddGpuAsync(GpuCreateRequest gpuDto)
     {
         await EnsureBrandExistsAsync(gpuDto.BrandId);
 
@@ -52,7 +52,7 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
 
         return gpu;
     }
-    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdate gpuDto)
+    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateRequest gpuDto)
     {
         var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
             throw new KeyNotFoundException("Gpu not found");

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-    public class Build
+    public class BuildRequest
     {
         public string? Name { get; set; }
         public int? CpuId { get; set; }

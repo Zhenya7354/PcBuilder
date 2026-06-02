@@ -23,7 +23,7 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
         return psu;
     }
 
-    public async Task<PsuEntity> AddPsuAsync(PsuCreate dto)
+    public async Task<PsuEntity> AddPsuAsync(PsuCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -49,7 +49,7 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
         return psu;
     }
 
-    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdate dto)
+    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateRequest dto)
     {
         var psu = await _psuRepository.GetPsuByIdAsync(id) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");

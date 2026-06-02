@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record PsuCreate(
+public record PsuCreateRequest(
     [Required] string Name,
     [Required] int BrandId,
     [Required, Range(1, 3000)] int Wattage,

@@ -25,7 +25,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IRamService service, [FromBody] RamCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IRamService service, [FromBody] RamCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try
@@ -38,7 +38,7 @@ public static class RamEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IRamService service, [FromBody] RamUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IRamService service, [FromBody] RamUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Ram data is required");
             try

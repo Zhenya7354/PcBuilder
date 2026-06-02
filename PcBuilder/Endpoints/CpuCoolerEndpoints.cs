@@ -29,7 +29,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try
@@ -43,7 +43,7 @@ public static class CpuCoolerEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Cpu cooler data is required");
             try

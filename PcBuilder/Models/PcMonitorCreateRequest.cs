@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record PcMonitorCreate(
+public record PcMonitorCreateRequest(
     [Required] string Name,
     [Required] int BrandId,
     [Required, Range(1, 100)] double ScreenSizeInch,

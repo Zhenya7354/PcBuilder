@@ -25,7 +25,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreate dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreateRequest dto) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try
@@ -38,7 +38,7 @@ public static class PcCaseEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IPcCaseService service, [FromBody] PcCaseUpdate dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPcCaseService service, [FromBody] PcCaseUpdateRequest dto, int id) =>
         {
             if (dto is null) return Results.BadRequest("Case data is required");
             try

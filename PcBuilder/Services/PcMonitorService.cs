@@ -23,7 +23,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreate dto)
+    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -61,7 +61,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdate dto)
+    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateRequest dto)
     {
         var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");

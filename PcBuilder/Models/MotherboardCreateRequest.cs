@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record MotherboardCreate(
+public record MotherboardCreateRequest(
     [Required] string Name,
     [Required] int BrandId,
     [Required] PcSocketType Socket,

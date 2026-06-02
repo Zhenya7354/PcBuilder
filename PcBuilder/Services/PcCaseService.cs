@@ -23,7 +23,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
         return pcCase;
     }
 
-    public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreate dto)
+    public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreateRequest dto)
     {
         await EnsureBrandExistsAsync(dto.BrandId);
 
@@ -53,7 +53,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
         return pcCase;
     }
 
-    public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdate dto)
+    public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdateRequest dto)
     {
         var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");

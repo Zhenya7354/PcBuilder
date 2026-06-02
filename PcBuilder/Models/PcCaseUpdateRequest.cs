@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record PcCaseUpdate(
+public record PcCaseUpdateRequest(
     string? Name,
     int? BrandId,
     List<FormFactor>? SupportedFormFactors,

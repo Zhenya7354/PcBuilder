@@ -21,7 +21,7 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
     {
         return await _buildRepository.GetAllAsync(userId);
     }
-    public async Task<BuildEntity> AddBuildAsync(string userId, Build dto)
+    public async Task<BuildEntity> AddBuildAsync(string userId, BuildRequest dto)
     {
         var build = new BuildEntity
         {
@@ -42,7 +42,7 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         return build;
     }
 
-    public async Task<BuildEntity> UpdateBuildAsync(int buildId, string userId, Build dto)
+    public async Task<BuildEntity> UpdateBuildAsync(int buildId, string userId, BuildRequest dto)
     {
         var build = await GetBuildById(buildId, userId);
 
@@ -68,7 +68,7 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         await _buildRepository.SaveChangesAsync();
     }
 
-    public async Task<BuildEntity> SetComponentAsync(int buildId, string userId, BuildComponent dto)
+    public async Task<BuildEntity> SetComponentAsync(int buildId, string userId, BuildComponentRequest dto)
     {
         var build = await GetBuildById(buildId, userId);
         if (!await ComponentExists(dto.ComponentType, dto.ComponentId))
@@ -87,7 +87,7 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         return build;
     }
 
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksAsync(Build dto)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksAsync(BuildRequest dto)
     {
         var checks = new List<(int? IdA, int? IdB, Func<int, int, Task<CompatibilityCheckResponse>> Check)> {
             (dto.CpuId, dto.MotherboardId, _compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync),
@@ -108,11 +108,11 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         var results =  await Task.WhenAll(tasks);
         return results.Where(r => !r.IsCompatible).SelectMany(r => r.Issues).ToList();
     }
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, string userId, Build dto)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, string userId, BuildRequest dto)
     {
         var build = await GetBuildById(buildId, userId);
 
-        var mergedDto = new Build
+        var mergedDto = new BuildRequest
         {
             Name = dto.Name ?? build.Name,
             CpuId = dto.CpuId ?? build.CpuId,
@@ -129,10 +129,10 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         return await RunCompatibilityChecksAsync(mergedDto);
     }
 
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, string userId, BuildComponent dto)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, string userId, BuildComponentRequest dto)
     {
         var build = await GetBuildById(buildId, userId);
-        var mergedDto = new Build
+        var mergedDto = new BuildRequest
         {
             Name = build.Name,
             CpuId = build.CpuId,

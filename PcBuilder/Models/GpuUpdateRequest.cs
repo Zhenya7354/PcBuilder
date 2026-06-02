@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PcBuilder.Models;
 
-public record GpuUpdate(
+public record GpuUpdateRequest(
     string? Name,
     int? BrandId,
     string? gpuChip,
