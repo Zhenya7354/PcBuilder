@@ -31,7 +31,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IBuildService, BuildService>();
         builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
-        builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IDataSeeder, BrandSeeder>();
         builder.Services.AddScoped<IDataSeeder, CpuCoolerSeeder>();
         builder.Services.AddScoped<IDataSeeder, CpuSeeder>();
