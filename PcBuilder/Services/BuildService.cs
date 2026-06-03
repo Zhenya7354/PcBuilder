@@ -8,20 +8,31 @@ using PcBuilder.Repositories.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckService compatibilityCheckService) : IBuildService
+public class BuildService : IBuildService
 {
-    private readonly IBuildRepository _buildRepository = buildRepository;
-    private readonly ICompatibilityCheckService _compatibilityCheckService = compatibilityCheckService;
-    public async Task<BuildEntity> GetBuildByIdAsync(string userId, int buildId)
+    private readonly IBuildRepository _buildRepository;
+    private readonly ICompatibilityCheckService _compatibilityCheckService;
+    private readonly IUserContextAccessor _userContextAccessor;
+    private readonly UserContextResponse _userContext;
+
+    public BuildService(IBuildRepository buildRepository, ICompatibilityCheckService compatibilityCheckService, IUserContextAccessor userContextAccessor)
     {
-        return await _buildRepository.GetByIdAsync(buildId, userId) ??
+        _buildRepository = buildRepository;
+        _compatibilityCheckService = compatibilityCheckService;
+        _userContextAccessor = userContextAccessor;
+        _userContext = userContextAccessor.GetUserContext();
+    }
+
+    public async Task<BuildEntity> GetBuildByIdAsync(int buildId)
+    {
+        return await _buildRepository.GetByIdAsync(buildId,_userContext.UserId) ??
             throw new KeyNotFoundException($"Build with Id {buildId} not found");
     }
-    public async Task<List<BuildEntity>> GetUserBuildsAsync(string userId)
+    public async Task<List<BuildEntity>> GetUserBuildsAsync()
     {
-        return await _buildRepository.GetAllAsync(userId);
+        return await _buildRepository.GetAllAsync(_userContext.UserId);
     }
-    public async Task<BuildEntity> AddBuildAsync(string userId, BuildRequest dto)
+    public async Task<BuildEntity> AddBuildAsync(BuildRequest dto)
     {
         var build = new BuildEntity
         {
@@ -35,16 +46,16 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
             PsuId = dto.PsuId,
             CaseId = dto.CaseId,
             MonitorId = dto.MonitorId,
-            UserId = userId
+            UserId = _userContext.UserId
         };
         await _buildRepository.AddBuildAsync(build);
         await _buildRepository.SaveChangesAsync();
         return build;
     }
 
-    public async Task<BuildEntity> UpdateBuildAsync(int buildId, string userId, BuildRequest dto)
+    public async Task<BuildEntity> UpdateBuildAsync(int buildId,BuildRequest dto)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
 
         if (!string.IsNullOrEmpty(dto.Name)) { build.Name = dto.Name; }
         if (dto.CpuId.HasValue) build.CpuId = dto.CpuId;
@@ -61,16 +72,16 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         return build;
     }
 
-    public async Task DeleteBuildAsync(int buildId, string userId)
+    public async Task DeleteBuildAsync(int buildId)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
         await _buildRepository.DeleteBuildAsync(build);
         await _buildRepository.SaveChangesAsync();
     }
 
-    public async Task<BuildEntity> SetComponentAsync(int buildId, string userId, BuildComponentRequest dto)
+    public async Task<BuildEntity> SetComponentAsync(int buildId, BuildComponentRequest dto)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
         if (!await ComponentExists(dto.ComponentType, dto.ComponentId))
         {
             throw new KeyNotFoundException($"Component with Id {dto.ComponentId} not found for type {dto.ComponentType}");
@@ -79,9 +90,9 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         await _buildRepository.SaveChangesAsync();
         return build;
     }
-    public async Task<BuildEntity> RemoveComponentAsync(int buildId, string userId, BuildComponentType componentType)
+    public async Task<BuildEntity> RemoveComponentAsync(int buildId, BuildComponentType componentType)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
         ApplyComponent(build, componentType, null);
         await _buildRepository.SaveChangesAsync();
         return build;
@@ -108,9 +119,9 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         var results =  await Task.WhenAll(tasks);
         return results.Where(r => !r.IsCompatible).SelectMany(r => r.Issues).ToList();
     }
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, string userId, BuildRequest dto)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, BuildRequest dto)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
 
         var mergedDto = new BuildRequest
         {
@@ -129,9 +140,9 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         return await RunCompatibilityChecksAsync(mergedDto);
     }
 
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, string userId, BuildComponentRequest dto)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, BuildComponentRequest dto)
     {
-        var build = await GetBuildById(buildId, userId);
+        var build = await GetBuildById(buildId);
         var mergedDto = new BuildRequest
         {
             Name = build.Name,
@@ -213,9 +224,9 @@ public class BuildService(IBuildRepository buildRepository, ICompatibilityCheckS
         };
     }
 
-    private async Task<BuildEntity> GetBuildById(int buildId, string userId)
+    private async Task<BuildEntity> GetBuildById(int buildId)
     {
-        return await _buildRepository.GetByIdAsync(buildId, userId) ??
-            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {userId}");
+        return await _buildRepository.GetByIdAsync(buildId, _userContext.UserId) ??
+            throw new KeyNotFoundException($"Build with Id {buildId} not found for user Id {_userContext.UserId}");
     }
 }

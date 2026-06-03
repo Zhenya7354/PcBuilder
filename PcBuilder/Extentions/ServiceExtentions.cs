@@ -43,6 +43,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IDataSeeder, PsuSeeder>();
         builder.Services.AddScoped<IDataSeeder, RamSeeder>();
         builder.Services.AddScoped<IDbSeeder, DbSeeder>();
+        builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
 
         builder.Services.AddScoped<ICpuRepository, CpuRepository>();
         builder.Services.AddScoped<IGpuRepository, GpuRepository>();
@@ -57,7 +58,10 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IBuildRepository, BuildRepository>();
         builder.Services.AddScoped<ICompatibilityCheckRepository, CompatibilityCheckRepository>();
+
         builder.Services.AddOpenApi();
+        builder.Services.AddHttpContextAccessor();
+
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

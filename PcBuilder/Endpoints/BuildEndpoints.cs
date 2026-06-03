@@ -23,10 +23,11 @@ public static class BuildEndpoints
             }
             try
             {
-                var builds = await service.GetUserBuildsAsync(userId);
+                var builds = await service.GetUserBuildsAsync();
                 return Results.Ok(builds);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         group.MapGet("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
@@ -38,10 +39,11 @@ public static class BuildEndpoints
             }
             try
             {
-                var build = await service.GetBuildByIdAsync(userId, id);
+                var build = await service.GetBuildByIdAsync(id);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
 
         });
 
@@ -64,10 +66,11 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.AddBuildAsync(userId, dto);
+                var build = await service.AddBuildAsync(dto);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         group.MapPut("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildRequest dto) =>
@@ -79,7 +82,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var issues = await service.RunCompatibilityChecksForUpdateAsync(id, userId, dto);
+                var issues = await service.RunCompatibilityChecksForUpdateAsync(id, dto);
                 if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
                 {
                     return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
@@ -88,10 +91,11 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.UpdateBuildAsync(id, userId, dto);
+                var build = await service.UpdateBuildAsync(id, dto);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         group.MapDelete("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
@@ -103,10 +107,11 @@ public static class BuildEndpoints
             }
             try
             {
-                await service.DeleteBuildAsync(id, userId);
+                await service.DeleteBuildAsync(id);
                 return Results.Ok();
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         group.MapPost("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentRequest dto) =>
@@ -118,7 +123,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, userId, dto);
+                var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto);
                 if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
                 {
                     return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
@@ -127,10 +132,11 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.SetComponentAsync(id, userId, dto);
+                var build = await service.SetComponentAsync(id, dto);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType) =>
@@ -142,10 +148,11 @@ public static class BuildEndpoints
             }
             try
             {
-                var build = await service.RemoveComponentAsync(id, userId, componentType);
+                var build = await service.RemoveComponentAsync(id, componentType);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
+            catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
         return app;
