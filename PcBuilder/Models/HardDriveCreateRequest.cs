@@ -9,7 +9,7 @@ public record HardDriveCreateRequest(
     [Required, Range(1, 1000000)] int CapacityGb,
     [Required] StorageInterface DriveInterface,
     [Required] StorageFormFactor FormFactor,
-    bool IsSsd,
+    PcDriveType PcDriveType,
     int? ReadSpeedMbS,
     int? WriteSpeedMbs,
     int? Rpm,

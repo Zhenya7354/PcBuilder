@@ -9,7 +9,7 @@ public record HardDriveUpdateRequest(
     [Range(1, 1000000)] int? CapacityGb,
     StorageInterface? DriveInterface,
     StorageFormFactor? FormFactor,
-    bool? IsSsd,
+    PcDriveType? PcDriveType,
     int? ReadSpeedMbS,
     int? WriteSpeedMbs,
     int? Rpm,

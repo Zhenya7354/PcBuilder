@@ -8,7 +8,7 @@ public class HardDriveEntity : Component
     public int CapacityGb { get; set; }
     public StorageInterface DriveInterface { get; set; }
     public StorageFormFactor FormFactor { get; set; }
-    public bool IsSsd { get; set; }
+    public PcDriveType PcDriveType { get; set; }
     public int? ReadSpeedMbS { get; set; }
     public int? WriteSpeedMbs { get; set; }
     public int? Rpm { get; set; }

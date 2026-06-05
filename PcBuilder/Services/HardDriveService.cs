@@ -33,7 +33,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
             CapacityGb = dto.CapacityGb,
             DriveInterface = dto.DriveInterface,
             FormFactor = dto.FormFactor,
-            IsSsd = dto.IsSsd,
+            PcDriveType = dto.PcDriveType,
             ReadSpeedMbS = dto.ReadSpeedMbS,
             WriteSpeedMbs = dto.WriteSpeedMbs,
             Rpm = dto.Rpm,
@@ -60,7 +60,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
         if (dto.CapacityGb.HasValue) hardDrive.CapacityGb = dto.CapacityGb.Value;
         if (dto.DriveInterface.HasValue) hardDrive.DriveInterface = dto.DriveInterface.Value;
         if (dto.FormFactor.HasValue) hardDrive.FormFactor = dto.FormFactor.Value;
-        if (dto.IsSsd.HasValue) hardDrive.IsSsd = dto.IsSsd.Value;
+        if (dto.PcDriveType.HasValue) hardDrive.PcDriveType = dto.PcDriveType.Value;
         if (dto.ReadSpeedMbS.HasValue) hardDrive.ReadSpeedMbS = dto.ReadSpeedMbS.Value;
         if (dto.WriteSpeedMbs.HasValue) hardDrive.WriteSpeedMbs = dto.WriteSpeedMbs.Value;
         if (dto.Rpm.HasValue) hardDrive.Rpm = dto.Rpm.Value;
