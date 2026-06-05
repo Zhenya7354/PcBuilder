@@ -15,9 +15,7 @@ public class PcMonitorEntity : Component
     public int? BrightnessNits { get; set; }
     public string? ContrastRatio { get; set; }
     public int? ColorGamutP3 { get; set; }
-    public bool HasGSync { get; set; }
-    public bool HasFreeSync { get; set; }
-    public bool HasFreeSyncPremium { get; set; }
+    public List<SyncTechnology> SyncTechnologies { get; set; } = new();
     public int HdmiPorts { get; set; }
     public string? HdmiVersion { get; set; }
     public int DpPorts { get; set; }

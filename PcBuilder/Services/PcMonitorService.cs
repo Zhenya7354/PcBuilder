@@ -41,9 +41,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
             BrightnessNits = dto.BrightnessNits,
             ContrastRatio = dto.ContrastRatio,
             ColorGamutP3 = dto.ColorGamutP3,
-            HasGSync = dto.HasGSync,
-            HasFreeSync = dto.HasFreeSync,
-            HasFreeSyncPremium = dto.HasFreeSyncPremium,
+            SyncTechnologies = dto.SyncTechnologies,
             HdmiPorts = dto.HdmiPorts,
             HdmiVersion = dto.HdmiVersion,
             DpPorts = dto.DpPorts,
@@ -80,9 +78,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         if (dto.BrightnessNits.HasValue) monitor.BrightnessNits = dto.BrightnessNits.Value;
         if (!string.IsNullOrWhiteSpace(dto.ContrastRatio)) monitor.ContrastRatio = dto.ContrastRatio;
         if (dto.ColorGamutP3.HasValue) monitor.ColorGamutP3 = dto.ColorGamutP3.Value;
-        if (dto.HasGSync.HasValue) monitor.HasGSync = dto.HasGSync.Value;
-        if (dto.HasFreeSync.HasValue) monitor.HasFreeSync = dto.HasFreeSync.Value;
-        if (dto.HasFreeSyncPremium.HasValue) monitor.HasFreeSyncPremium = dto.HasFreeSyncPremium.Value;
+        if (dto.SyncTechnologies != null) monitor.SyncTechnologies = dto.SyncTechnologies;
         if (dto.HdmiPorts.HasValue) monitor.HdmiPorts = dto.HdmiPorts.Value;
         if (!string.IsNullOrWhiteSpace(dto.HdmiVersion)) monitor.HdmiVersion = dto.HdmiVersion;
         if (dto.DpPorts.HasValue) monitor.DpPorts = dto.DpPorts.Value;
