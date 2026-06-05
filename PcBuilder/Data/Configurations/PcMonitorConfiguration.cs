@@ -22,5 +22,7 @@ public class PcMonitorConfiguration : IEntityTypeConfiguration<PcMonitorEntity>
         builder
             .Property(e => e.Currency)
             .HasConversion<string>();
+        builder
+            .PrimitiveCollection(m => m.SyncTechnologies);
     }
 }

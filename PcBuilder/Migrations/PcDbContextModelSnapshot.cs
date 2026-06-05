@@ -748,15 +748,6 @@ namespace PcBuilder.Migrations
                     b.Property<string>("DpVersion")
                         .HasColumnType("text");
 
-                    b.Property<bool>("HasFreeSync")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("HasFreeSyncPremium")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("HasGSync")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("HasSpeakers")
                         .HasColumnType("boolean");
 
@@ -800,6 +791,10 @@ namespace PcBuilder.Migrations
 
                     b.Property<double>("ScreenSizeInch")
                         .HasColumnType("double precision");
+
+                    b.PrimitiveCollection<int[]>("SyncTechnologies")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
 
                     b.Property<int>("UsbCPorts")
                         .HasColumnType("integer");
