@@ -35,7 +35,8 @@ public class GpuSeeder : IDataSeeder
                 OutputDp = 3,
                 CardLengthMm = 304,
                 CardSlots = 3.5,
-                HasRgb = true,
+                ColorScheme = ColorScheme.RGB,
+                Currency = Currency.USD,
                 Price = 1599.99m
             },
             new GpuEntity
@@ -57,7 +58,8 @@ public class GpuSeeder : IDataSeeder
                 OutputDp = 3,
                 CardLengthMm = 267,
                 CardSlots = 2.5,
-                HasRgb = false,
+                ColorScheme = ColorScheme.RGB,
+                Currency = Currency.USD,
                 Price = 999.99m
             }   
         };

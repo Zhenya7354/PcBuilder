@@ -44,7 +44,8 @@ public class MotherboardSeeder : IDataSeeder
                 RearUsbC = 3,
                 RearHdmi = false,
                 RearDisplayPort = true,
-                PriceUsd = 399.99m
+                Currency = Currency.USD,
+                Price = 399.99m
             },
             new MotherboardEntity
             {
@@ -73,7 +74,8 @@ public class MotherboardSeeder : IDataSeeder
                 RearUsbC = 1,
                 RearHdmi = true,
                 RearDisplayPort = true,
-                PriceUsd = 179.99m
+                Currency = Currency.USD,
+                Price = 179.99m
             }
         };
 

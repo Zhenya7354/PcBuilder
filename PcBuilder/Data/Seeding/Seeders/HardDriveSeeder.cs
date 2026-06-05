@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Entities;
+using PcBuilder.Enums;
 
 namespace PcBuilder.Data.Seeding.Seeders;
 
@@ -25,7 +26,8 @@ public class HardDriveSeeder : IDataSeeder
                 FormFactor = Enums.StorageFormFactor.Sata_2_5,
                 IsSsd = false,
                 PowerWatts = 15,
-                PriceUsd = 100m,
+                Currency = Currency.USD,
+                Price = 100m,
                 ReadSpeedMbS = 220,
                 WriteSpeedMbs = 150,
                 Rpm = 7200,
@@ -41,7 +43,8 @@ public class HardDriveSeeder : IDataSeeder
                 FormFactor = Enums.StorageFormFactor.M2_22110,
                 IsSsd = false,
                 PowerWatts = 15,
-                PriceUsd = 100m,
+                Currency = Currency.USD,
+                Price = 100m,
                 ReadSpeedMbS = 220,
                 WriteSpeedMbs = 150,
                 Rpm = 7200,
@@ -57,7 +60,8 @@ public class HardDriveSeeder : IDataSeeder
                 FormFactor = Enums.StorageFormFactor.AddInCard,
                 IsSsd = true,
                 PowerWatts = 15,
-                PriceUsd = 100m,
+                Currency = Currency.USD,
+                Price = 100m,
                 ReadSpeedMbS = 220,
                 WriteSpeedMbs = 150,
                 Rpm = 7200,
@@ -73,7 +77,8 @@ public class HardDriveSeeder : IDataSeeder
                 FormFactor = Enums.StorageFormFactor.Sata_3_5,
                 IsSsd = true,
                 PowerWatts = 15,
-                PriceUsd = 100m,
+                Currency = Currency.USD,
+                Price = 100m,
                 ReadSpeedMbS = 220,
                 WriteSpeedMbs = 150,
                 Rpm = 7200,

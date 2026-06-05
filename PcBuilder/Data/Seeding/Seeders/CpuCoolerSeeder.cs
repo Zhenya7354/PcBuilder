@@ -25,9 +25,10 @@ public class CpuCoolerSeeder : IDataSeeder
                 FanSizeMm = 120,
                 MaxTdpWatts = 150,
                 HeightMm = 159,
-                HasRgb = false,
+                ColorScheme = ColorScheme.RGB,
                 NoiseLevelDb = 36.0,
-                PriceUsd = 39.99m,
+                Currency = Currency.USD,
+                Price = 39.99m,
                 BrandId = brands["Cooler Master"].Id,
                 RadiatorSizeMm = 225
             },
@@ -40,9 +41,10 @@ public class CpuCoolerSeeder : IDataSeeder
                 FanSizeMm = 140,
                 MaxTdpWatts = 280,
                 HeightMm = null,
-                HasRgb = true,
+                ColorScheme = ColorScheme.RGB,
                 NoiseLevelDb = 21.0,
-                PriceUsd = 149.99m,
+                Currency = Currency.USD,
+                Price = 149.99m,
                 BrandId = brands["Thermalright"].Id,
                 RadiatorSizeMm = 280
             }

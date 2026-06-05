@@ -30,7 +30,8 @@ public class PsuSeeder : IDataSeeder
                 Pcie8PinConnectors = 6,
                 FanSizeMm = 135,
                 LengthMm = 160,
-                PriceUsd = 129.99m
+                Currency = Currency.USD,
+                Price = 129.99m
             },
             new PsuEntity
             {
@@ -46,7 +47,8 @@ public class PsuSeeder : IDataSeeder
                 Pcie8PinConnectors = 6,
                 FanSizeMm = 135,
                 LengthMm = 150,
-                PriceUsd = 119.99m
+                Currency = Currency.USD,
+                Price = 119.99m
             },
             new PsuEntity
             {
@@ -62,7 +64,8 @@ public class PsuSeeder : IDataSeeder
                 Pcie8PinConnectors = 4,
                 FanSizeMm = 120,
                 LengthMm = 140,
-                PriceUsd = 109.99m
+                Currency = Currency.USD,
+                Price = 109.99m
             }
         };
         await context.Psu.AddRangeAsync(psus);

@@ -42,7 +42,8 @@ public class PcMonitorSeeder : IDataSeeder
                 HasSpeakers = false,
                 HeightAdjustable = true,
                 VesaMount = "100x100",
-                PriceUsd = 699.99m 
+                Currency = Currency.USD,
+                Price = 699.99m 
             },
             new PcMonitorEntity
             {
@@ -70,7 +71,8 @@ public class PcMonitorSeeder : IDataSeeder
                 HasSpeakers = true,
                 HeightAdjustable = true,
                 VesaMount = "100x100",
-                PriceUsd = 2999.99m
+                Currency = Currency.USD,
+                Price = 2999.99m
             }
         };
         await context.PcMonitor.AddRangeAsync(pcMonitors);

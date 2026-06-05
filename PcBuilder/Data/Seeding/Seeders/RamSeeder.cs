@@ -25,10 +25,11 @@ public class RamSeeder : IDataSeeder
                 SpeedMhz = 3200,
                 CasLatency = 16,
                 Voltage = 1.35,
-                HasRgb = false,
+                ColorScheme = ColorScheme.RGB,
                 HasEcc = false,
                 HeightMm = 34,
-                PriceUsd = 89.99m,
+                Currency = Currency.USD,
+                Price = 89.99m,
                 BrandId = brands["Corsair"].Id
             },
             new RamEntity
@@ -40,10 +41,11 @@ public class RamSeeder : IDataSeeder
                 SpeedMhz = 3600,
                 CasLatency = 18,
                 Voltage = 1.35,
-                HasRgb = true,
+                ColorScheme = ColorScheme.RGB,
                 HasEcc = false,
                 HeightMm = 44,
-                PriceUsd = 199.99m,
+                Currency = Currency.USD,
+                Price = 199.99m,
                 BrandId = brands["G.Skill"].Id
             },
             new RamEntity
@@ -55,10 +57,11 @@ public class RamSeeder : IDataSeeder
                 SpeedMhz = 2666,
                 CasLatency = 15,
                 Voltage = 1.2,
-                HasRgb = false,
+                ColorScheme = ColorScheme.ARGB,
                 HasEcc = false,
                 HeightMm = 31,
-                PriceUsd = 74.99m,
+                Currency = Currency.USD,
+                Price = 74.99m,
                 BrandId = brands["Kingston"].Id
             }
         };

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Entities;
+using PcBuilder.Enums;
 using System.Net.Sockets;
 
 namespace PcBuilder.Data.Seeding.Seeders;
@@ -34,7 +35,8 @@ public class CpuSeeder : IDataSeeder
                 IncludesCooler = false,
                 IgpuModel = null,
                 LaunchedYear = 2015,
-                PriceUsd = 449.99m
+                Currency = Currency.USD,
+                Price = 449.99m
                 
             },
             new CpuEntity
@@ -56,7 +58,8 @@ public class CpuSeeder : IDataSeeder
                 IncludesCooler = false,
                 IgpuModel = null,
                 LaunchedYear = 2015,
-                PriceUsd = 325.99m
+                Currency = Currency.USD,
+                Price = 325.99m
             }
         };
 

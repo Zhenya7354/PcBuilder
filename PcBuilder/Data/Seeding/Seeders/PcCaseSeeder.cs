@@ -33,7 +33,9 @@ public class PcCaseSeeder : IDataSeeder
                 CaseDepthMm = 428,
                 HasGlassPanel = true,
                 IncludedFans = 2,
-                PriceUsd = 79.99m,
+                ColorScheme = ColorScheme.ARGB,
+                Currency = Currency.USD,
+                Price = 79.99m,
                 BrandId = brands["NZXT"].Id
             },
             new PcCaseEntity
@@ -53,7 +55,9 @@ public class PcCaseSeeder : IDataSeeder
                 CaseDepthMm = 453,
                 HasGlassPanel = true,
                 IncludedFans = 2,
-                PriceUsd = 94.99m,
+                ColorScheme = ColorScheme.ARGB,
+                Currency = Currency.USD,
+                Price = 94.99m,
                 BrandId = brands["Corsair"].Id
             }
         };
