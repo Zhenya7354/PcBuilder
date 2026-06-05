@@ -29,5 +29,6 @@ public record MotherboardCreateRequest(
     [Required, Range(0, 30)] int RearUsbC,
     [Required, Range(0, 10)] bool RearHdmi,
     [Required, Range(0, 10)] bool RearDisplayPort,
-    [Range(0, 100000)] decimal? PriceUsd
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

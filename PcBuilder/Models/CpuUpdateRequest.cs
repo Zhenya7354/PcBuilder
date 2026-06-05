@@ -26,5 +26,6 @@ public record CpuUpdateRequest
     int? PcieLanes,
     bool? IncludesCooler,
     int? LaunchedYear,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
     );

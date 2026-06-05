@@ -15,5 +15,6 @@ public class HardDriveEntity : Component
     public int? CacheMb { get; set; }
     public int? Tbw { get; set; }
     public double? PowerWatts { get; set; }
-    public decimal? PriceUsd { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
 }

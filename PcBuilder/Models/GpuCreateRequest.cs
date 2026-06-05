@@ -23,6 +23,7 @@ public record GpuCreateRequest
     [Required, Range(0, 10)] int outputDp,
      int? cardLengthMm,
     [Required, Range(1, 5)] double cardSlots,
-    [Required] bool hasRgb,
-    decimal? price
+    [Required] ColorScheme colorScheme,
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

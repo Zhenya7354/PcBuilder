@@ -37,9 +37,10 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
             FanSizeMm = dto.FanSizeMm,
             MaxTdpWatts = dto.MaxTdpWatts,
             HeightMm = dto.HeightMm,
-            HasRgb = dto.HasRgb,
+            ColorScheme = dto.ColorScheme,
             NoiseLevelDb = dto.NoiseLevelDb,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _cpuCoolerRepository.AddCpuCoolerAsync(cpuCooler);
@@ -61,9 +62,10 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
         if (dto.FanSizeMm.HasValue) cpuCooler.FanSizeMm = dto.FanSizeMm.Value;
         if (dto.MaxTdpWatts.HasValue) cpuCooler.MaxTdpWatts = dto.MaxTdpWatts.Value;
         if (dto.HeightMm.HasValue) cpuCooler.HeightMm = dto.HeightMm.Value;
-        if (dto.HasRgb.HasValue) cpuCooler.HasRgb = dto.HasRgb.Value;
+        if (dto.ColorScheme.HasValue) cpuCooler.ColorScheme = dto.ColorScheme.Value;
         if (dto.NoiseLevelDb.HasValue) cpuCooler.NoiseLevelDb = dto.NoiseLevelDb.Value;
-        if (dto.PriceUsd.HasValue) cpuCooler.PriceUsd = dto.PriceUsd.Value;
+        if (dto.Currency.HasValue) cpuCooler.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) cpuCooler.Price = dto.Price.Value;
 
         await _cpuCoolerRepository.SaveChangesAsync();
         return cpuCooler;

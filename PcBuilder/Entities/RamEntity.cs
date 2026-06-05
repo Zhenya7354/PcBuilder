@@ -11,8 +11,9 @@ public class RamEntity : Component
     public int SpeedMhz { get; set; }
     public int? CasLatency { get; set; }
     public double? Voltage { get; set; }
-    public bool HasRgb { get; set; }
+    public ColorScheme ColorScheme { get; set; }
     public bool HasEcc { get; set; }
     public int? HeightMm { get; set; }
-    public decimal? PriceUsd { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
 }

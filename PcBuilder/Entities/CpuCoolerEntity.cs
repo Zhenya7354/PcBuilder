@@ -12,7 +12,8 @@ public class CpuCoolerEntity : Component
     public int FanSizeMm { get; set; }
     public int MaxTdpWatts { get; set; }
     public int? HeightMm { get; set; }
-    public bool HasRgb { get; set; }
+    public ColorScheme ColorScheme { get; set; }
     public double? NoiseLevelDb { get; set; }
-    public decimal? PriceUsd { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
 }

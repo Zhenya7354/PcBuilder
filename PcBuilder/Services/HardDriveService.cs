@@ -40,7 +40,8 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
             CacheMb = dto.CacheMb,
             Tbw = dto.Tbw,
             PowerWatts = dto.PowerWatts,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _hardDriveRepository.AddHardDriveAsync(hardDrive);
@@ -66,7 +67,8 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
         if (dto.CacheMb.HasValue) hardDrive.CacheMb = dto.CacheMb.Value;
         if (dto.Tbw.HasValue) hardDrive.Tbw = dto.Tbw.Value;
         if (dto.PowerWatts.HasValue) hardDrive.PowerWatts = dto.PowerWatts.Value;
-        if (dto.PriceUsd.HasValue) hardDrive.PriceUsd = dto.PriceUsd.Value;
+        if(dto.Currency.HasValue) hardDrive.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) hardDrive.Price = dto.Price.Value;
 
         await _hardDriveRepository.SaveChangesAsync();
         return hardDrive;

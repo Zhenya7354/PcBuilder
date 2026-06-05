@@ -13,7 +13,8 @@ public record CpuCoolerUpdateRequest(
     [Range(40, 300)] int? FanSizeMm,
     [Range(1, 1000)] int? MaxTdpWatts,
     int? HeightMm,
-    bool? HasRgb,
+    ColorScheme? ColorScheme,
     double? NoiseLevelDb,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

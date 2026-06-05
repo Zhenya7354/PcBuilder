@@ -37,10 +37,11 @@ public class RamService(IRamRepository ramRepository) : IRamService
             SpeedMhz = dto.SpeedMhz,
             CasLatency = dto.CasLatency,
             Voltage = dto.Voltage,
-            HasRgb = dto.HasRgb,
+            ColorScheme = dto.ColorScheme,
             HasEcc = dto.HasEcc,
             HeightMm = dto.HeightMm,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _ramRepository.AddRamAsync(ram);
@@ -62,10 +63,11 @@ public class RamService(IRamRepository ramRepository) : IRamService
         if (dto.SpeedMhz.HasValue) ram.SpeedMhz = dto.SpeedMhz.Value;
         if (dto.CasLatency.HasValue) ram.CasLatency = dto.CasLatency.Value;
         if (dto.Voltage.HasValue) ram.Voltage = dto.Voltage.Value;
-        if (dto.HasRgb.HasValue) ram.HasRgb = dto.HasRgb.Value;
+        if (dto.ColorScheme.HasValue) ram.ColorScheme = dto.ColorScheme.Value;
         if (dto.HasEcc.HasValue) ram.HasEcc = dto.HasEcc.Value;
         if (dto.HeightMm.HasValue) ram.HeightMm = dto.HeightMm.Value;
-        if (dto.PriceUsd.HasValue) ram.PriceUsd = dto.PriceUsd.Value;
+        if(dto.Currency.HasValue) ram.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) ram.Price = dto.Price.Value;
 
         await _ramRepository.SaveChangesAsync();
         return ram;

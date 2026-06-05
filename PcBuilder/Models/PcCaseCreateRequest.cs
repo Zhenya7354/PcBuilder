@@ -20,5 +20,7 @@ public record PcCaseCreateRequest(
     int? CaseDepthMm,
     bool HasGlassPanel,
     [Required, Range(0, 20)] int IncludedFans,
-    [Range(0, 100000)] decimal? PriceUsd
+    [Required] ColorScheme ColorScheme,
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

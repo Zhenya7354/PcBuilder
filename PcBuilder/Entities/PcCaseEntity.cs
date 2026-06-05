@@ -19,6 +19,8 @@ public class PcCaseEntity : Component
     public int? CaseDepthMm { get; set; }
     public bool HasGlassPanel { get; set; }
     public int IncludedFans { get; set; }
-    public decimal? PriceUsd { get; set; }
-    
+    public ColorScheme ColorScheme { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
+
 }

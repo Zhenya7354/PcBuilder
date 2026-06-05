@@ -41,7 +41,8 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
             Pcie8PinConnectors = dto.Pcie8PinConnectors,
             FanSizeMm = dto.FanSizeMm,
             LengthMm = dto.LengthMm,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _psuRepository.AddPsuAsync(psu);
@@ -67,7 +68,8 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
         if (dto.Pcie8PinConnectors.HasValue) psu.Pcie8PinConnectors = dto.Pcie8PinConnectors.Value;
         if (dto.FanSizeMm.HasValue) psu.FanSizeMm = dto.FanSizeMm.Value;
         if (dto.LengthMm.HasValue) psu.LengthMm = dto.LengthMm.Value;
-        if (dto.PriceUsd.HasValue) psu.PriceUsd = dto.PriceUsd.Value;
+        if(dto.Currency.HasValue) psu.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) psu.Price = dto.Price.Value;
 
         await _psuRepository.SaveChangesAsync();
         return psu;

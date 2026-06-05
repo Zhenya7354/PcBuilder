@@ -16,5 +16,6 @@ public record HardDriveUpdateRequest(
     int? CacheMb,
     int? Tbw,
     double? PowerWatts,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

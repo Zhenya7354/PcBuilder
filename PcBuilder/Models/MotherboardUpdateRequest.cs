@@ -29,5 +29,6 @@ public record MotherboardUpdateRequest(
     [Range(0, 30)] int? RearUsbC,
     [Range(0, 10)] bool? RearHdmi,
     [Range(0, 10)] bool? RearDisplayPort,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

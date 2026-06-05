@@ -54,7 +54,8 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
             RearUsbC = dto.RearUsbC,
             RearHdmi = dto.RearHdmi,
             RearDisplayPort = dto.RearDisplayPort,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _motherboardRepository.AddMotherboardAsync(motherboard);
@@ -93,7 +94,8 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
         if (dto.RearUsbC.HasValue) motherboard.RearUsbC = dto.RearUsbC.Value;
         if (dto.RearHdmi.HasValue) motherboard.RearHdmi = dto.RearHdmi.Value;
         if (dto.RearDisplayPort.HasValue) motherboard.RearDisplayPort = dto.RearDisplayPort.Value;
-        if (dto.PriceUsd.HasValue) motherboard.PriceUsd = dto.PriceUsd.Value;
+        if(dto.Currency.HasValue) motherboard.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) motherboard.Price = dto.Price.Value;
 
         await _motherboardRepository.SaveChangesAsync();
         return motherboard;

@@ -45,7 +45,9 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
             CaseDepthMm = dto.CaseDepthMm,
             HasGlassPanel = dto.HasGlassPanel,
             IncludedFans = dto.IncludedFans,
-            PriceUsd = dto.PriceUsd
+            ColorScheme = dto.ColorScheme,
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _pcCaseRepository.AddCaseAsync(pcCase);
@@ -75,7 +77,9 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
         if (dto.CaseDepthMm.HasValue) pcCase.CaseDepthMm = dto.CaseDepthMm.Value;
         if (dto.HasGlassPanel.HasValue) pcCase.HasGlassPanel = dto.HasGlassPanel.Value;
         if (dto.IncludedFans.HasValue) pcCase.IncludedFans = dto.IncludedFans.Value;
-        if (dto.PriceUsd.HasValue) pcCase.PriceUsd = dto.PriceUsd.Value;
+        if(dto.ColorScheme.HasValue) pcCase.ColorScheme = dto.ColorScheme.Value;
+        if(dto.Currency.HasValue) pcCase.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) pcCase.Price = dto.Price.Value;
 
         await _pcCaseRepository.SaveChangesAsync();
         return pcCase;

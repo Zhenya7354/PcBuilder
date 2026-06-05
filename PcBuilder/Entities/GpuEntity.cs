@@ -20,7 +20,8 @@ public class GpuEntity : Component
     public int OutputDp { get; set; }
     public int? CardLengthMm { get; set; }
     public double CardSlots { get; set; }
-    public bool HasRgb { get; set; }
+    public ColorScheme ColorScheme { get; set; }
+    public Currency? Currency { get; set; }
     public decimal? Price { get; set; }
 
 }

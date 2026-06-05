@@ -12,8 +12,9 @@ public record RamUpdateRequest(
     [Range(800, 10000)] int? SpeedMhz,
     int? CasLatency,
     double? Voltage,
-    bool? HasRgb,
+    ColorScheme? ColorScheme,
     bool? HasEcc,
     int? HeightMm,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

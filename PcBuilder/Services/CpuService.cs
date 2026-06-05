@@ -18,68 +18,70 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
             throw new KeyNotFoundException("Cpu not found");
         return cpu;
     }
-    public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest cpuDto)
+    public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest dto)
     {
-        if (!await _cpuRepository.BrandExistsAsync(cpuDto.BrandId))
+        if (!await _cpuRepository.BrandExistsAsync(dto.BrandId))
             throw new KeyNotFoundException("Brand not found");
         var cpu = new CpuEntity
         {
-            Name = cpuDto.Name,
-            BrandId = cpuDto.BrandId,
-            ModelNumber = cpuDto.ModelNumber,
-            Socket = cpuDto.Socket,
-            ChipsetsSupported = cpuDto.ChipsetsSupported,
-            Cores = cpuDto.Cores,
-            Threads = cpuDto.Threads,
-            BaseClockGhz = cpuDto.BaseClockGhz,
-            BoostClockGhz = cpuDto.BoostClockGhz,
-            L3CacheMb = cpuDto.L3CacheMb,
-            TdpWatts = cpuDto.TdpWatts,
-            MemoryType = cpuDto.MemoryType,
-            MaxMemoryGb = cpuDto.MaxMemoryGb,
-            MaxMemorySpeedMhz = cpuDto.MaxMemorySpeedMhz,
-            MemoryChannels = cpuDto.MemoryChannels,
-            IntegratedGraphics = cpuDto.IntegratedGraphics,
-            IgpuModel = cpuDto.IgpuModel,
-            PcieVersion = cpuDto.PcieVersion,
-            PcieLanes = cpuDto.PcieLanes,
-            IncludesCooler = cpuDto.IncludesCooler,
-            LaunchedYear = cpuDto.LaunchedYear,
-            PriceUsd = cpuDto.PriceUsd
+            Name = dto.Name,
+            BrandId = dto.BrandId,
+            ModelNumber = dto.ModelNumber,
+            Socket = dto.Socket,
+            ChipsetsSupported = dto.ChipsetsSupported,
+            Cores = dto.Cores,
+            Threads = dto.Threads,
+            BaseClockGhz = dto.BaseClockGhz,
+            BoostClockGhz = dto.BoostClockGhz,
+            L3CacheMb = dto.L3CacheMb,
+            TdpWatts = dto.TdpWatts,
+            MemoryType = dto.MemoryType,
+            MaxMemoryGb = dto.MaxMemoryGb,
+            MaxMemorySpeedMhz = dto.MaxMemorySpeedMhz,
+            MemoryChannels = dto.MemoryChannels,
+            IntegratedGraphics = dto.IntegratedGraphics,
+            IgpuModel = dto.IgpuModel,
+            PcieVersion = dto.PcieVersion,
+            PcieLanes = dto.PcieLanes,
+            IncludesCooler = dto.IncludesCooler,
+            LaunchedYear = dto.LaunchedYear,
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _cpuRepository.AddCpuAsync(cpu);
         await _cpuRepository.SaveChangesAsync();
         return cpu;
     }
-    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest cpuDto)
+    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest dto)
     {
         var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
             throw new KeyNotFoundException("Cpu not found");
 
-        await EnsureBrandExistsAsync(cpuDto.BrandId ?? cpu.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? cpu.BrandId);
 
-        if (cpuDto.Socket.HasValue) cpu.Socket = cpuDto.Socket.Value;
-        if (cpuDto.MemoryType.HasValue) cpu.MemoryType = cpuDto.MemoryType.Value;
-        if (cpuDto.IntegratedGraphics.HasValue) cpu.IntegratedGraphics = cpuDto.IntegratedGraphics.Value;
-        if (cpuDto.IncludesCooler.HasValue) cpu.IncludesCooler = cpuDto.IncludesCooler.Value;
-        if (!string.IsNullOrWhiteSpace(cpuDto.Name)) cpu.Name = cpuDto.Name;
-        if (!string.IsNullOrWhiteSpace(cpuDto.ModelNumber)) cpu.ModelNumber = cpuDto.ModelNumber;
-        if (cpuDto.ChipsetsSupported is { Count: > 0 }) cpu.ChipsetsSupported = cpuDto.ChipsetsSupported;
-        if (cpuDto.Cores.HasValue) cpu.Cores = cpuDto.Cores.Value;
-        if (cpuDto.Threads.HasValue) cpu.Threads = cpuDto.Threads.Value;
-        if (cpuDto.BaseClockGhz.HasValue) cpu.BaseClockGhz = cpuDto.BaseClockGhz.Value;
-        if (cpuDto.BoostClockGhz.HasValue) cpu.BoostClockGhz = cpuDto.BoostClockGhz.Value;
-        if (cpuDto.L3CacheMb.HasValue) cpu.L3CacheMb = cpuDto.L3CacheMb.Value;
-        if (cpuDto.TdpWatts.HasValue) cpu.TdpWatts = cpuDto.TdpWatts.Value;
-        if (cpuDto.MaxMemoryGb.HasValue) cpu.MaxMemoryGb = cpuDto.MaxMemoryGb.Value;
-        if (cpuDto.MaxMemorySpeedMhz.HasValue) cpu.MaxMemorySpeedMhz = cpuDto.MaxMemorySpeedMhz.Value;
-        if (cpuDto.MemoryChannels.HasValue) cpu.MemoryChannels = cpuDto.MemoryChannels.Value;
-        if (!string.IsNullOrWhiteSpace(cpuDto.IgpuModel)) cpu.IgpuModel = cpuDto.IgpuModel;
-        if (!string.IsNullOrWhiteSpace(cpuDto.PcieVersion)) cpu.PcieVersion = cpuDto.PcieVersion;
-        if (cpuDto.PcieLanes.HasValue) cpu.PcieLanes = cpuDto.PcieLanes.Value;
-        if (cpuDto.LaunchedYear.HasValue) cpu.LaunchedYear = cpuDto.LaunchedYear.Value;
-        if (cpuDto.PriceUsd.HasValue) cpu.PriceUsd = cpuDto.PriceUsd.Value;
+        if (dto.Socket.HasValue) cpu.Socket = dto.Socket.Value;
+        if (dto.MemoryType.HasValue) cpu.MemoryType = dto.MemoryType.Value;
+        if (dto.IntegratedGraphics.HasValue) cpu.IntegratedGraphics = dto.IntegratedGraphics.Value;
+        if (dto.IncludesCooler.HasValue) cpu.IncludesCooler = dto.IncludesCooler.Value;
+        if (!string.IsNullOrWhiteSpace(dto.Name)) cpu.Name = dto.Name;
+        if (!string.IsNullOrWhiteSpace(dto.ModelNumber)) cpu.ModelNumber = dto.ModelNumber;
+        if (dto.ChipsetsSupported is { Count: > 0 }) cpu.ChipsetsSupported = dto.ChipsetsSupported;
+        if (dto.Cores.HasValue) cpu.Cores = dto.Cores.Value;
+        if (dto.Threads.HasValue) cpu.Threads = dto.Threads.Value;
+        if (dto.BaseClockGhz.HasValue) cpu.BaseClockGhz = dto.BaseClockGhz.Value;
+        if (dto.BoostClockGhz.HasValue) cpu.BoostClockGhz = dto.BoostClockGhz.Value;
+        if (dto.L3CacheMb.HasValue) cpu.L3CacheMb = dto.L3CacheMb.Value;
+        if (dto.TdpWatts.HasValue) cpu.TdpWatts = dto.TdpWatts.Value;
+        if (dto.MaxMemoryGb.HasValue) cpu.MaxMemoryGb = dto.MaxMemoryGb.Value;
+        if (dto.MaxMemorySpeedMhz.HasValue) cpu.MaxMemorySpeedMhz = dto.MaxMemorySpeedMhz.Value;
+        if (dto.MemoryChannels.HasValue) cpu.MemoryChannels = dto.MemoryChannels.Value;
+        if (!string.IsNullOrWhiteSpace(dto.IgpuModel)) cpu.IgpuModel = dto.IgpuModel;
+        if (!string.IsNullOrWhiteSpace(dto.PcieVersion)) cpu.PcieVersion = dto.PcieVersion;
+        if (dto.PcieLanes.HasValue) cpu.PcieLanes = dto.PcieLanes.Value;
+        if (dto.LaunchedYear.HasValue) cpu.LaunchedYear = dto.LaunchedYear.Value;
+        if(dto.Currency.HasValue) cpu.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) cpu.Price = dto.Price.Value;
 
         await _cpuRepository.SaveChangesAsync();
         return cpu;

@@ -16,5 +16,6 @@ public record PsuUpdateRequest(
     [Range(0, 20)] int? Pcie8PinConnectors,
     [Range(40, 300)] int? FanSizeMm,
     int? LengthMm,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

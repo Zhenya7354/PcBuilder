@@ -13,7 +13,8 @@ public record CpuCoolerCreateRequest(
     [Required, Range(40, 300)] int FanSizeMm,
     [Required, Range(1, 1000)] int MaxTdpWatts,
     int? HeightMm,
-    bool HasRgb,
+    [Required] ColorScheme ColorScheme,
     double? NoiseLevelDb,
-    [Range(0, 100000)] decimal? PriceUsd
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

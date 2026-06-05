@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PcBuilder.Models;
 
 public record GpuUpdateRequest(
+    //Change case
     string? Name,
     int? BrandId,
     string? gpuChip,
@@ -21,9 +22,8 @@ public record GpuUpdateRequest(
     int? outputDp,
      int? cardLengthMm,
     double? cardSlots,
-    bool? hasRgb,
-    decimal? price
-
-    );
-
-
+    ColorScheme? colorScheme,
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
+    //Закінчив тут, міняв HasRgb на ColorScheme, PriceUsd на Price, Currency.
+);

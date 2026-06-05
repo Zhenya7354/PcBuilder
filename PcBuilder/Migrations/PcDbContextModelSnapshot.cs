@@ -267,8 +267,15 @@ namespace PcBuilder.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ColorScheme")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("CoolerType")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Currency")
                         .HasColumnType("text");
 
                     b.Property<int>("FanCount")
@@ -276,9 +283,6 @@ namespace PcBuilder.Migrations
 
                     b.Property<int>("FanSizeMm")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("HasRgb")
-                        .HasColumnType("boolean");
 
                     b.Property<int?>("HeightMm")
                         .HasColumnType("integer");
@@ -293,7 +297,7 @@ namespace PcBuilder.Migrations
                     b.Property<double?>("NoiseLevelDb")
                         .HasColumnType("double precision");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int?>("RadiatorSizeMm")
@@ -333,6 +337,9 @@ namespace PcBuilder.Migrations
 
                     b.Property<int>("Cores")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
 
                     b.Property<string>("IgpuModel")
                         .HasColumnType("text");
@@ -375,7 +382,7 @@ namespace PcBuilder.Migrations
                     b.Property<string>("PcieVersion")
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<string>("Socket")
@@ -418,6 +425,12 @@ namespace PcBuilder.Migrations
                     b.Property<double>("CardSlots")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("ColorScheme")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
+
                     b.Property<string>("GpuChip")
                         .IsRequired()
                         .HasColumnType("text");
@@ -425,9 +438,6 @@ namespace PcBuilder.Migrations
                     b.Property<string>("GpuInterface")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("HasRgb")
-                        .HasColumnType("boolean");
 
                     b.Property<double?>("MemoryBandwithGb")
                         .HasColumnType("double precision");
@@ -488,6 +498,9 @@ namespace PcBuilder.Migrations
                     b.Property<int>("CapacityGb")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
+
                     b.Property<string>("DriveInterface")
                         .IsRequired()
                         .HasColumnType("text");
@@ -506,7 +519,7 @@ namespace PcBuilder.Migrations
                     b.Property<double?>("PowerWatts")
                         .HasColumnType("double precision");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int?>("ReadSpeedMbS")
@@ -544,6 +557,9 @@ namespace PcBuilder.Migrations
 
                     b.Property<string>("Chipset")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Currency")
                         .HasColumnType("text");
 
                     b.Property<int>("FanHeaders")
@@ -588,7 +604,7 @@ namespace PcBuilder.Migrations
                     b.Property<int>("PcieX1Slots")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<bool>("RearDisplayPort")
@@ -646,6 +662,13 @@ namespace PcBuilder.Migrations
                     b.Property<int?>("CaseWidthMm")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ColorScheme")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
+
                     b.Property<int>("DriveBays25Inch")
                         .HasColumnType("integer");
 
@@ -677,7 +700,7 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.PrimitiveCollection<List<string>>("RadiatorSupportMm")
@@ -713,6 +736,9 @@ namespace PcBuilder.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ContrastRatio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Currency")
                         .HasColumnType("text");
 
                     b.Property<int>("DpPorts")
@@ -756,7 +782,7 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int>("RefreshRateHz")
@@ -803,6 +829,9 @@ namespace PcBuilder.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
+
                     b.Property<string>("Efficiency")
                         .IsRequired()
                         .HasColumnType("text");
@@ -830,7 +859,7 @@ namespace PcBuilder.Migrations
                     b.Property<int>("Pcie8PinConnectors")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int>("SataConnectors")
@@ -863,10 +892,14 @@ namespace PcBuilder.Migrations
                     b.Property<int?>("CasLatency")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("HasEcc")
-                        .HasColumnType("boolean");
+                    b.Property<string>("ColorScheme")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<bool>("HasRgb")
+                    b.Property<string>("Currency")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("HasEcc")
                         .HasColumnType("boolean");
 
                     b.Property<int?>("HeightMm")
@@ -883,7 +916,7 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("PriceUsd")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int>("SpeedMhz")

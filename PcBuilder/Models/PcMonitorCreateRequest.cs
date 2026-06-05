@@ -28,5 +28,6 @@ public record PcMonitorCreateRequest(
     bool HasSpeakers,
     bool HeightAdjustable,
     [Required] string VesaMount,
-    [Range(0, 100000)] decimal? PriceUsd
+    Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );

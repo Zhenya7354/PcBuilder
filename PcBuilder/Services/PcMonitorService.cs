@@ -53,7 +53,8 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
             HasSpeakers = dto.HasSpeakers,
             HeightAdjustable = dto.HeightAdjustable,
             VesaMount = dto.VesaMount,
-            PriceUsd = dto.PriceUsd
+            Currency = dto.Currency,
+            Price = dto.Price
         };
 
         await _pcMonitorRepository.AddMonitorAsync(monitor);
@@ -91,7 +92,8 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         if (dto.HasSpeakers.HasValue) monitor.HasSpeakers = dto.HasSpeakers.Value;
         if (dto.HeightAdjustable.HasValue) monitor.HeightAdjustable = dto.HeightAdjustable.Value;
         if (!string.IsNullOrWhiteSpace(dto.VesaMount)) monitor.VesaMount = dto.VesaMount;
-        if (dto.PriceUsd.HasValue) monitor.PriceUsd = dto.PriceUsd.Value;
+        if(dto.Currency.HasValue) monitor.Currency = dto.Currency.Value;
+        if (dto.Price.HasValue) monitor.Price = dto.Price.Value;
 
         await _pcMonitorRepository.SaveChangesAsync();
         return monitor;

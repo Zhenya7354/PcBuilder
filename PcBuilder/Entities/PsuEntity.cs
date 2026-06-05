@@ -15,7 +15,8 @@ public class PsuEntity : Component
     public int Pcie8PinConnectors { get; set; }
     public int FanSizeMm { get; set; }
     public int? LengthMm { get; set; }
-    public decimal? PriceUsd { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
 
 
 }

@@ -12,8 +12,9 @@ public record RamCreateRequest(
     [Required, Range(800, 10000)] int SpeedMhz,
     int? CasLatency,
     double? Voltage,
-    bool HasRgb,
+    [Required] ColorScheme ColorScheme,
     bool HasEcc,
     int? HeightMm,
-    [Range(0, 100000)] decimal? PriceUsd
+    [Required] Currency? Currency,
+    [Range(0, 100000)] decimal? Price
 );
