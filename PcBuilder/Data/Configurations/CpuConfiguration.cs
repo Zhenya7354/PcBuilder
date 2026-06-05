@@ -24,5 +24,8 @@ public class CpuConfiguration : IEntityTypeConfiguration<CpuEntity>
             .HasConversion(
                 v => v.ToString(),
                 v => Enum.Parse<MemoryType>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
     }
 }

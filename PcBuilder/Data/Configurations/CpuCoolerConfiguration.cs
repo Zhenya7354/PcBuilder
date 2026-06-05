@@ -30,5 +30,11 @@ public class CpuCoolerConfiguration : IEntityTypeConfiguration<CpuCoolerEntity>
             .HasConversion(
                 v => v.ToString(),
                 v => Enum.Parse<CoolerType>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
+        builder
+            .Property(e => e.ColorScheme)
+            .HasConversion<string>();
     }
 }

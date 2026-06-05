@@ -19,5 +19,11 @@ public class RamConfiguration : IEntityTypeConfiguration<RamEntity>
             .HasConversion(
                v => v.ToString(),
                 v => Enum.Parse<MemoryType>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
+        builder
+            .Property(e => e.ColorScheme)
+            .HasConversion<string>();
     }
 }

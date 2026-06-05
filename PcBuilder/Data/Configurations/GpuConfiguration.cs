@@ -19,6 +19,8 @@ public class GpuConfiguration : IEntityTypeConfiguration<GpuEntity>
             .HasConversion(
                v => v.ToString(),
                 v => Enum.Parse<GpuInterface>(v));
-
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
     }
 }

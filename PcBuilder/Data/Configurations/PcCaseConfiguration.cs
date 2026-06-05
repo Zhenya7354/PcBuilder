@@ -19,5 +19,11 @@ public class PcCaseConfiguration : IEntityTypeConfiguration<PcCaseEntity>
         
         builder
             .PrimitiveCollection(e => e.SupportedFormFactors);
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
+        builder
+            .Property(e => e.ColorScheme)
+            .HasConversion<string>();
     }
 }

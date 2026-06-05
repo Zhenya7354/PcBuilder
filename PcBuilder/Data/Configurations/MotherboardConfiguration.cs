@@ -29,5 +29,8 @@ public class MotherboardConfiguration : IEntityTypeConfiguration<MotherboardEnti
             .HasConversion(
                v => v.ToString(),
                 v => Enum.Parse<MemoryType>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
     }
 }

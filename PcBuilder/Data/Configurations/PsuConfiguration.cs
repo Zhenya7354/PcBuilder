@@ -24,6 +24,9 @@ public class PsuConfiguration : IEntityTypeConfiguration<PsuEntity>
             .HasConversion(
                 v => v.ToString(),
                 v => Enum.Parse<PsuModular>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
 
     }
 }

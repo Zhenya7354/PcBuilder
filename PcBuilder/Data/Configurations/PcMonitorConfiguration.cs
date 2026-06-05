@@ -19,5 +19,8 @@ public class PcMonitorConfiguration : IEntityTypeConfiguration<PcMonitorEntity>
             .HasConversion(
             v => v.ToString(),
             v => Enum.Parse<PanelType>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
     }
 }

@@ -24,5 +24,8 @@ public class HardDriveConfiguration : IEntityTypeConfiguration<HardDriveEntity>
             .HasConversion(
             v => v.ToString(),
             v => Enum.Parse<StorageFormFactor>(v));
+        builder
+            .Property(e => e.Currency)
+            .HasConversion<string>();
     }
 }
