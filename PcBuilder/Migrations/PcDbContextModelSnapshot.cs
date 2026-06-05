@@ -509,10 +509,11 @@ namespace PcBuilder.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsSsd")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PcDriveType")
                         .IsRequired()
                         .HasColumnType("text");
 

@@ -27,5 +27,8 @@ public class HardDriveConfiguration : IEntityTypeConfiguration<HardDriveEntity>
         builder
             .Property(e => e.Currency)
             .HasConversion<string>();
+        builder
+            .Property(e => e.PcDriveType)
+            .HasConversion<string>();
     }
 }
