@@ -23,7 +23,7 @@ public record GpuUpdateRequest(
      int? cardLengthMm,
     double? cardSlots,
     ColorScheme? colorScheme,
-    [Required] Currency? Currency,
+    Currency? Currency,
     [Range(0, 100000)] decimal? Price
-    //Закінчив тут, міняв HasRgb на ColorScheme, PriceUsd на Price, Currency.
+    
 );

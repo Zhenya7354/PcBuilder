@@ -26,6 +26,6 @@ public record CpuCreateRequest
     int? PcieLanes,
     bool IncludesCooler,
     int? LaunchedYear,
-    [Required] Currency? Currency,
+    Currency? Currency,
     [Range(0, 100000)] decimal? Price
     );

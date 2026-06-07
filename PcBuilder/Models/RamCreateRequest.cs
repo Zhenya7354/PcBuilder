@@ -15,6 +15,6 @@ public record RamCreateRequest(
     [Required] ColorScheme ColorScheme,
     bool HasEcc,
     int? HeightMm,
-    [Required] Currency? Currency,
+    Currency? Currency,
     [Range(0, 100000)] decimal? Price
 );

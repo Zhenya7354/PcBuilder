@@ -15,6 +15,6 @@ public record CpuCoolerCreateRequest(
     int? HeightMm,
     [Required] ColorScheme ColorScheme,
     double? NoiseLevelDb,
-    [Required] Currency? Currency,
+    Currency? Currency,
     [Range(0, 100000)] decimal? Price
 );
