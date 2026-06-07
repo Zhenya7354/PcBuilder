@@ -18,12 +18,12 @@ public class AdminRepository(PcDbContext context) : IAdminRepository
 
     public async Task AddAdminAsync(AdminEntity admin)
     {
-        _context.Admin.Add(admin);
+        await _context.Admin.AddAsync(admin);
     }
 
     public async Task DeleteAdminAsync(AdminEntity admin)
     {
-        _context.Admin.Remove(admin);
+        await _context.Admin.Where(a => a.Id == admin.Id).ExecuteDeleteAsync();
     }
 
 
