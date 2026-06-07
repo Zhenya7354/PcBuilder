@@ -2,6 +2,5 @@
 
 public interface IDbSeeder
 {
-    public Task SeedRolesAsync(IServiceProvider services);
-    public Task SeedDataAsync();
+    public Task SeedDataAsync(IServiceProvider services);
 }
