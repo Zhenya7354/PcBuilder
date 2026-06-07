@@ -35,14 +35,16 @@ public static class AuthEndpoints
 
         group.MapPost("/login", async (
             LoginRequest dto,
-            SignInManager<UserEntity> singInManager,
-            UserManager<UserEntity> userManager,
+            IAuthService authService,
             IJwtService jwtService) =>
         {
-            var user = await userManager.FindByEmailAsync(dto.Email);
-            if (user is null) return Results.Unauthorized();
+            var user = await authService.FindByEmailAsync(dto.Email);
+            if (user is null)
+                return Results.Unauthorized();
 
-            var result = await singInManager.CheckPasswordSignInAsync(user, dto.Password, true);
+            var result = await authService.CheckPasswordSignInAsync(user, dto.Password, true);
+            if (result is null)
+                return Results.BadRequest("Invalid email or password.");
 
             if (!result.Succeeded)
             {
@@ -52,7 +54,9 @@ public static class AuthEndpoints
                         statusCode: 429);
                 return Results.Unauthorized();
             }
-            var roles = await userManager.GetRolesAsync(user);
+            var roles = await authService.GetRolesAsync(user);
+            if(roles is null)
+                return Results.BadRequest("Failed to retrieve user roles.");
             var token = jwtService.GenerateToken(user, roles);
             var expires = DateTime.UtcNow.AddMinutes(60);
 
