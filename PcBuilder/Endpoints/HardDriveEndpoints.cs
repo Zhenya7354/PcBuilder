@@ -11,16 +11,16 @@ public static class HardDriveEndpoints
     {
         var group = webApplication.MapGroup("/hard-drives");
 
-        group.MapGet(string.Empty, async ([FromServices] IHardDriveService service) =>
+        group.MapGet(string.Empty, async ([FromServices] IHardDriveService service, CancellationToken cancellationToken) =>
         {
-            return Results.Ok(await service.GetAllHardDrivesAsync());
+            return Results.Ok(await service.GetAllHardDrivesAsync(cancellationToken));
         });
 
-        group.MapGet("/{id}", async ([FromServices] IHardDriveService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IHardDriveService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                return Results.Ok(await service.GetHardDriveByIdAsync(id));
+                return Results.Ok(await service.GetHardDriveByIdAsync(id, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -28,12 +28,12 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreateRequest dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreateRequest dto, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
             {
-                return Results.Ok(await service.AddHardDriveAsync(dto));
+                return Results.Ok(await service.AddHardDriveAsync(dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -41,12 +41,12 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdateRequest dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Hard drive data is required");
             try
             {
-                return Results.Ok(await service.UpdateHardDriveAsync(id, dto));
+                return Results.Ok(await service.UpdateHardDriveAsync(id, dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -54,11 +54,11 @@ public static class HardDriveEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] IHardDriveService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IHardDriveService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                await service.DeleteHardDriveAsync(id);
+                await service.DeleteHardDriveAsync(id, cancellationToken);
                 return Results.Ok($"Hard drive with id {id} deleted successfully");
             }
             catch (KeyNotFoundException ex)

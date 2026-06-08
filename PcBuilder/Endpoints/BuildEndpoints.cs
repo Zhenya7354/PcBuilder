@@ -14,7 +14,7 @@ public static class BuildEndpoints
     {
         var group = app.MapGroup("/builds");
 
-        group.MapGet(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user) =>
+        group.MapGet(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -23,14 +23,14 @@ public static class BuildEndpoints
             }
             try
             {
-                var builds = await service.GetUserBuildsAsync();
+                var builds = await service.GetUserBuildsAsync(cancellationToken);
                 return Results.Ok(builds);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
-        group.MapGet("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -39,7 +39,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var build = await service.GetBuildByIdAsync(id);
+                var build = await service.GetBuildByIdAsync(id, cancellationToken);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
@@ -47,7 +47,7 @@ public static class BuildEndpoints
 
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user, [FromBody] BuildRequest dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IBuildService service, ClaimsPrincipal user, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
 
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -57,7 +57,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var issues = await service.RunCompatibilityChecksAsync(dto);
+                var issues = await service.RunCompatibilityChecksAsync(dto, cancellationToken);
                 if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
                 {
                     return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
@@ -66,14 +66,14 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.AddBuildAsync(dto);
+                var build = await service.AddBuildAsync(dto, cancellationToken);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildRequest dto) =>
+        group.MapPut("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -82,7 +82,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var issues = await service.RunCompatibilityChecksForUpdateAsync(id, dto);
+                var issues = await service.RunCompatibilityChecksForUpdateAsync(id, dto, cancellationToken);
                 if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
                 {
                     return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
@@ -91,14 +91,14 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.UpdateBuildAsync(id, dto);
+                var build = await service.UpdateBuildAsync(id, dto, cancellationToken);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -107,14 +107,14 @@ public static class BuildEndpoints
             }
             try
             {
-                await service.DeleteBuildAsync(id);
+                await service.DeleteBuildAsync(id, cancellationToken);
                 return Results.Ok();
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
-        group.MapPost("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentRequest dto) =>
+        group.MapPost("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentRequest dto, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -123,7 +123,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto);
+                var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto, cancellationToken);
                 if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
                 {
                     return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
@@ -132,14 +132,14 @@ public static class BuildEndpoints
                 {
                     return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
                 }
-                var build = await service.SetComponentAsync(id, dto);
+                var build = await service.SetComponentAsync(id, dto, cancellationToken);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }
             catch (UnauthorizedAccessException) { return Results.Unauthorized(); }
         });
 
-        group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType) =>
+        group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, ClaimsPrincipal user, int id, [FromBody] BuildComponentType componentType, CancellationToken cancellationToken) =>
         {
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -148,7 +148,7 @@ public static class BuildEndpoints
             }
             try
             {
-                var build = await service.RemoveComponentAsync(id, componentType);
+                var build = await service.RemoveComponentAsync(id, componentType, cancellationToken);
                 return Results.Ok(build);
             }
             catch (KeyNotFoundException ex) { return Results.NotFound(ex.Message); }

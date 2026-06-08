@@ -66,9 +66,10 @@ public static class AuthEndpoints
         // Endpoint for making user an admin, have to be moved elsewhere in future
         app.MapPost("/admin/{userId}/make-admin", async (
             string userId,
-            IAdminService adminService) =>
+            IAdminService adminService,
+            CancellationToken cancellationToken) =>
         {
-            await adminService.PromoteToAdminAsync(userId);
+            await adminService.PromoteToAdminAsync(userId, cancellationToken);
             return Results.Ok(new { message = "User promoted to Admin" });
         }).RequireAuthorization();
 

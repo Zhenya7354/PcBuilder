@@ -11,13 +11,16 @@ public static class PcMonitorEndpoints
     {
         var group = webApplication.MapGroup("/pc-monitors");
 
-        group.MapGet(string.Empty, async ([FromServices] IPcMonitorService service) => Results.Ok(await service.GetAllMonitorsAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IPcMonitorService service, CancellationToken cancellationToken) =>
+        {
+            return Results.Ok(await service.GetAllMonitorsAsync(cancellationToken));
+        });
 
-        group.MapGet("/{id}", async ([FromServices] IPcMonitorService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IPcMonitorService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                return Results.Ok(await service.GetMonitorByIdAsync(id));
+                return Results.Ok(await service.GetMonitorByIdAsync(id, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -25,12 +28,12 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreateRequest dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreateRequest dto, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
             {
-                return Results.Ok(await service.AddMonitorAsync(dto));
+                return Results.Ok(await service.AddMonitorAsync(dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -38,12 +41,12 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdateRequest dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Monitor data is required");
             try
             {
-                return Results.Ok(await service.UpdateMonitorAsync(id, dto));
+                return Results.Ok(await service.UpdateMonitorAsync(id, dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -51,11 +54,11 @@ public static class PcMonitorEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] IPcMonitorService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IPcMonitorService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                await service.DeleteMonitorAsync(id);
+                await service.DeleteMonitorAsync(id, cancellationToken);
                 return Results.Ok($"Monitor with id {id} deleted successfully");
             }
             catch (KeyNotFoundException ex)

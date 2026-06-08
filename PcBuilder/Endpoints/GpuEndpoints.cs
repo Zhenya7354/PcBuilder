@@ -12,16 +12,16 @@ public static class GpuEndpoints
     {
         var group = webApplication.MapGroup("/gpus");
 
-        group.MapGet(string.Empty, async ([FromServices]IGpuService gpuService) =>
+        group.MapGet(string.Empty, async ([FromServices]IGpuService gpuService, CancellationToken cancellationToken) =>
         {
-        return Results.Ok(await gpuService.GetGpusAsync());
+        return Results.Ok(await gpuService.GetGpusAsync(cancellationToken));
         });
 
-        group.MapGet("/{id}", async ([FromServices] IGpuService gpuService, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IGpuService gpuService, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                var gpu = await gpuService.GetGpuById(id);
+                var gpu = await gpuService.GetGpuById(id, cancellationToken);
                 return Results.Ok(gpu);
             }
             catch(KeyNotFoundException ex)
@@ -30,12 +30,12 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromBody] GpuCreateRequest dto, [FromServices] IGpuService gpuService) =>
+        group.MapPost(string.Empty, async ([FromBody] GpuCreateRequest dto, [FromServices] IGpuService gpuService, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
             {
-                var gpu = await gpuService.AddGpuAsync(dto);
+                var gpu = await gpuService.AddGpuAsync(dto, cancellationToken);
                 return Results.Ok(gpu);
             }
             catch(KeyNotFoundException ex)
@@ -44,12 +44,12 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdateRequest dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Gpu data is required");
             try
             {
-                var gpu = await gpuService.UpdateGpuAsync(id, dto);
+                var gpu = await gpuService.UpdateGpuAsync(id, dto, cancellationToken);
                 return Results.Ok(gpu);
             }
             catch (KeyNotFoundException ex)
@@ -58,11 +58,11 @@ public static class GpuEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] IGpuService gpuService, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IGpuService gpuService, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                await gpuService.DeleteGpuAsync(id);
+                await gpuService.DeleteGpuAsync(id, cancellationToken);
                 return Results.Ok($"Gpu with id {id} deleted successfully");
             }
             catch (KeyNotFoundException ex)

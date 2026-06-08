@@ -11,13 +11,16 @@ public static class MotherboardEndpoints
     {
         var group = webApplication.MapGroup("/motherboards");
 
-        group.MapGet(string.Empty, async ([FromServices] IMotherboardService service) => Results.Ok(await service.GetAllMotherboardsAsync()));
+        group.MapGet(string.Empty, async ([FromServices] IMotherboardService service, CancellationToken cancellationToken) =>
+        {
+            return Results.Ok(await service.GetAllMotherboardsAsync(cancellationToken));
+        });
 
-        group.MapGet("/{id}", async ([FromServices] IMotherboardService service, int id) =>
+        group.MapGet("/{id}", async ([FromServices] IMotherboardService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                return Results.Ok(await service.GetMotherboardByIdAsync(id));
+                return Results.Ok(await service.GetMotherboardByIdAsync(id, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -25,12 +28,12 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPost(string.Empty, async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreateRequest dto) =>
+        group.MapPost(string.Empty, async ([FromServices] IMotherboardService service, [FromBody] MotherboardCreateRequest dto, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
             {
-                return Results.Ok(await service.AddMotherboardAsync(dto));
+                return Results.Ok(await service.AddMotherboardAsync(dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -38,12 +41,12 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapPut("/{id}", async ([FromServices] IMotherboardService service, [FromBody] MotherboardUpdateRequest dto, int id) =>
+        group.MapPut("/{id}", async ([FromServices] IMotherboardService service, [FromBody] MotherboardUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
             if (dto is null) return Results.BadRequest("Motherboard data is required");
             try
             {
-                return Results.Ok(await service.UpdateMotherboardAsync(id, dto));
+                return Results.Ok(await service.UpdateMotherboardAsync(id, dto, cancellationToken));
             }
             catch (KeyNotFoundException ex)
             {
@@ -51,11 +54,11 @@ public static class MotherboardEndpoints
             }
         });
 
-        group.MapDelete("/{id}", async ([FromServices] IMotherboardService service, int id) =>
+        group.MapDelete("/{id}", async ([FromServices] IMotherboardService service, int id, CancellationToken cancellationToken) =>
         {
             try
             {
-                await service.DeleteMotherboardAsync(id);
+                await service.DeleteMotherboardAsync(id, cancellationToken);
                 return Results.Ok($"Motherboard with id {id} deleted successfully");
             }
             catch (KeyNotFoundException ex)
