@@ -10,22 +10,22 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
 {
     private readonly IMotherboardRepository _motherboardRepository = motherboardRepository;
 
-    public async Task<List<MotherboardEntity>> GetAllMotherboardsAsync()
+    public async Task<List<MotherboardEntity>> GetAllMotherboardsAsync(CancellationToken cancellationToken)
     {
-        return await _motherboardRepository.GetAllMotherboardsAsync();
+        return await _motherboardRepository.GetAllMotherboardsAsync(cancellationToken);
     }
 
-    public async Task<MotherboardEntity> GetMotherboardByIdAsync(int id)
+    public async Task<MotherboardEntity> GetMotherboardByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateRequest dto)
+    public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateRequest dto, CancellationToken cancellationToken)
     {
-        await EnsureBrandExistsAsync(dto.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var motherboard = new MotherboardEntity
         {
@@ -58,17 +58,17 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
             Price = dto.Price
         };
 
-        await _motherboardRepository.AddMotherboardAsync(motherboard);
-        await _motherboardRepository.SaveChangesAsync();
+        await _motherboardRepository.AddMotherboardAsync(motherboard, cancellationToken);
+        await _motherboardRepository.SaveChangesAsync(cancellationToken);
         return motherboard;
     }
 
-    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateRequest dto)
+    public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateRequest dto, CancellationToken cancellationToken)
     {
-        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
-        await EnsureBrandExistsAsync(dto.BrandId ?? motherboard.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? motherboard.BrandId, cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) motherboard.Name = dto.Name;
         if (dto.Socket.HasValue) motherboard.Socket = dto.Socket.Value;
@@ -97,22 +97,22 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
         if(dto.Currency.HasValue) motherboard.Currency = dto.Currency.Value;
         if (dto.Price.HasValue) motherboard.Price = dto.Price.Value;
 
-        await _motherboardRepository.SaveChangesAsync();
+        await _motherboardRepository.SaveChangesAsync(cancellationToken);
         return motherboard;
     }
 
-    public async Task DeleteMotherboardAsync(int id)
+    public async Task DeleteMotherboardAsync(int id, CancellationToken cancellationToken)
     {
-        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id) ??
+        var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
-        await _motherboardRepository.DeleteMotherboardAsync(motherboard);
-        await _motherboardRepository.SaveChangesAsync();
+        await _motherboardRepository.DeleteMotherboardAsync(motherboard, cancellationToken);
+        await _motherboardRepository.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task EnsureBrandExistsAsync(int brandId)
+    private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        if (!await _motherboardRepository.BrandExistsAsync(brandId))
+        if (!await _motherboardRepository.BrandExistsAsync(brandId, cancellationToken))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }

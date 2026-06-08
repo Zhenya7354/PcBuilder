@@ -5,9 +5,9 @@ namespace PcBuilder.Services.Interfaces;
 
 public interface IHardDriveService
 {
-    public Task<List<HardDriveEntity>> GetAllHardDrivesAsync();
-    public Task<HardDriveEntity> GetHardDriveByIdAsync(int id);
-    public Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateRequest dto);
-    public Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateRequest dto);
-    public Task DeleteHardDriveAsync(int id);
+    public Task<List<HardDriveEntity>> GetAllHardDrivesAsync(CancellationToken cancellationToken);
+    public Task<HardDriveEntity> GetHardDriveByIdAsync(int id, CancellationToken cancellationToken);
+    public Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateRequest dto, CancellationToken cancellationToken);
+    public Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateRequest dto, CancellationToken cancellationToken);
+    public Task DeleteHardDriveAsync(int id, CancellationToken cancellationToken);
 }

@@ -9,21 +9,21 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
 {
     private readonly IGpuRepository _gpuRepository = gpuRepository;
 
-    public async Task<List<GpuEntity>> GetGpusAsync()
+    public async Task<List<GpuEntity>> GetGpusAsync(CancellationToken cancellationToken)
     {
-        return await _gpuRepository.GetAllGpusAsync();
+        return await _gpuRepository.GetAllGpusAsync(cancellationToken);
     }
 
-    public async Task<GpuEntity> GetGpuById(int id)
+    public async Task<GpuEntity> GetGpuById(int id, CancellationToken cancellationToken)
     {
-        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Gpu not found");
         return gpu;
     }
 
-    public async Task<GpuEntity> AddGpuAsync(GpuCreateRequest dto)
+    public async Task<GpuEntity> AddGpuAsync(GpuCreateRequest dto, CancellationToken cancellationToken)
     {
-        await EnsureBrandExistsAsync(dto.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var gpu = new GpuEntity
         {
@@ -48,17 +48,17 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
             Currency = dto.Currency,
             Price = dto.Price
         };
-        await _gpuRepository.AddGpuAsync(gpu);
-        await _gpuRepository.SaveChangesAsync();
+        await _gpuRepository.AddGpuAsync(gpu, cancellationToken);
+        await _gpuRepository.SaveChangesAsync(cancellationToken);
 
         return gpu;
     }
-    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateRequest dto)
+    public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateRequest dto, CancellationToken cancellationToken)
     {
-        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Gpu not found");
 
-        await EnsureBrandExistsAsync(dto.BrandId ?? gpu.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? gpu.BrandId, cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) gpu.Name = dto.Name;
         if (!string.IsNullOrWhiteSpace(dto.gpuChip)) gpu.GpuChip = dto.gpuChip;
@@ -80,20 +80,20 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
         if(dto.Currency.HasValue) gpu.Currency = dto.Currency.Value;
         if (dto.Price.HasValue) gpu.Price = dto.Price.Value;
 
-        await _gpuRepository.SaveChangesAsync();
+        await _gpuRepository.SaveChangesAsync(cancellationToken);
         return gpu;
     }
 
-    public async Task DeleteGpuAsync(int id)
+    public async Task DeleteGpuAsync(int id, CancellationToken cancellationToken)
     {
-        var gpu = await _gpuRepository.GetGpuByIdAsync(id) ??
+        var gpu = await _gpuRepository.GetGpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Gpu not found");
-        await _gpuRepository.DeleteGpuAsync(gpu);
-        await _gpuRepository.SaveChangesAsync();
+        await _gpuRepository.DeleteGpuAsync(gpu, cancellationToken);
+        await _gpuRepository.SaveChangesAsync(cancellationToken);
     }
-    private async Task EnsureBrandExistsAsync(int brandId)
+    private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        if (!await _gpuRepository.BrandExistsAsync(brandId))
+        if (!await _gpuRepository.BrandExistsAsync(brandId, cancellationToken))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }

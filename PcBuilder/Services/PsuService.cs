@@ -10,22 +10,22 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
 {
     private readonly IPsuRepository _psuRepository = psuRepository;
 
-    public async Task<List<PsuEntity>> GetAllPsusAsync()
+    public async Task<List<PsuEntity>> GetAllPsusAsync(CancellationToken cancellationToken)
     {
-        return await _psuRepository.GetAllPsusAsync();
+        return await _psuRepository.GetAllPsusAsync(cancellationToken);
     }
 
-    public async Task<PsuEntity> GetPsuByIdAsync(int id)
+    public async Task<PsuEntity> GetPsuByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
+        var psu = await _psuRepository.GetPsuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
         return psu;
     }
 
-    public async Task<PsuEntity> AddPsuAsync(PsuCreateRequest dto)
+    public async Task<PsuEntity> AddPsuAsync(PsuCreateRequest dto, CancellationToken cancellationToken)
     {
-        await EnsureBrandExistsAsync(dto.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var psu = new PsuEntity
         {
@@ -45,17 +45,17 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
             Price = dto.Price
         };
 
-        await _psuRepository.AddPsuAsync(psu);
-        await _psuRepository.SaveChangesAsync();
+        await _psuRepository.AddPsuAsync(psu, cancellationToken);
+        await _psuRepository.SaveChangesAsync(cancellationToken);
         return psu;
     }
 
-    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateRequest dto)
+    public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateRequest dto, CancellationToken cancellationToken)
     {
-        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
+        var psu = await _psuRepository.GetPsuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
-        await EnsureBrandExistsAsync(dto.BrandId ?? psu.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? psu.BrandId, cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) psu.Name = dto.Name;
         if (dto.Wattage.HasValue) psu.Wattage = dto.Wattage.Value;
@@ -71,22 +71,22 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
         if(dto.Currency.HasValue) psu.Currency = dto.Currency.Value;
         if (dto.Price.HasValue) psu.Price = dto.Price.Value;
 
-        await _psuRepository.SaveChangesAsync();
+        await _psuRepository.SaveChangesAsync(cancellationToken);
         return psu;
     }
 
-    public async Task DeletePsuAsync(int id)
+    public async Task DeletePsuAsync(int id, CancellationToken cancellationToken)
     {
-        var psu = await _psuRepository.GetPsuByIdAsync(id) ??
+        var psu = await _psuRepository.GetPsuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
-        await _psuRepository.DeletePsuAsync(psu);
-        await _psuRepository.SaveChangesAsync();
+        await _psuRepository.DeletePsuAsync(psu, cancellationToken);
+        await _psuRepository.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task EnsureBrandExistsAsync(int brandId)
+    private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        if (!await _psuRepository.BrandExistsAsync(brandId))
+        if (!await _psuRepository.BrandExistsAsync(brandId, cancellationToken))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }

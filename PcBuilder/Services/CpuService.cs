@@ -8,19 +8,19 @@ namespace PcBuilder.Services;
 public class CpuService(ICpuRepository cpuRepository) : ICpuService
 {
     private readonly ICpuRepository _cpuRepository = cpuRepository;
-    public async Task<List<CpuEntity>> GetAllCpuAsync()
+    public async Task<List<CpuEntity>> GetAllCpuAsync(CancellationToken cancellationToken)
     {
-        return await _cpuRepository.GetAllCpusAsync();
+        return await _cpuRepository.GetAllCpusAsync(cancellationToken);
     }
-    public async Task<CpuEntity> GetCpuByIdAsync(int id)
+    public async Task<CpuEntity> GetCpuByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Cpu not found");
         return cpu;
     }
-    public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest dto)
+    public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest dto, CancellationToken cancellationToken)
     {
-        if (!await _cpuRepository.BrandExistsAsync(dto.BrandId))
+        if (!await _cpuRepository.BrandExistsAsync(dto.BrandId, cancellationToken))
             throw new KeyNotFoundException("Brand not found");
         var cpu = new CpuEntity
         {
@@ -49,16 +49,16 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
             Price = dto.Price
         };
 
-        await _cpuRepository.AddCpuAsync(cpu);
-        await _cpuRepository.SaveChangesAsync();
+        await _cpuRepository.AddCpuAsync(cpu, cancellationToken);
+        await _cpuRepository.SaveChangesAsync(cancellationToken);
         return cpu;
     }
-    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest dto)
+    public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest dto, CancellationToken cancellationToken)
     {
-        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Cpu not found");
 
-        await EnsureBrandExistsAsync(dto.BrandId ?? cpu.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? cpu.BrandId, cancellationToken);
 
         if (dto.Socket.HasValue) cpu.Socket = dto.Socket.Value;
         if (dto.MemoryType.HasValue) cpu.MemoryType = dto.MemoryType.Value;
@@ -83,19 +83,19 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
         if(dto.Currency.HasValue) cpu.Currency = dto.Currency.Value;
         if (dto.Price.HasValue) cpu.Price = dto.Price.Value;
 
-        await _cpuRepository.SaveChangesAsync();
+        await _cpuRepository.SaveChangesAsync(cancellationToken);
         return cpu;
     }
-    public async Task DeleteCpuAsync(int id)
+    public async Task DeleteCpuAsync(int id, CancellationToken cancellationToken)
     {
-        var cpu = await _cpuRepository.GetCpuByIdAsync(id) ??
+        var cpu = await _cpuRepository.GetCpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Cpu not found");
-        await _cpuRepository.DeleteCpuAsync(cpu);
-        await _cpuRepository.SaveChangesAsync();
+        await _cpuRepository.DeleteCpuAsync(cpu, cancellationToken);
+        await _cpuRepository.SaveChangesAsync(cancellationToken);
     }
-    private async Task EnsureBrandExistsAsync(int brandId)
+    private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        if (!await _cpuRepository.BrandExistsAsync(brandId))
+        if (!await _cpuRepository.BrandExistsAsync(brandId, cancellationToken))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }

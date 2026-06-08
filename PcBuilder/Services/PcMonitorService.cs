@@ -10,22 +10,22 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
 {
     private readonly IPcMonitorRepository _pcMonitorRepository = pcMonitorRepository;
 
-    public async Task<List<PcMonitorEntity>> GetAllMonitorsAsync()
+    public async Task<List<PcMonitorEntity>> GetAllMonitorsAsync(CancellationToken cancellationToken)
     {
-        return await _pcMonitorRepository.GetAllMonitorsAsync();
+        return await _pcMonitorRepository.GetAllMonitorsAsync(cancellationToken);
     }
 
-    public async Task<PcMonitorEntity> GetMonitorByIdAsync(int id)
+    public async Task<PcMonitorEntity> GetMonitorByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateRequest dto)
+    public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateRequest dto, CancellationToken cancellationToken)
     {
-        await EnsureBrandExistsAsync(dto.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var monitor = new PcMonitorEntity
         {
@@ -55,17 +55,17 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
             Price = dto.Price
         };
 
-        await _pcMonitorRepository.AddMonitorAsync(monitor);
-        await _pcMonitorRepository.SaveChangesAsync();
+        await _pcMonitorRepository.AddMonitorAsync(monitor, cancellationToken);
+        await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
         return monitor;
     }
 
-    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateRequest dto)
+    public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateRequest dto, CancellationToken cancellationToken)
     {
-        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
-        await EnsureBrandExistsAsync(dto.BrandId ?? monitor.BrandId);
+        await EnsureBrandExistsAsync(dto.BrandId ?? monitor.BrandId, cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(dto.Name)) monitor.Name = dto.Name;
         if (dto.ScreenSizeInch.HasValue) monitor.ScreenSizeInch = dto.ScreenSizeInch.Value;
@@ -91,22 +91,22 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         if(dto.Currency.HasValue) monitor.Currency = dto.Currency.Value;
         if (dto.Price.HasValue) monitor.Price = dto.Price.Value;
 
-        await _pcMonitorRepository.SaveChangesAsync();
+        await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
         return monitor;
     }
 
-    public async Task DeleteMonitorAsync(int id)
+    public async Task DeleteMonitorAsync(int id, CancellationToken cancellationToken)
     {
-        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id) ??
+        var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 
-        await _pcMonitorRepository.DeleteMonitorAsync(monitor);
-        await _pcMonitorRepository.SaveChangesAsync();
+        await _pcMonitorRepository.DeleteMonitorAsync(monitor, cancellationToken);
+        await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task EnsureBrandExistsAsync(int brandId)
+    private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        if (!await _pcMonitorRepository.BrandExistsAsync(brandId))
+        if (!await _pcMonitorRepository.BrandExistsAsync(brandId, cancellationToken))
         {
             throw new KeyNotFoundException("Brand with the specified ID does not exist.");
         }
