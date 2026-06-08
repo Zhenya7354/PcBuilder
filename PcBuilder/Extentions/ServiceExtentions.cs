@@ -43,6 +43,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<IDataSeeder, PsuSeeder>();
         builder.Services.AddScoped<IDataSeeder, RamSeeder>();
         builder.Services.AddScoped<IIdentityRolesSeeder, IdentityRolesSeeder>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IDbSeeder, DbSeeder>();
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
 
