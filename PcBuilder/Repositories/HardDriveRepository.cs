@@ -9,33 +9,33 @@ public class HardDriveRepository(PcDbContext context) : IHardDriveRepository
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<HardDriveEntity>> GetAllHardDrivesAsync()
+    public async Task<List<HardDriveEntity>> GetAllHardDrivesAsync(CancellationToken cancellationToken)
     {
-        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().ToListAsync();
+        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<HardDriveEntity?> GetHardDriveByIdAsync(int id)
+    public async Task<HardDriveEntity?> GetHardDriveByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
+        return await _context.HardDrive.Include(h => h.Brand).AsNoTracking().FirstOrDefaultAsync(h => h.Id == id, cancellationToken);
     }
 
-    public async Task AddHardDriveAsync(HardDriveEntity hardDrive)
+    public async Task AddHardDriveAsync(HardDriveEntity hardDrive, CancellationToken cancellationToken)
     {
-        await _context.HardDrive.AddAsync(hardDrive);
+        await _context.HardDrive.AddAsync(hardDrive, cancellationToken);
     }
 
-    public async Task DeleteHardDriveAsync(HardDriveEntity hardDrive)
+    public async Task DeleteHardDriveAsync(HardDriveEntity hardDrive, CancellationToken cancellationToken)
     {
-        await _context.HardDrive.Where(h => h.Id == hardDrive.Id).ExecuteDeleteAsync();
+        await _context.HardDrive.Where(h => h.Id == hardDrive.Id).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<bool> BrandExistsAsync(int brandId)
+    public async Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        return await _context.Brand.AnyAsync(b => b.Id == brandId);
+        return await _context.Brand.AnyAsync(b => b.Id == brandId, cancellationToken);
     }
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

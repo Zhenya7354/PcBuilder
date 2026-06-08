@@ -4,10 +4,10 @@ namespace PcBuilder.Repositories.Interfaces;
 
 public interface ICpuCoolerRepository
 {
-    public Task<List<CpuCoolerEntity>> GetAllCpuCoolersAsync();
-    public Task<CpuCoolerEntity?> GetCpuCoolerByIdAsync(int id);
-    public Task AddCpuCoolerAsync(CpuCoolerEntity cpuCooler);
-    public Task DeleteCpuCoolerAsync(CpuCoolerEntity cpuCooler);
-    public Task<bool> BrandExistsAsync(int brandId);
-    public Task SaveChangesAsync();
+    public Task<List<CpuCoolerEntity>> GetAllCpuCoolersAsync(CancellationToken cancellationToken);
+    public Task<CpuCoolerEntity?> GetCpuCoolerByIdAsync(int id, CancellationToken cancellationToken);
+    public Task AddCpuCoolerAsync(CpuCoolerEntity cpuCooler, CancellationToken cancellationToken);
+    public Task DeleteCpuCoolerAsync(CpuCoolerEntity cpuCooler, CancellationToken cancellationToken);
+    public Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken);
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
 }

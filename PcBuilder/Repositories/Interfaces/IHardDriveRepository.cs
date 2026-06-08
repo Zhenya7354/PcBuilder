@@ -4,10 +4,10 @@ namespace PcBuilder.Repositories.Interfaces;
 
 public interface IHardDriveRepository
 {
-    public Task<List<HardDriveEntity>> GetAllHardDrivesAsync();
-    public Task<HardDriveEntity?> GetHardDriveByIdAsync(int id);
-    public Task AddHardDriveAsync(HardDriveEntity hardDrive);
-    public Task DeleteHardDriveAsync(HardDriveEntity hardDrive);
-    public Task<bool> BrandExistsAsync(int brandId);
-    public Task SaveChangesAsync();
+    public Task<List<HardDriveEntity>> GetAllHardDrivesAsync(CancellationToken cancellationToken);
+    public Task<HardDriveEntity?> GetHardDriveByIdAsync(int id, CancellationToken cancellationToken);
+    public Task AddHardDriveAsync(HardDriveEntity hardDrive, CancellationToken cancellationToken);
+    public Task DeleteHardDriveAsync(HardDriveEntity hardDrive, CancellationToken cancellationToken);
+    public Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken);
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
 }

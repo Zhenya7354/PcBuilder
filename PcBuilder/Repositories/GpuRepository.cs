@@ -8,31 +8,31 @@ namespace PcBuilder.Repositories;
 public class GpuRepository(PcDbContext context) : IGpuRepository
 {
     private readonly PcDbContext _context = context;
-    public async Task<List<GpuEntity>> GetAllGpusAsync()
+    public async Task<List<GpuEntity>> GetAllGpusAsync(CancellationToken cancellationToken)
     {
-        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().ToListAsync();
+        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().ToListAsync(cancellationToken);
     }
-    public async Task<GpuEntity?> GetGpuByIdAsync(int id)
+    public async Task<GpuEntity?> GetGpuByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
-    }
-
-    public async Task AddGpuAsync(GpuEntity gpu)
-    {
-        await _context.Gpu.AddAsync(gpu);
-    }
-    public async Task DeleteGpuAsync(GpuEntity gpu)
-    {
-        await _context.Gpu.Where(g => g.Id == gpu.Id).ExecuteDeleteAsync();
+        return await _context.Gpu.Include(g => g.Brand).AsNoTracking().FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
     }
 
-    public async Task<bool> BrandExistsAsync(int brandId)
+    public async Task AddGpuAsync(GpuEntity gpu, CancellationToken cancellationToken)
     {
-        return await _context.Brand.AnyAsync(b => b.Id == brandId);
+        await _context.Gpu.AddAsync(gpu, cancellationToken);
+    }
+    public async Task DeleteGpuAsync(GpuEntity gpu, CancellationToken cancellationToken)
+    {
+        await _context.Gpu.Where(g => g.Id == gpu.Id).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task SaveChangesAsync()
+    public async Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync();
+        return await _context.Brand.AnyAsync(b => b.Id == brandId, cancellationToken);
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

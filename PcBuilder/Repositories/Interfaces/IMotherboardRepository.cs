@@ -4,10 +4,10 @@ namespace PcBuilder.Repositories.Interfaces;
 
 public interface IMotherboardRepository
 {
-    public Task<List<MotherboardEntity>> GetAllMotherboardsAsync();
-    public Task<MotherboardEntity?> GetMotherboardByIdAsync(int id);
-    public Task AddMotherboardAsync(MotherboardEntity motherboard);
-    public Task DeleteMotherboardAsync(MotherboardEntity motherboard);
-    public Task<bool> BrandExistsAsync(int brandId);
-    public Task SaveChangesAsync();
+    public Task<List<MotherboardEntity>> GetAllMotherboardsAsync(CancellationToken cancellationToken);
+    public Task<MotherboardEntity?> GetMotherboardByIdAsync(int id, CancellationToken cancellationToken);
+    public Task AddMotherboardAsync(MotherboardEntity motherboard, CancellationToken cancellationToken);
+    public Task DeleteMotherboardAsync(MotherboardEntity motherboard, CancellationToken cancellationToken);
+    public Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken);
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
 }

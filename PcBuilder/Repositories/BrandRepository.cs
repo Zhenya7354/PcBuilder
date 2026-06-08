@@ -9,28 +9,28 @@ public class BrandRepository(PcDbContext context) : IBrandRepository
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<BrandEntity>> GetAllBrandsAsync()
+    public async Task<List<BrandEntity>> GetAllBrandsAsync(CancellationToken cancellationToken)
     {
-        return await _context.Brand.AsNoTracking().ToListAsync();
+        return await _context.Brand.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<BrandEntity?> GetBrandByIdAsync(int id)
+    public async Task<BrandEntity?> GetBrandByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.Brand.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+        return await _context.Brand.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
     }
 
-    public async Task AddBrandAsync(BrandEntity brand)
+    public async Task AddBrandAsync(BrandEntity brand, CancellationToken cancellationToken)
     {
-        await _context.Brand.AddAsync(brand);
+        await _context.Brand.AddAsync(brand, cancellationToken);
     }
 
-    public async Task DeleteBrandAsync(BrandEntity brand)
+    public async Task DeleteBrandAsync(BrandEntity brand, CancellationToken cancellationToken)
     {
-        await _context.Brand.Where(b => b.Id == brand.Id).ExecuteDeleteAsync(); 
+        await _context.Brand.Where(b => b.Id == brand.Id).ExecuteDeleteAsync(cancellationToken); 
     }
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

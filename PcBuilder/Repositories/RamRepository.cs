@@ -9,33 +9,33 @@ public class RamRepository(PcDbContext context) : IRamRepository
 {
     private readonly PcDbContext _context = context;
 
-    public async Task<List<RamEntity>> GetAllRamAsync()
+    public async Task<List<RamEntity>> GetAllRamAsync(CancellationToken cancellationToken)
     {
-        return await _context.Ram.Include(r => r.Brand).AsNoTracking().ToListAsync();
+        return await _context.Ram.Include(r => r.Brand).AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<RamEntity?> GetRamByIdAsync(int id)
+    public async Task<RamEntity?> GetRamByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.Ram.Include(r => r.Brand).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+        return await _context.Ram.Include(r => r.Brand).AsNoTracking().FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
     }
 
-    public async Task AddRamAsync(RamEntity ram)
+    public async Task AddRamAsync(RamEntity ram, CancellationToken cancellationToken)
     {
-        await _context.Ram.AddAsync(ram);
+        await _context.Ram.AddAsync(ram, cancellationToken);
     }
 
-    public async Task DeleteRamAsync(RamEntity ram)
+    public async Task DeleteRamAsync(RamEntity ram, CancellationToken cancellationToken)
     {
-        await _context.Ram.Where(r => r.Id == ram.Id).ExecuteDeleteAsync();
+        await _context.Ram.Where(r => r.Id == ram.Id).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<bool> BrandExistsAsync(int brandId)
+    public async Task<bool> BrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {
-        return await _context.Brand.AnyAsync(b => b.Id == brandId);
+        return await _context.Brand.AnyAsync(b => b.Id == brandId, cancellationToken);
     }
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

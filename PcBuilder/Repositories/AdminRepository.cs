@@ -7,28 +7,28 @@ namespace PcBuilder.Repositories;
 public class AdminRepository(PcDbContext context) : IAdminRepository
 {
     private readonly PcDbContext _context = context;
-    public async Task<List<AdminEntity>> GetAdminsAsync()
+    public async Task<List<AdminEntity>> GetAdminsAsync(CancellationToken cancellationToken)
     {
-        return await _context.Admin.Include(a => a.User).AsNoTracking().ToListAsync();
+        return await _context.Admin.Include(a => a.User).AsNoTracking().ToListAsync(cancellationToken);
     }
-    public async Task<AdminEntity?> GetAdminByIdAsync(int id)
+    public async Task<AdminEntity?> GetAdminByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _context.Admin.Include(a => a.User).AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
-    }
-
-    public async Task AddAdminAsync(AdminEntity admin)
-    {
-        await _context.Admin.AddAsync(admin);
+        return await _context.Admin.Include(a => a.User).AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
-    public async Task DeleteAdminAsync(AdminEntity admin)
+    public async Task AddAdminAsync(AdminEntity admin, CancellationToken cancellationToken)
     {
-        await _context.Admin.Where(a => a.Id == admin.Id).ExecuteDeleteAsync();
+        await _context.Admin.AddAsync(admin, cancellationToken);
+    }
+
+    public async Task DeleteAdminAsync(AdminEntity admin, CancellationToken cancellationToken)
+    {
+        await _context.Admin.Where(a => a.Id == admin.Id).ExecuteDeleteAsync(cancellationToken);
     }
 
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

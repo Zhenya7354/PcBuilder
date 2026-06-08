@@ -4,18 +4,18 @@ namespace PcBuilder.Repositories.Interfaces;
 
 public interface IBuildRepository
 {
-    public Task<List<BuildEntity>> GetAllAsync(string userId);
-    public Task<BuildEntity?> GetByIdAsync(int buildId, string userId);
-    public Task AddBuildAsync(BuildEntity build);
-    public Task DeleteBuildAsync(BuildEntity build);
-    public Task SaveChangesAsync();
-    public Task<bool> CpuExistsAsync(int cpuId);
-    public Task<bool> CpuCoolerExistsAsync(int cpuCoolerId);
-    public Task<bool> GpuExistsAsync(int gpuId);
-    public Task<bool> RamExistsAsync(int ramId);
-    public Task<bool> HardDriveExistsAsync(int hardDriveId);
-    public Task<bool> MotherboardExistsAsync(int motherboardId);
-    public Task<bool> PsuExistsAsync(int psuId);
-    public Task<bool> CaseExistsAsync(int caseId);
-    public Task<bool> MonitorExistsAsync(int monitorId);
+    public Task<List<BuildEntity>> GetAllAsync(string userId, CancellationToken cancellationToken);
+    public Task<BuildEntity?> GetByIdAsync(int buildId, string userId, CancellationToken cancellationToken);
+    public Task AddBuildAsync(BuildEntity build, CancellationToken cancellationToken);
+    public Task DeleteBuildAsync(BuildEntity build, CancellationToken cancellationToken);
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
+    public Task<bool> CpuExistsAsync(int cpuId, CancellationToken cancellationToken);
+    public Task<bool> CpuCoolerExistsAsync(int cpuCoolerId, CancellationToken cancellationToken);
+    public Task<bool> GpuExistsAsync(int gpuId, CancellationToken cancellationToken);
+    public Task<bool> RamExistsAsync(int ramId, CancellationToken cancellationToken);
+    public Task<bool> HardDriveExistsAsync(int hardDriveId, CancellationToken cancellationToken);
+    public Task<bool> MotherboardExistsAsync(int motherboardId, CancellationToken cancellationToken);
+    public Task<bool> PsuExistsAsync(int psuId, CancellationToken cancellationToken);
+    public Task<bool> CaseExistsAsync(int caseId, CancellationToken cancellationToken);
+    public Task<bool> MonitorExistsAsync(int monitorId, CancellationToken cancellationToken);
 }
