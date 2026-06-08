@@ -13,24 +13,22 @@ public class BuildService : IBuildService
     private readonly IBuildRepository _buildRepository;
     private readonly ICompatibilityCheckService _compatibilityCheckService;
     private readonly IUserContextAccessor _userContextAccessor;
-    private readonly UserContextResponse _userContext;
 
     public BuildService(IBuildRepository buildRepository, ICompatibilityCheckService compatibilityCheckService, IUserContextAccessor userContextAccessor)
     {
         _buildRepository = buildRepository;
         _compatibilityCheckService = compatibilityCheckService;
         _userContextAccessor = userContextAccessor;
-        _userContext = userContextAccessor.GetUserContext();
     }
 
     public async Task<BuildEntity> GetBuildByIdAsync(int buildId, CancellationToken cancellationToken)
     {
-        return await _buildRepository.GetByIdAsync(buildId, _userContext.UserId, cancellationToken) ??
+        return await _buildRepository.GetByIdAsync(buildId, _userContextAccessor.GetUserContext().UserId, cancellationToken) ??
             throw new KeyNotFoundException($"Build with Id {buildId} not found");
     }
     public async Task<List<BuildEntity>> GetUserBuildsAsync(CancellationToken cancellationToken)
     {
-        return await _buildRepository.GetAllAsync(_userContext.UserId, cancellationToken);
+        return await _buildRepository.GetAllAsync(_userContextAccessor.GetUserContext().UserId, cancellationToken);
     }
     public async Task<BuildEntity> AddBuildAsync(BuildRequest dto, CancellationToken cancellationToken)
     {
@@ -46,7 +44,7 @@ public class BuildService : IBuildService
             PsuId = dto.PsuId,
             CaseId = dto.CaseId,
             MonitorId = dto.MonitorId,
-            UserId = _userContext.UserId
+            UserId = _userContextAccessor.GetUserContext().UserId
         };
         await _buildRepository.AddBuildAsync(build, cancellationToken);
         await _buildRepository.SaveChangesAsync(cancellationToken);
