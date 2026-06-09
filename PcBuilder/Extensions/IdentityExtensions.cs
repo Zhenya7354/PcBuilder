@@ -8,7 +8,7 @@ using PcBuilder.Entities;
 
 namespace PcBuilder.Extentions;
 
-public static class IdentityExtentions
+public static class IdentityExtensions
 {
     private const string AdminPolicyName = "AdminOnly";
     private const string AuthenticatedUserPolicyName = "Authenticated";

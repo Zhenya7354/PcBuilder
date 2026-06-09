@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
 
 namespace PcBuilder.Extentions;
 
-public static class ServiceExtentions
+public static class ServiceExtensions
 {
     public static WebApplicationBuilder AddAppServices(this WebApplicationBuilder builder)
     {
@@ -32,19 +32,7 @@ public static class ServiceExtentions
         builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IDataSeeder, BrandSeeder>();
-        builder.Services.AddScoped<IDataSeeder, CpuCoolerSeeder>();
-        builder.Services.AddScoped<IDataSeeder, CpuSeeder>();
-        builder.Services.AddScoped<IDataSeeder, GpuSeeder>();
-        builder.Services.AddScoped<IDataSeeder, HardDriveSeeder>();
-        builder.Services.AddScoped<IDataSeeder, MotherboardSeeder>();
-        builder.Services.AddScoped<IDataSeeder, PcCaseSeeder>();
-        builder.Services.AddScoped<IDataSeeder, PcMonitorSeeder>();
-        builder.Services.AddScoped<IDataSeeder, PsuSeeder>();
-        builder.Services.AddScoped<IDataSeeder, RamSeeder>();
-        builder.Services.AddScoped<IIdentityRolesSeeder, IdentityRolesSeeder>();
-        builder.Services.AddScoped<IAuthService, AuthService>();
-        builder.Services.AddScoped<IDbSeeder, DbSeeder>();
+        builder.Services.AddScoped<IAuthService, AuthService>(); 
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
 
         builder.Services.AddScoped<ICpuRepository, CpuRepository>();
