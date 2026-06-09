@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data.Seeding;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Endpoints;
+using PcBuilder.Extensions;
 using PcBuilder.Extentions;
 using PcBuilder.Services;
 using Scalar.AspNetCore;
@@ -13,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.AddAppServices();
+builder.AddSeeders();
+builder.AddRepositories();
 builder.AddIdentityAndJwt();
 
 var app = builder.Build();
