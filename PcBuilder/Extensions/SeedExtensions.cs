@@ -6,7 +6,7 @@ namespace PcBuilder.Extentions;
 
 public static class SeedExtensions
 {
-    public static WebApplicationBuilder AddSeedingServices(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddSeeders(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IDataSeeder, BrandSeeder>();
         builder.Services.AddScoped<IDataSeeder, CpuCoolerSeeder>();
