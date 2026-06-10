@@ -5,20 +5,20 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class AdminService(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager, IAdminRepository adminRepository, IUnitOfWork unitOfWork) : IAdminService
+public class AdminService(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager, IAdminRepository adminRepository) : IAdminService
 {
-    private readonly UserManager<UserEntity> _userManager= userManager;
-    private readonly RoleManager<IdentityRole> _roleManager= roleManager;
-    private readonly IAdminRepository _adminRepository= adminRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly UserManager<UserEntity> _userManager = userManager;
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+    private readonly IAdminRepository _adminRepository = adminRepository;
+
     public async Task PromoteToAdminAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(userId) ??
             throw new KeyNotFoundException("User not found.");
 
-            await _userManager.AddToRoleAsync(user, "Admin");
-            await _unitOfWork.AdminRepository.AddAdminAsync(new AdminEntity { UserId = user.Id }, cancellationToken);
-            await _unitOfWork.Commit();
-        
+        await _userManager.AddToRoleAsync(user, "Admin");
+        await _adminRepository.AddAdminAsync(new AdminEntity { UserId = user.Id }, cancellationToken);
+        await _adminRepository.SaveChangesAsync(cancellationToken);
+
     }
 }
