@@ -5,6 +5,7 @@ using PcBuilder.Data.Seeding;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Data.Seeding.Seeders;
 using PcBuilder.Enums;
+using PcBuilder.Exceptions;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services;
@@ -31,7 +32,6 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IBuildService, BuildService>();
         builder.Services.AddScoped<ICompatibilityCheckService, CompatibilityCheckService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IAuthService, AuthService>(); 
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
 
