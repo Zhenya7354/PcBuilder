@@ -23,13 +23,11 @@ public static class RamEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IRamService service, [FromBody] RamCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Ram data is required");
                 return Results.Ok(await service.AddRamAsync(dto, cancellationToken));
         });
 
         group.MapPut("/{id}", async ([FromServices] IRamService service, [FromBody] RamUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Ram data is required");
                 return Results.Ok(await service.UpdateRamAsync(id, dto, cancellationToken));
         });
 

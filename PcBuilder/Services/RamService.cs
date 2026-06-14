@@ -25,6 +25,9 @@ public class RamService(IRamRepository ramRepository) : IRamService
 
     public async Task<RamEntity> AddRamAsync(RamCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("RAM data is required.");
+
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var ram = new RamEntity
@@ -51,6 +54,9 @@ public class RamService(IRamRepository ramRepository) : IRamService
 
     public async Task<RamEntity> UpdateRamAsync(int id, RamUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("RAM data is required.");
+
         var ram = await _ramRepository.GetRamByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"RAM with ID {id} not found.");
 
