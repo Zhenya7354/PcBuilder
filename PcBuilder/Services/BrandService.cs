@@ -24,6 +24,8 @@ public class BrandService(IBrandRepository brandRepository) : IBrandService
 
     public async Task<BrandEntity> AddBrandAsync(BrandCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null) 
+            throw new ArgumentNullException("Brand data is required");
         var brand = new BrandEntity { Name = dto.Name };
         await _brandRepository.AddBrandAsync(brand, cancellationToken);
         await _brandRepository.SaveChangesAsync(cancellationToken);
@@ -32,6 +34,8 @@ public class BrandService(IBrandRepository brandRepository) : IBrandService
 
     public async Task<BrandEntity> UpdateBrandAsync(int id, BrandUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Brand data is required");
         var brand = await _brandRepository.GetBrandByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Brand with ID {id} not found.");
 

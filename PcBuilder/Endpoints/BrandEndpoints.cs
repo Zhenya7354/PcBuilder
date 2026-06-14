@@ -25,14 +25,12 @@ public static class BrandEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IBrandService brandService, [FromBody] BrandCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Brand data is required");
                 var brand = await brandService.AddBrandAsync(dto, cancellationToken);
                 return Results.Ok(brand);
         });
 
         group.MapPut("/{id}", async ([FromServices] IBrandService brandService, [FromBody] BrandUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Brand data is required");
                 var brand = await brandService.UpdateBrandAsync(id, dto, cancellationToken);
                 return Results.Ok(brand);
         });
