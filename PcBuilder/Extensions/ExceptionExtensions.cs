@@ -6,7 +6,7 @@ namespace PcBuilder.Extensions;
 
 public static class ExceptionExtensions
 {
-    public static WebApplicationBuilder AddRepositories(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddExceptionsServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddExceptionHandler<UnauthorizedAccessExceptionHandler>();
         builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
