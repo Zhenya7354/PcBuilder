@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddAppServices();
 builder.AddSeeders();
 builder.AddRepositories();
+builder.AddExceptionsServices();
 builder.AddIdentityAndJwt();
 
 var app = builder.Build();
