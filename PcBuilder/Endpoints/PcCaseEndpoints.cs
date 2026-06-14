@@ -23,13 +23,11 @@ public static class PcCaseEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IPcCaseService service, [FromBody] PcCaseCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Case data is required");
                 return Results.Ok(await service.AddCaseAsync(dto, cancellationToken));
         });
 
         group.MapPut("/{id}", async ([FromServices] IPcCaseService service, [FromBody] PcCaseUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Case data is required");
                 return Results.Ok(await service.UpdateCaseAsync(id, dto, cancellationToken));
         });
 

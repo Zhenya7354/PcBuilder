@@ -25,6 +25,8 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
 
     public async Task<PcCaseEntity> AddCaseAsync(PcCaseCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Case data is required.");
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var pcCase = new PcCaseEntity
@@ -57,6 +59,9 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
 
     public async Task<PcCaseEntity> UpdateCaseAsync(int id, PcCaseUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Case data is required.");
+
         var pcCase = await _pcCaseRepository.GetCaseByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Case with ID {id} not found.");
 
