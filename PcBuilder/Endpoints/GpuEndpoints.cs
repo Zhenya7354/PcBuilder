@@ -25,14 +25,12 @@ public static class GpuEndpoints
 
         group.MapPost(string.Empty, async ([FromBody] GpuCreateRequest dto, [FromServices] IGpuService gpuService, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Gpu data is required");
                 var gpu = await gpuService.AddGpuAsync(dto, cancellationToken);
                 return Results.Ok(gpu);
         });
 
         group.MapPut("/{id}", async ([FromServices] IGpuService gpuService, [FromBody] GpuUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Gpu data is required");
                 var gpu = await gpuService.UpdateGpuAsync(id, dto, cancellationToken);
                 return Results.Ok(gpu);
         });

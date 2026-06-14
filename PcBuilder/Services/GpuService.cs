@@ -23,6 +23,9 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
 
     public async Task<GpuEntity> AddGpuAsync(GpuCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Gpu data is required");
+
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var gpu = new GpuEntity
@@ -55,6 +58,9 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
     }
     public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Gpu data is required");
+
         var gpu = await _gpuRepository.GetGpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Gpu not found");
 
