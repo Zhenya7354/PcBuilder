@@ -23,13 +23,11 @@ public static class PsuEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IPsuService service, [FromBody] PsuCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Psu data is required");
                 return Results.Ok(await service.AddPsuAsync(dto, cancellationToken));
         });
 
         group.MapPut("/{id}", async ([FromServices] IPsuService service, [FromBody] PsuUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Psu data is required");
                 return Results.Ok(await service.UpdatePsuAsync(id, dto, cancellationToken));
         });
 

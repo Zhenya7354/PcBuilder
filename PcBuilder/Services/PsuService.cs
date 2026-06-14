@@ -25,6 +25,8 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
 
     public async Task<PsuEntity> AddPsuAsync(PsuCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("PSU data is required.");
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var psu = new PsuEntity
@@ -52,6 +54,9 @@ public class PsuService(IPsuRepository psuRepository) : IPsuService
 
     public async Task<PsuEntity> UpdatePsuAsync(int id, PsuUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("PSU data is required.");
+
         var psu = await _psuRepository.GetPsuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"PSU with ID {id} not found.");
 
