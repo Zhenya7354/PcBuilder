@@ -25,6 +25,9 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
 
     public async Task<MotherboardEntity> AddMotherboardAsync(MotherboardCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Motherboard data is required.");
+
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var motherboard = new MotherboardEntity
@@ -65,6 +68,9 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
 
     public async Task<MotherboardEntity> UpdateMotherboardAsync(int id, MotherboardUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Motherboard data is required.");
+
         var motherboard = await _motherboardRepository.GetMotherboardByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Motherboard with ID {id} not found.");
 
