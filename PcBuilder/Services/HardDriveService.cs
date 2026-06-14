@@ -24,6 +24,9 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
 
     public async Task<HardDriveEntity> AddHardDriveAsync(HardDriveCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Hard drive data is required.");
+
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var hardDrive = new HardDriveEntity
@@ -51,6 +54,9 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
 
     public async Task<HardDriveEntity> UpdateHardDriveAsync(int id, HardDriveUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Hard drive data is required.");
+
         var hardDrive = await _hardDriveRepository.GetHardDriveByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
 

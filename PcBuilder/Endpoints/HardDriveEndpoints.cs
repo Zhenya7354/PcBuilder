@@ -23,13 +23,11 @@ public static class HardDriveEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IHardDriveService service, [FromBody] HardDriveCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Hard drive data is required");
                 return Results.Ok(await service.AddHardDriveAsync(dto, cancellationToken));
         });
 
         group.MapPut("/{id}", async ([FromServices] IHardDriveService service, [FromBody] HardDriveUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Hard drive data is required");
                 return Results.Ok(await service.UpdateHardDriveAsync(id, dto, cancellationToken));
         });
 
