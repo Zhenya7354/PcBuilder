@@ -14,6 +14,6 @@ public interface IBuildService
     public Task<BuildEntity> SetComponentAsync(int buildId, BuildComponentRequest dto, CancellationToken cancellationToken);
     public Task<BuildEntity> RemoveComponentAsync(int buildId,BuildComponentType componentType, CancellationToken cancellationToken);
     public Task<List<CompatibilityIssue>> RunCompatibilityChecksAsync(BuildRequest dto, CancellationToken cancellationToken);
-    public Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId,BuildRequest dto, CancellationToken cancellationToken);
+    public Task<List<CompatibilityIssue>> RunCompatibilityChecksForBuildUpdateAsync(int buildId,BuildRequest dto, CancellationToken cancellationToken);
     public Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId,BuildComponentRequest dto, CancellationToken cancellationToken);
 }

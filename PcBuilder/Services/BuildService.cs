@@ -117,7 +117,7 @@ public class BuildService : IBuildService
         var results =  await Task.WhenAll(tasks);
         return results.Where(r => !r.IsCompatible).SelectMany(r => r.Issues).ToList();
     }
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForUpdateAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
+    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForBuildUpdateAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
     {
         var build = await GetBuildByIdAsync(buildId, cancellationToken);
 

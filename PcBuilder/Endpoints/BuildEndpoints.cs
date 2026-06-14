@@ -65,7 +65,7 @@ public static class BuildEndpoints
             {
                 return Results.Unauthorized();
             }
-            var issues = await service.RunCompatibilityChecksForUpdateAsync(id, dto, cancellationToken);
+            var issues = await service.RunCompatibilityChecksForBuildUpdateAsync(id, dto, cancellationToken);
             if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
             {
                 return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
