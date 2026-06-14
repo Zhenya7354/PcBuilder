@@ -24,6 +24,8 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
 
     public async Task<CpuCoolerEntity> AddCpuCoolerAsync(CpuCoolerCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Cpu cooler data is required");
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var cpuCooler = new CpuCoolerEntity
@@ -50,6 +52,9 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository) : ICpuCo
 
     public async Task<CpuCoolerEntity> UpdateCpuCoolerAsync(int id, CpuCoolerUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Cpu cooler data is required");
+
         var cpuCooler = await _cpuCoolerRepository.GetCpuCoolerByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"CPU cooler with ID {id} not found.");
         await EnsureBrandExistsAsync(dto.BrandId ?? cpuCooler.BrandId, cancellationToken);

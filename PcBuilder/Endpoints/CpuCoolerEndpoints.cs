@@ -18,21 +18,18 @@ public static class CpuCoolerEndpoints
 
         group.MapGet("/{id}", async ([FromServices] ICpuCoolerService service, int id, CancellationToken cancellationToken) =>
         {
-           
                 var cpuCooler = await service.GetCpuCoolerByIdAsync(id, cancellationToken);
                 return Results.Ok(cpuCooler);
         });
 
         group.MapPost(string.Empty, async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Cpu cooler data is required");
                 var cpuCooler = await service.AddCpuCoolerAsync(dto, cancellationToken);
                 return Results.Ok(cpuCooler);
         });
 
         group.MapPut("/{id}", async ([FromServices] ICpuCoolerService service, [FromBody] CpuCoolerUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Cpu cooler data is required");
                 var cpuCooler = await service.UpdateCpuCoolerAsync(id, dto, cancellationToken);
                 return Results.Ok(cpuCooler);
         });
