@@ -20,6 +20,7 @@ public static class RepositoryExtensions
         builder.Services.AddScoped<IAdminRepository, AdminRepository>();
         builder.Services.AddScoped<IBuildRepository, BuildRepository>();
         builder.Services.AddScoped<ICompatibilityCheckRepository, CompatibilityCheckRepository>();
+        builder.Services.AddScoped<IRegularUserRepository, RegularUserRepository>();
 
         return builder;
     }
