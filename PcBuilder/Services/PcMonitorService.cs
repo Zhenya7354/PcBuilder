@@ -25,6 +25,8 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
 
     public async Task<PcMonitorEntity> AddMonitorAsync(PcMonitorCreateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Monitor data is required.");
         await EnsureBrandExistsAsync(dto.BrandId, cancellationToken);
 
         var monitor = new PcMonitorEntity
@@ -62,6 +64,9 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
 
     public async Task<PcMonitorEntity> UpdateMonitorAsync(int id, PcMonitorUpdateRequest dto, CancellationToken cancellationToken)
     {
+        if (dto is null)
+            throw new ArgumentNullException("Monitor data is required.");
+
         var monitor = await _pcMonitorRepository.GetMonitorByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException($"Monitor with ID {id} not found.");
 

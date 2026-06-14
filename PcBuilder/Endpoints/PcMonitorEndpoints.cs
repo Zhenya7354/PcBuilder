@@ -23,13 +23,11 @@ public static class PcMonitorEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorCreateRequest dto, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Monitor data is required");
                 return Results.Ok(await service.AddMonitorAsync(dto, cancellationToken));
         });
 
         group.MapPut("/{id}", async ([FromServices] IPcMonitorService service, [FromBody] PcMonitorUpdateRequest dto, int id, CancellationToken cancellationToken) =>
         {
-            if (dto is null) return Results.BadRequest("Monitor data is required");
                 return Results.Ok(await service.UpdateMonitorAsync(id, dto, cancellationToken));
         });
 
