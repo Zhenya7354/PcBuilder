@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PcBuilder.Entities;
+﻿using PcBuilder.Models;
 
 namespace PcBuilder.Services.Interfaces;
 
 public interface IAuthService
 {
-    public Task<UserEntity?> FindByEmailAsync(string email);
-    public Task<SignInResult?> CheckPasswordSignInAsync(UserEntity user, string password, bool lockoutOnFailure);
-    public Task<IList<string>?> GetRolesAsync(UserEntity user);
+    public Task RegisterAsync(RegisterRequest dto, CancellationToken cancellationToken = default);
+    public Task<AuthResponse> LoginAsync(LoginRequest dto, CancellationToken cancellationToken = default);
 }
