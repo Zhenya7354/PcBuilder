@@ -23,7 +23,6 @@ public static class CpuEndpoints
         });
         group.MapPost(string.Empty, async ([FromServices] ICpuService cpuService, [FromBody] CpuCreateRequest cpuDto, CancellationToken cancellationToken) =>
         {
-            if(cpuDto is null) return Results.BadRequest("Cpu data is required");
                 var cpu = await cpuService.AddCpuAsync(cpuDto, cancellationToken);
                 return Results.Ok(cpu);
         });
@@ -33,16 +32,12 @@ public static class CpuEndpoints
             if (cpu is null) return Results.NotFound("Cpu not found");
                 var updatedCpu = await cpuService.UpdateCpuAsync(id, cpuDto, cancellationToken);
                 return Results.Ok(updatedCpu);
-
         });
 
         group.MapDelete("/{id}", async ([FromServices] ICpuService cpuService, int id, CancellationToken cancellationToken) =>
         {
-            var cpu = await cpuService.GetCpuByIdAsync(id, cancellationToken);
-            if (cpu is null) return Results.NotFound("Cpu not found");
                 await cpuService.DeleteCpuAsync(id, cancellationToken);
                 return Results.Ok($"Cpu with id {id} deleted successfully");
-
         });
             return webApplication;
     }
