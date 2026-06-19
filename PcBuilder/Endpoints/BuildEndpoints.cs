@@ -29,11 +29,11 @@ public static class BuildEndpoints
         group.MapPost(string.Empty, async ([FromServices] IBuildService service, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
             var issues = await service.RunCompatibilityChecksAsync(dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
             {
                 return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
             }
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Warning))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
             {
                 return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
             }
@@ -44,11 +44,11 @@ public static class BuildEndpoints
         group.MapPut("/{id}", async ([FromServices] IBuildService service, int id, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
             var issues = await service.RunCompatibilityChecksForBuildUpdateAsync(id, dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
             {
                 return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
             }
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Warning))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
             {
                 return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
             }
@@ -65,11 +65,11 @@ public static class BuildEndpoints
         group.MapPost("/{id}/components", async ([FromServices] IBuildService service, int id, [FromBody] BuildComponentRequest dto, CancellationToken cancellationToken) =>
         {
             var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Error))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
             {
                 return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
             }
-            if (issues.Any(i => i.Severity == CompatibilityServerity.Warning))
+            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
             {
                 return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
             }

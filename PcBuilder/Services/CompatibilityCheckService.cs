@@ -1,4 +1,4 @@
-using PcBuilder.Data;
+using PcBuilder.Enums;
 using PcBuilder.Models;
 using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services.Interfaces;
@@ -22,7 +22,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.Socket),
                 Message = $"CPU socket {cpu.Socket} is not compatible with motherboard socket {motherboard.Socket}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (!cpu.ChipsetsSupported.Contains(motherboard.Chipset))
@@ -31,7 +31,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(motherboard.Chipset),
                 Message = $"CPU does not support motherboard chipset {motherboard.Chipset}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (motherboard.MemoryType != cpu.MemoryType)
@@ -40,7 +40,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.MemoryType),
                 Message = $"CPU memory type {cpu.MemoryType} is not compatible with motherboard memory type {motherboard.MemoryType}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (motherboard.MaxMemorySpeedMhz <= cpu.MaxMemorySpeedMhz)
@@ -49,7 +49,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.MaxMemorySpeedMhz),
                 Message = $"CPU max memory speed {cpu.MaxMemorySpeedMhz} is is higher than motherboard max memory speed {motherboard.MaxMemorySpeedMhz}",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
 
@@ -68,7 +68,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.Socket),
                 Message = $"CPU cooler socket {cpuCooler.SocketsSupported} is not compatible with CPU socket {cpu.Socket}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (cpuCooler.MaxTdpWatts < cpu.TdpWatts)
@@ -77,7 +77,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.TdpWatts),
                 Message = $"CPU cooler max TDP {cpuCooler.MaxTdpWatts} W is lower than CPU TDP {cpu.TdpWatts} W",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -96,7 +96,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.MaxMemorySpeedMhz),
                 Message = $"CPU max memory speed {cpu.MaxMemorySpeedMhz} is lower than RAM speed {ram.SpeedMhz}",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
         if(ram.KitCount != cpu.MemoryChannels)
@@ -105,7 +105,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpu.MemoryChannels),
                 Message = $"CPU memory channels {cpu.MemoryChannels} do not match RAM kit count {ram.KitCount}. Ram will not run in optimal channel",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
             return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -123,7 +123,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(ram.MemoryType),
                 Message = $"RAM memory type {ram.MemoryType} is not compatible with motherboard memory type {motherboard.MemoryType}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (ram.SpeedMhz > motherboard.MaxMemorySpeedMhz)
@@ -132,7 +132,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(ram.SpeedMhz),
                 Message = $"RAM speed {ram.SpeedMhz} is higher than motherboard max memory speed {motherboard.MaxMemorySpeedMhz}",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
         if (ram.KitCount > motherboard.MemorySlots)
@@ -141,7 +141,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(ram.KitCount),
                 Message = $"RAM module count {ram.KitCount} exceeds motherboard memory slots {motherboard.MemorySlots}",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
         if (ram.CapacityGb * ram.KitCount > motherboard.MaxMemoryGb)
@@ -150,7 +150,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(ram.CapacityGb),
                 Message = $"Total RAM capacity {ram.CapacityGb * ram.KitCount} GB exceeds motherboard max memory capacity {motherboard.MaxMemoryGb} GB",
-                Severity = CompatibilityServerity.Warning
+                Severity = CompatibilitySeverity.Warning
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -170,7 +170,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(motherboard.FormFactor),
                 Message = $"PC case does not support motherboard form factor {motherboard.FormFactor}",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -188,7 +188,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(cpuCooler.HeightMm),
                 Message = $"CPU cooler height {cpuCooler.HeightMm} mm exceeds PC case max CPU cooler height {pcCase.MaxCpuCoolerHeightMm} mm",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         if (cpuCooler.CoolerType == Enums.CoolerType.Liquid)
@@ -199,7 +199,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
                 {
                     Field = nameof(cpuCooler.RadiatorSizeMm),
                     Message = $"CPU cooler radiator size {cpuCooler.RadiatorSizeMm} mm is not supported by PC case",
-                    Severity = CompatibilityServerity.Error
+                    Severity = CompatibilitySeverity.Error
                 });
             }
         }
@@ -218,7 +218,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(gpu.CardLengthMm),
                 Message = $"GPU length {gpu.CardLengthMm} mm exceeds PC case max GPU length {pcCase.MaxGpuLengthMm} mm",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -236,7 +236,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(psu.LengthMm),
                 Message = $"PSU length {psu.LengthMm} mm exceeds PC case max PSU length {pcCase.MaxPsuLengthMm} mm",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
@@ -256,7 +256,7 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
             {
                 Field = nameof(psu.Wattage),
                 Message = $"PSU wattage {psu.Wattage} W is lower than GPU {gpu.RecommendedPsuWattage} wattage",
-                Severity = CompatibilityServerity.Error
+                Severity = CompatibilitySeverity.Error
             });
         }
         return issues.Count == 0 ? CompatibilityCheckResponse.Success() : CompatibilityCheckResponse.Failure(issues);
