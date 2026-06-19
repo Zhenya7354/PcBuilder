@@ -28,53 +28,42 @@ public static class BuildEndpoints
 
         group.MapPost(string.Empty, async ([FromServices] IBuildService service, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
-            var issues = await service.RunCompatibilityChecksAsync(dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
+            var compatibilityCheckResult = await service.RunCompatibilityChecksAsync(dto, cancellationToken);
+            if (compatibilityCheckResult.IsSuccess)
             {
-                return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
+                var build = await service.AddBuildAsync(dto, cancellationToken);
+                return Results.Ok(build);
             }
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
-            {
-                return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
-            }
-            var build = await service.AddBuildAsync(dto, cancellationToken);
-            return Results.Ok(build);
+            return Results.BadRequest(new { Message = "Build has compatibility issues", compatibilityCheckResult.Issues });
+
         }).RequireAuthorization();
 
         group.MapPut("/{id}", async ([FromServices] IBuildService service, int id, [FromBody] BuildRequest dto, CancellationToken cancellationToken) =>
         {
-            var issues = await service.RunCompatibilityChecksForBuildUpdateAsync(id, dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
+            var compatibilityCheckResult = await service.RunCompatibilityChecksForBuildUpdateAsync(id, dto, cancellationToken);
+            if (compatibilityCheckResult.IsSuccess)
             {
-                return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
+                var build = await service.UpdateBuildAsync(id, dto, cancellationToken);
+                return Results.Ok(build);
             }
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
-            {
-                return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
-            }
-            var build = await service.UpdateBuildAsync(id, dto, cancellationToken);
-            return Results.Ok(build);
+            return Results.BadRequest(new { Message = "Build has compatibility issues", compatibilityCheckResult.Issues });
         }).RequireAuthorization();
 
         group.MapDelete("/{id}", async ([FromServices] IBuildService service, int id, CancellationToken cancellationToken) =>
-        { 
+        {
             await service.DeleteBuildAsync(id, cancellationToken);
             return Results.Ok();
         }).RequireAuthorization();
 
         group.MapPost("/{id}/components", async ([FromServices] IBuildService service, int id, [FromBody] BuildComponentRequest dto, CancellationToken cancellationToken) =>
         {
-            var issues = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto, cancellationToken);
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Error))
+            var compatibilityCheckResult = await service.RunCompatibilityChecksForComponentUpdateAsync(id, dto, cancellationToken);
+            if (compatibilityCheckResult.IsSuccess)
             {
-                return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = issues });
+                var build = await service.SetComponentAsync(id, dto, cancellationToken);
+                return Results.Ok(build);
             }
-            if (issues.Any(i => i.Severity == CompatibilitySeverity.Warning))
-            {
-                return Results.Ok(new { Message = "Build has compatibility warnings", Issues = issues });
-            }
-            var build = await service.SetComponentAsync(id, dto, cancellationToken);
-            return Results.Ok(build);
+            return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = compatibilityCheckResult.Issues });
         }).RequireAuthorization();
 
         group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, int id, [FromBody] BuildComponentType componentType, CancellationToken cancellationToken) =>
