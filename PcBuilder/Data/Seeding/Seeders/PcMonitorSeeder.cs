@@ -9,7 +9,7 @@ public class PcMonitorSeeder : IDataSeeder
 {
     public async Task SeedAsync(PcDbContext context)
     {
-        if (await context.CpuCooler.AnyAsync())
+        if (await context.PcMonitor.AnyAsync())
             return;
 
         var brands = await context.Brand.ToDictionaryAsync(b => b.Name);
