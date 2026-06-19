@@ -110,11 +110,13 @@ public class BuildService : IBuildService
             (dto.PsuId, dto.GpuId, _compatibilityCheckService.CheckPsuToGpuCompatibilityAsync)
         };
 
-        var tasks = checks
-            .Where(c => c.IdA.HasValue && c.IdB.HasValue)
-            .Select(c => c.Check(c.IdA!.Value, c.IdB!.Value, cancellationToken));
+        var compatibilityCheckResults = new List<CompatibilityCheckResponse>();
+        foreach(var check in checks.Where(c => c.IdA.HasValue && c.IdB.HasValue))
+        {
+            compatibilityCheckResults.Add(
+                await check.Check(check.IdA!.Value, check.IdB!.Value, cancellationToken));
+        }
 
-        var compatibilityCheckResults = await Task.WhenAll(tasks);
         if (compatibilityCheckResults.Any(c => c.IsSuccess == false))
         {
             return CompatibilityCheckResponse.Failure(compatibilityCheckResults.SelectMany(c => c.Issues).ToList());
