@@ -51,7 +51,7 @@ public class BuildService : IBuildService
         return build;
     }
 
-    public async Task<BuildEntity> UpdateBuildAsync(int buildId,BuildRequest dto, CancellationToken cancellationToken)
+    public async Task<BuildEntity> UpdateBuildAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
     {
         var build = await GetBuildByIdAsync(buildId, cancellationToken);
 
@@ -96,9 +96,9 @@ public class BuildService : IBuildService
         return build;
     }
 
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksAsync(BuildRequest dto, CancellationToken cancellationToken)
+    public async Task<CompatibilityCheckResponse> RunCompatibilityChecksAsync(BuildRequest dto, CancellationToken cancellationToken)
     {
-        var checks = new List<(int? IdA, int? IdB, Func<int, int,CancellationToken, Task<CompatibilityCheckResponse>> Check)> {
+        var checks = new List<(int? IdA, int? IdB, Func<int, int, CancellationToken, Task<CompatibilityCheckResponse>> Check)> {
             (dto.CpuId, dto.MotherboardId, _compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync),
             (dto.CpuId, dto.CpuCoolerId, _compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync),
             (dto.CpuId, dto.RamId, _compatibilityCheckService.CheckCpuToRamCompatibilityAsync),
@@ -114,10 +114,14 @@ public class BuildService : IBuildService
             .Where(c => c.IdA.HasValue && c.IdB.HasValue)
             .Select(c => c.Check(c.IdA!.Value, c.IdB!.Value, cancellationToken));
 
-        var results =  await Task.WhenAll(tasks);
-        return results.Where(r => !r.IsCompatible).SelectMany(r => r.Issues).ToList();
+        var compatibilityCheckResults = await Task.WhenAll(tasks);
+        if (compatibilityCheckResults.Any(c => c.IsSuccess == false))
+        {
+            return CompatibilityCheckResponse.Failure(compatibilityCheckResults.SelectMany(c => c.Issues).ToList());
+        }
+        return CompatibilityCheckResponse.Success();
     }
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForBuildUpdateAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
+    public async Task<CompatibilityCheckResponse> RunCompatibilityChecksForBuildUpdateAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
     {
         var build = await GetBuildByIdAsync(buildId, cancellationToken);
 
@@ -138,7 +142,7 @@ public class BuildService : IBuildService
         return await RunCompatibilityChecksAsync(mergedDto, cancellationToken);
     }
 
-    public async Task<List<CompatibilityIssue>> RunCompatibilityChecksForComponentUpdateAsync(int buildId, BuildComponentRequest dto, CancellationToken cancellationToken)
+    public async Task<CompatibilityCheckResponse> RunCompatibilityChecksForComponentUpdateAsync(int buildId, BuildComponentRequest dto, CancellationToken cancellationToken)
     {
         var build = await GetBuildByIdAsync(buildId, cancellationToken);
         var mergedDto = new BuildRequest
@@ -166,7 +170,8 @@ public class BuildService : IBuildService
             case BuildComponentType.PcCase: mergedDto.CaseId = dto.ComponentId; break;
             case BuildComponentType.PcMonitor: mergedDto.MonitorId = dto.ComponentId; break;
             default: throw new ArgumentException($"Invalid component type: {dto.ComponentType}");
-        };
+        }
+        ;
         return await RunCompatibilityChecksAsync(mergedDto, cancellationToken);
     }
 
@@ -222,5 +227,5 @@ public class BuildService : IBuildService
         };
     }
 
-    
+
 }
