@@ -50,6 +50,7 @@ app.MapPcMonitorEndpoints();
 app.MapHardDriveEndpoints();
 app.MapBrandEndpoints();
 app.MapBuildEndpoints();
+app.MapAiBuildEndpoints();
 
 app.Run();
 
