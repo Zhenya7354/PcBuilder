@@ -37,6 +37,7 @@ public static class ServiceExtensions
 
         builder.Services.AddOpenApi();
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddHttpClient<IAiBuildService, AiBuildSevice>();
 
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
