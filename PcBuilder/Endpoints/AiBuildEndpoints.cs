@@ -10,8 +10,9 @@ public static class AiBuildEndpoints
     {
         var group = app.MapGroup("/builds/ai");
 
-        group.MapPost("/analyze", async (
+        group.MapPost("/recommend", async (
             [FromServices] IAiBuildService service,
+            [FromServices] IBuildRecommendationService recommendationService,
             [FromBody] AiBuildRequest request,
             CancellationToken cancellationToken
             ) =>
@@ -20,8 +21,9 @@ public static class AiBuildEndpoints
                 return Results.BadRequest(new { Message = "Prompt is required" });
 
             var requirements = await service.AnalyzeAsync(request.Prompt, cancellationToken);
+            var recommendation = await recommendationService.RecommendBuildAsync(requirements, cancellationToken);
 
-            return Results.Ok(requirements);
+            return Results.Ok(recommendation);
         }).RequireAuthorization();
 
         return app;
