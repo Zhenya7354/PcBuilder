@@ -5,10 +5,10 @@ using System.Text.Json;
 
 namespace PcBuilder.Services;
 
-public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) : IAiBuildService
+public class AiBuildSevice(IGeminiAiProvider geminiAiProvider, IConfiguration configuration) : IAiBuildService
 {
-    private readonly HttpClient _httpClient = httpClient;
     private readonly IConfiguration _configuration = configuration;
+    private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
     private const string ResponseSchemaObjectType = "OBJECT";
     private const string ResponseSchemaStringType = "STRING";
     private const string ResponseSchemaBoolType = "BOOLEAN";
@@ -16,7 +16,6 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
     private const string ResponseSchemaDecimalType = "NUMBER";
     public async Task<AiBuildRequirements> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
     {
-        var model = _configuration["Gemini:Model"] ?? "gemini-3.5-flash";
 
         var requestBody = new
         {
@@ -129,10 +128,7 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
         var json = JsonSerializer.Serialize(requestBody);
         using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync(
-            $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-            content,
-            cancellationToken);
+        var response = await _geminiAiProvider.GenerateContentAsync(content, cancellationToken);
 
         var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)
