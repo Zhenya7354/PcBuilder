@@ -16,16 +16,7 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
     private const string ResponseSchemaDecimalType = "NUMBER";
     public async Task<AiBuildRequirements> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
     {
-        var apiKey = _configuration["Gemini:ApiKey"];
         var model = _configuration["Gemini:Model"] ?? "gemini-3.5-flash";
-
-        if (string.IsNullOrWhiteSpace(apiKey))
-        {
-            throw new InvalidOperationException("Gemini API key is missing.");
-        }
-
-        _httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
-        _httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
 
         var requestBody = new
         {

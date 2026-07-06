@@ -38,7 +38,19 @@ public static class ServiceExtensions
 
         builder.Services.AddOpenApi();
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddHttpClient<IAiBuildService, AiBuildSevice>();
+
+        builder.Services.AddHttpClient<IAiBuildService, AiBuildSevice>((serviceProvider ,httpClient) =>
+        {
+            var apiKey = serviceProvider.GetRequiredService<IConfiguration>()["Gemini:ApiKey"];
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new InvalidOperationException("API key is missing.");
+            }
+
+            httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
+            httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
+        });
 
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
