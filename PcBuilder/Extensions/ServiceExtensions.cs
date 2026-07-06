@@ -35,11 +35,12 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IAuthService, AuthService>(); 
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
         builder.Services.AddScoped<IBuildRecommendationService, BuildRecommendationService>();
+        builder.Services.AddScoped<IAiBuildService, AiBuildSevice>();
 
         builder.Services.AddOpenApi();
         builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddHttpClient<IAiBuildService, AiBuildSevice>((serviceProvider ,httpClient) =>
+        builder.Services.AddHttpClient<IGeminiAiProvider, GeminiAiProvider>((serviceProvider ,httpClient) =>
         {
             var apiKey = serviceProvider.GetRequiredService<IConfiguration>()["Gemini:ApiKey"];
 
