@@ -46,7 +46,6 @@ public class BuildRecommendationService(
         }
         build.MotherboardId = motherboard.Id;
 
-        // 3. RAM — must be compatible with motherboard (and check against CPU too)
         var rams = await ramRepository.GetAllRamAsync(cancellationToken);
         var compatibleRam = await FilterCompatibleAsync(rams,
             r => compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync(r.Id, motherboard.Id, cancellationToken));
@@ -58,7 +57,6 @@ public class BuildRecommendationService(
         }
         build.RamId = ram.Id;
 
-        // 4. GPU — budget + resolution target drive selection, no compatibility yet (case/PSU depend on it)
         var gpus = await gpuRepository.GetAllGpusAsync(cancellationToken);
         var gpuCandidates = FilterByTarget(gpus, requirements.TargetResolution);
         var gpu = PickBest(gpuCandidates, g => g.Price, requirements, BuildComponentType.Gpu, totalBudget);
@@ -69,7 +67,6 @@ public class BuildRecommendationService(
         }
         build.GpuId = gpu.Id;
 
-        // 5. PSU — must cover GPU's recommended wattage
         var psus = await psuRepository.GetAllPsusAsync(cancellationToken);
         var viablePsus = psus.Where(p => p.Wattage >= gpu.RecommendedPsuWattage).ToList();
         var psu = PickBest(viablePsus, p => p.Price, requirements, BuildComponentType.Psu, totalBudget);
@@ -80,7 +77,6 @@ public class BuildRecommendationService(
         }
         build.PsuId = psu.Id;
 
-        // 6. Case — must fit motherboard form factor, GPU length, PSU length
         var cases = await pcCaseRepository.GetAllCasesAsync(cancellationToken);
         var compatibleCases = await FilterCompatibleAsync(cases,
             c => compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync(c.Id, motherboard.Id, cancellationToken));
@@ -96,7 +92,6 @@ public class BuildRecommendationService(
         }
         build.CaseId = pcCase.Id;
 
-        // 7. CPU Cooler — must fit CPU socket/TDP and case height
         var coolers = await cpuCoolerRepository.GetAllCpuCoolersAsync(cancellationToken);
         var compatibleCoolers = await FilterCompatibleAsync(coolers,
             cc => compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync(cpu.Id, cc.Id, cancellationToken));
@@ -110,13 +105,11 @@ public class BuildRecommendationService(
         }
         build.CpuCoolerId = cooler.Id;
 
-        // 8. Hard drive — no hard compatibility constraints in your current check set
         var hardDrives = await hardDriveRepository.GetAllHardDrivesAsync(cancellationToken);
         var hardDrive = PickBest(hardDrives, h => h.Price, requirements, BuildComponentType.HardDrive, totalBudget);
         if (hardDrive is not null) build.HardDriveId = hardDrive.Id;
         else result.Notes.Add("No suitable hard drive found within budget; build is missing storage.");
 
-        // 9. Monitor — only if requested
         if (requirements.NeedsMonitor)
         {
             var monitors = await pcMonitorRepository.GetAllMonitorsAsync(cancellationToken);
@@ -146,8 +139,7 @@ public class BuildRecommendationService(
         return passed;
     }
     private static IEnumerable<T> FilterByTarget<T>(IEnumerable<T> candidates, string? target)
-        //refine per entity(GpuEntity has no resolution field directly;
-    // you'd map targetResolution -> minimum VramGb tier here, e.g. "4K" -> VramGb >= 12).
+        //refine in future(GpuEntity has no resolution so it should be filtered by VramGb);
       => candidates;
 
     private static T? PickBest<T>(
