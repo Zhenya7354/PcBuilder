@@ -9,6 +9,11 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly IConfiguration _configuration = configuration;
+    private const string ResponseSchemaObjectType = "OBJECT";
+    private const string ResponseSchemaStringType = "STRING";
+    private const string ResponseSchemaBoolType = "BOOLEAN";
+    private const string ResponseSchemaArrayType = "ARRAY";
+    private const string ResponseSchemaDecimalType = "NUMBER";
     public async Task<AiBuildRequirements> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
     {
         var apiKey = _configuration["Gemini:ApiKey"];
@@ -16,7 +21,7 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
 
         if (string.IsNullOrWhiteSpace(apiKey))
         {
-            throw new InvalidOperationException("Gemini API key is missing. Set Gemini:ApiKey in user secrets.");
+            throw new InvalidOperationException("Gemini API key is missing.");
         }
 
         _httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
@@ -61,58 +66,58 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
                 responseMimeType = "application/json",
                 responseSchema = new
                 {
-                    type = "OBJECT",
+                    type = ResponseSchemaObjectType,
                     properties = new
                     {
                         purpose = new
                         {
-                            type = "STRING",
+                            type = ResponseSchemaStringType,
                             description = "Main use case, for example gaming, office, streaming, programming, editing, or general use."
                         },
                         budget = new
                         {
-                            type = "NUMBER",
+                            type = ResponseSchemaDecimalType,
                             nullable = true,
                             description = "User budget as a number only, or null if no budget is provided."
                         },
                         currency = new
                         {
-                            type = "STRING",
+                            type = ResponseSchemaStringType,
                             nullable = true,
                             description = "Currency code or null if no currency is provided."
                         },
                         targetResolution = new
                         {
-                            type = "STRING",
+                            type = ResponseSchemaStringType,
                             nullable = true,
                             description = "Gaming or monitor resolution, or null if not provided."
                         },
                         priorities = new
                         {
-                            type = "ARRAY",
+                            type = ResponseSchemaArrayType,
                             items = new
                             {
-                                type = "STRING"
+                                type = ResponseSchemaStringType
                             }
                         },
                         needsMonitor = new
                         {
-                            type = "BOOLEAN"
+                            type = ResponseSchemaBoolType
                         },
                         preferredBrands = new
                         {
-                            type = "ARRAY",
+                            type = ResponseSchemaArrayType,
                             items = new
                             {
-                                type = "STRING"
+                                type = ResponseSchemaStringType
                             }
                         },
                         avoidBrands = new
                         {
-                            type = "ARRAY",
+                            type = ResponseSchemaArrayType,
                             items = new
                             {
-                                type = "STRING"
+                                type = ResponseSchemaStringType
                             }
                         }
                     },
@@ -141,7 +146,7 @@ public class AiBuildSevice(HttpClient httpClient, IConfiguration configuration) 
         var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Gemini request failed with {(int)response.StatusCode} {response.ReasonPhrase}: {responseJson}");
+            throw new HttpRequestException($"Api request failed with {(int)response.StatusCode} {response.ReasonPhrase}: {responseJson}");
         }
 
         using var document = JsonDocument.Parse(responseJson);
