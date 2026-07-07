@@ -9,11 +9,7 @@ public class AiBuildSevice(IGeminiAiProvider geminiAiProvider, IConfiguration co
 {
     private readonly IConfiguration _configuration = configuration;
     private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
-    private const string ResponseSchemaObjectType = "OBJECT";
-    private const string ResponseSchemaStringType = "STRING";
-    private const string ResponseSchemaBoolType = "BOOLEAN";
-    private const string ResponseSchemaArrayType = "ARRAY";
-    private const string ResponseSchemaDecimalType = "NUMBER";
+    
     public async Task<AiBuildRequirements> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
     {
 
@@ -56,58 +52,58 @@ public class AiBuildSevice(IGeminiAiProvider geminiAiProvider, IConfiguration co
                 responseMimeType = "application/json",
                 responseSchema = new
                 {
-                    type = ResponseSchemaObjectType,
+                    type = GeminiApiResponseSchemaTypes.Object,
                     properties = new
                     {
                         purpose = new
                         {
-                            type = ResponseSchemaStringType,
+                            type = GeminiApiResponseSchemaTypes.String,
                             description = "Main use case, for example gaming, office, streaming, programming, editing, or general use."
                         },
                         budget = new
                         {
-                            type = ResponseSchemaDecimalType,
+                            type = GeminiApiResponseSchemaTypes.Decimal,
                             nullable = true,
                             description = "User budget as a number only, or null if no budget is provided."
                         },
                         currency = new
                         {
-                            type = ResponseSchemaStringType,
+                            type = GeminiApiResponseSchemaTypes.String,
                             nullable = true,
                             description = "Currency code or null if no currency is provided."
                         },
                         targetResolution = new
                         {
-                            type = ResponseSchemaStringType,
+                            type = GeminiApiResponseSchemaTypes.String,
                             nullable = true,
                             description = "Gaming or monitor resolution, or null if not provided."
                         },
                         priorities = new
                         {
-                            type = ResponseSchemaArrayType,
+                            type = GeminiApiResponseSchemaTypes.Array,
                             items = new
                             {
-                                type = ResponseSchemaStringType
+                                type = GeminiApiResponseSchemaTypes.String
                             }
                         },
                         needsMonitor = new
                         {
-                            type = ResponseSchemaBoolType
+                            type = GeminiApiResponseSchemaTypes.Bool
                         },
                         preferredBrands = new
                         {
-                            type = ResponseSchemaArrayType,
+                            type = GeminiApiResponseSchemaTypes.Array,
                             items = new
                             {
-                                type = ResponseSchemaStringType
+                                type = GeminiApiResponseSchemaTypes.String
                             }
                         },
                         avoidBrands = new
                         {
-                            type = ResponseSchemaArrayType,
+                            type = GeminiApiResponseSchemaTypes.Array,
                             items = new
                             {
-                                type = ResponseSchemaStringType
+                                type = GeminiApiResponseSchemaTypes.String
                             }
                         }
                     },
