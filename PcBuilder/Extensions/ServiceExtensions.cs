@@ -16,6 +16,7 @@ namespace PcBuilder.Extentions;
 
 public static class ServiceExtensions
 {
+    const string ApiKeyHeaderName = "x-goog-api-key";
     public static WebApplicationBuilder AddAppServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IJwtService, JwtService>();
@@ -49,8 +50,8 @@ public static class ServiceExtensions
                 throw new InvalidOperationException("API key is missing.");
             }
 
-            httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
+            httpClient.DefaultRequestHeaders.Remove(ApiKeyHeaderName);
+            httpClient.DefaultRequestHeaders.Add(ApiKeyHeaderName, apiKey);
         });
 
         builder.Services.AddDbContext<PcDbContext>(options =>
