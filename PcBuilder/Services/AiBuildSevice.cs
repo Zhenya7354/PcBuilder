@@ -130,24 +130,21 @@ public class AiBuildSevice(IGeminiAiProvider geminiAiProvider, IConfiguration co
 
         var response = await _geminiAiProvider.GenerateContentAsync(content, cancellationToken);
 
-        var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
-        if (!response.IsSuccessStatusCode)
+        var outputText = response.Candidates
+            .FirstOrDefault()?
+            .Content
+            .Parts
+            .FirstOrDefault()?
+            .Text;
+
+        if (string.IsNullOrWhiteSpace(outputText))
         {
-            throw new HttpRequestException($"Api request failed with {(int)response.StatusCode} {response.ReasonPhrase}: {responseJson}");
+            throw new InvalidOperationException("Gemini API returned no output text.");
         }
 
-        using var document = JsonDocument.Parse(responseJson);
-
-        var outputText = document.RootElement
-            .GetProperty("candidates")[0]
-            .GetProperty("content")
-            .GetProperty("parts")[0]
-            .GetProperty("text")
-            .GetString();
-
-            return JsonSerializer.Deserialize<AiBuildRequirements>(
+        return JsonSerializer.Deserialize<AiBuildRequirements>(
                 outputText!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-        
+
     }
 }

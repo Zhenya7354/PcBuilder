@@ -1,6 +1,8 @@
-﻿namespace PcBuilder.Services.Interfaces;
+﻿using PcBuilder.Models;
+
+namespace PcBuilder.Services.Interfaces;
 
 public interface IGeminiAiProvider
 {
-    Task<HttpResponseMessage?> GenerateContentAsync(HttpContent? content, CancellationToken cancellationToken);
+    Task<GeminiContentResponse> GenerateContentAsync(HttpContent? content, CancellationToken cancellationToken);
 }
