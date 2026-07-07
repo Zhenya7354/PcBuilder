@@ -31,6 +31,7 @@ public class BuildRecommendationService(
         if(cpu is null)
         {
             result.Notes.Add("No Cpu found matching budget/brand constraints.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.CpuId = cpu.Id;
@@ -42,6 +43,7 @@ public class BuildRecommendationService(
         if (motherboard is null)
         {
             result.Notes.Add($"No motherboard compatible with {cpu.Name} within budget.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.MotherboardId = motherboard.Id;
@@ -53,6 +55,7 @@ public class BuildRecommendationService(
         if (ram is null)
         {
             result.Notes.Add($"No RAM compatible with {motherboard.Name} within budget.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.RamId = ram.Id;
@@ -63,6 +66,7 @@ public class BuildRecommendationService(
         if (gpu is null)
         {
             result.Notes.Add("No GPU found matching budget/resolution target.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.GpuId = gpu.Id;
@@ -73,6 +77,7 @@ public class BuildRecommendationService(
         if (psu is null)
         {
             result.Notes.Add($"No PSU rated for {gpu.Name}'s {gpu.RecommendedPsuWattage}W requirement within budget.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.PsuId = psu.Id;
@@ -88,6 +93,7 @@ public class BuildRecommendationService(
         if (pcCase is null)
         {
             result.Notes.Add("No case fits the selected motherboard/GPU/PSU combination within budget.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.CaseId = pcCase.Id;
@@ -101,25 +107,40 @@ public class BuildRecommendationService(
         if (cooler is null)
         {
             result.Notes.Add("No CPU cooler fits the selected CPU/case combination within budget.");
+            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
         build.CpuCoolerId = cooler.Id;
 
         var hardDrives = await hardDriveRepository.GetAllHardDrivesAsync(cancellationToken);
         var hardDrive = PickBest(hardDrives, h => h.Price, requirements, BuildComponentType.HardDrive, totalBudget);
-        if (hardDrive is not null) build.HardDriveId = hardDrive.Id;
-        else result.Notes.Add("No suitable hard drive found within budget; build is missing storage.");
+        if (hardDrive is null) 
+        {
+            result.Notes.Add("No suitable hard drive found within budget; build is missing storage.");
+            result.Status = BuildRecommendationStatus.Failed;
+            return result;
+        }
+        build.HardDriveId = hardDrive.Id;
 
         if (requirements.NeedsMonitor)
         {
             var monitors = await pcMonitorRepository.GetAllMonitorsAsync(cancellationToken);
             var monitorCandidates = FilterByTarget(monitors, requirements.TargetResolution);
             var monitor = PickBest(monitorCandidates, m => m.Price, requirements, BuildComponentType.PcMonitor, totalBudget);
-            if (monitor is not null) build.MonitorId = monitor.Id;
-            else result.Notes.Add("No suitable monitor found within budget.");
+            if (monitor is null)
+            {
+                result.Notes.Add("No suitable monitor found within budget.");
+                result.Status = BuildRecommendationStatus.Failed;
+                return result;
+            }
+            build.MonitorId = monitor.Id;
         }
 
-        result.IsCompleted = result.Notes.Count == 0;
+        if(result.Notes.Count == 0)
+        {
+            result.Status = BuildRecommendationStatus.Completed;
+        }
+
         return result;
     }
 
