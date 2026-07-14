@@ -144,114 +144,93 @@ public class AiBuildSevice(
         var build = result.Build;
         var totalBudget = requirements.Budget ?? DefaultBudget;
 
-        var cpus = await cpuRepository.GetAllCpusAsync(cancellationToken);
-        var cpu = PickBest(cpus, c => c.Price, requirements, BuildComponentType.Cpu, totalBudget);
-        if (cpu is null)
+        var cpu = await SelectComponentAsync(
+            cpuRepository.GetAllCpusAsync,
+            c => c.Price,
+            [],
+            requirements,
+            BuildComponentType.Cpu,
+            totalBudget,
+            cancellationToken);
+        if (!TryAssign(cpu, "No Cpu found matching budget/priority target.", id => build.CpuId = id, result))
         {
-            result.Notes.Add("No Cpu found matching budget/brand constraints.");
-            result.Status = BuildRecommendationStatus.Failed;
             return result;
         }
-        build.CpuId = cpu.Id;
 
-        var motherboards = await motherboardRepository.GetAllMotherboardsAsync(cancellationToken);
-        var compatibleMotherboards = await FilterCompatibleAsync(motherboards,
-            m => compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync(cpu.Id, m.Id, cancellationToken));
-        var motherboard = PickBest(compatibleMotherboards, m => m.Price, requirements, BuildComponentType.Motherboard, totalBudget);
-        if (motherboard is null)
-        {
-            result.Notes.Add($"No motherboard compatible with {cpu.Name} within budget.");
-            result.Status = BuildRecommendationStatus.Failed;
+        var motherboard = await SelectComponentAsync(
+        motherboardRepository.GetAllMotherboardsAsync,
+        m => m.Price,
+        [mb => compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync(cpu!.Id, mb.Id, cancellationToken)],
+        requirements, BuildComponentType.Motherboard, totalBudget, cancellationToken);
+        if (!TryAssign(motherboard, $"No motherboard compatible with {cpu?.Name ?? "selected Cpu"} within budget.", id => build.MotherboardId = id, result))
             return result;
-        }
-        build.MotherboardId = motherboard.Id;
 
-        var rams = await ramRepository.GetAllRamAsync(cancellationToken);
-        var compatibleRam = await FilterCompatibleAsync(rams,
-            r => compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync(r.Id, motherboard.Id, cancellationToken));
-        var ram = PickBest(compatibleRam, r => r.Price, requirements, BuildComponentType.Ram, totalBudget);
-        if (ram is null)
-        {
-            result.Notes.Add($"No RAM compatible with {motherboard.Name} within budget.");
-            result.Status = BuildRecommendationStatus.Failed;
+        var ram = await SelectComponentAsync(
+        ramRepository.GetAllRamAsync,
+        r => r.Price,
+        [r => compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync(r.Id, motherboard!.Id, cancellationToken)],
+        requirements, BuildComponentType.Ram, totalBudget, cancellationToken);
+        if (!TryAssign(ram, $"No RAM compatible with {motherboard?.Name ?? "selected Motherboard"} within budget.", id => build.RamId = id, result))
             return result;
-        }
-        build.RamId = ram.Id;
 
-        var gpus = await gpuRepository.GetAllGpusAsync(cancellationToken);
-        var gpuCandidates = FilterByTarget(gpus, requirements.TargetResolution);
-        var gpu = PickBest(gpuCandidates, g => g.Price, requirements, BuildComponentType.Gpu, totalBudget);
-        if (gpu is null)
-        {
-            result.Notes.Add("No GPU found matching budget/resolution target.");
-            result.Status = BuildRecommendationStatus.Failed;
+        var gpu = await SelectComponentAsync(
+        async ct => FilterByResolution(await gpuRepository.GetAllGpusAsync(ct), requirements.TargetResolution).ToList(),
+        g => g.Price,
+        [],
+        requirements, BuildComponentType.Gpu, totalBudget, cancellationToken);
+        if (!TryAssign(gpu, "No GPU found matching budget/resolution target.", id => build.GpuId = id, result))
             return result;
-        }
-        build.GpuId = gpu.Id;
 
-        var psus = await psuRepository.GetAllPsusAsync(cancellationToken);
-        var viablePsus = psus.Where(p => p.Wattage >= gpu.RecommendedPsuWattage).ToList();
-        var psu = PickBest(viablePsus, p => p.Price, requirements, BuildComponentType.Psu, totalBudget);
-        if (psu is null)
-        {
-            result.Notes.Add($"No PSU rated for {gpu.Name}'s {gpu.RecommendedPsuWattage}W requirement within budget.");
-            result.Status = BuildRecommendationStatus.Failed;
-            return result;
-        }
-        build.PsuId = psu.Id;
 
-        var cases = await pcCaseRepository.GetAllCasesAsync(cancellationToken);
-        var compatibleCases = await FilterCompatibleAsync(cases,
-            c => compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync(c.Id, motherboard.Id, cancellationToken));
-        compatibleCases = await FilterCompatibleAsync(compatibleCases,
-            c => compatibilityCheckService.CheckCaseToGpuCompatibilityAsync(c.Id, gpu.Id, cancellationToken));
-        compatibleCases = await FilterCompatibleAsync(compatibleCases,
-            c => compatibilityCheckService.CheckCaseToPsuCompatibilityAsync(c.Id, psu.Id, cancellationToken));
-        var pcCase = PickBest(compatibleCases, c => c.Price, requirements, BuildComponentType.PcCase, totalBudget);
-        if (pcCase is null)
-        {
-            result.Notes.Add("No case fits the selected motherboard/GPU/PSU combination within budget.");
-            result.Status = BuildRecommendationStatus.Failed;
+        var psu = await SelectComponentAsync(
+        async ct => (await psuRepository.GetAllPsusAsync(ct)).Where(p => p.Wattage >= gpu!.RecommendedPsuWattage).ToList(),
+        p => p.Price,
+        [],
+        requirements, BuildComponentType.Psu, totalBudget, cancellationToken);
+        if (!TryAssign(psu, $"No PSU rated for {gpu?.Name ?? "selected GPU"}'s {gpu?.RecommendedPsuWattage ?? 0}W requirement within budget.", id => build.PsuId = id, result))
             return result;
-        }
-        build.CaseId = pcCase.Id;
 
-        var coolers = await cpuCoolerRepository.GetAllCpuCoolersAsync(cancellationToken);
-        var compatibleCoolers = await FilterCompatibleAsync(coolers,
-            cc => compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync(cpu.Id, cc.Id, cancellationToken));
-        compatibleCoolers = await FilterCompatibleAsync(compatibleCoolers,
-            cc => compatibilityCheckService.CheckCaseToCpuCoolerCompatibilityAsync(pcCase.Id, cc.Id, cancellationToken));
-        var cooler = PickBest(compatibleCoolers, c => c.Price, requirements, BuildComponentType.CpuCooler, totalBudget);
-        if (cooler is null)
-        {
-            result.Notes.Add("No CPU cooler fits the selected CPU/case combination within budget.");
-            result.Status = BuildRecommendationStatus.Failed;
-            return result;
-        }
-        build.CpuCoolerId = cooler.Id;
 
-        var hardDrives = await hardDriveRepository.GetAllHardDrivesAsync(cancellationToken);
-        var hardDrive = PickBest(hardDrives, h => h.Price, requirements, BuildComponentType.HardDrive, totalBudget);
-        if (hardDrive is null)
-        {
-            result.Notes.Add("No suitable hard drive found within budget; build is missing storage.");
-            result.Status = BuildRecommendationStatus.Failed;
+        var pcCase = await SelectComponentAsync(
+        pcCaseRepository.GetAllCasesAsync,
+        c => c.Price,
+        [
+            c => compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync(c.Id, motherboard!.Id, cancellationToken),
+            c => compatibilityCheckService.CheckCaseToGpuCompatibilityAsync(c.Id, gpu!.Id, cancellationToken),
+            c => compatibilityCheckService.CheckCaseToPsuCompatibilityAsync(c.Id, psu!.Id, cancellationToken),
+        ],
+        requirements, BuildComponentType.PcCase, totalBudget, cancellationToken);
+        if (!TryAssign(pcCase, "No case fits the selected motherboard/GPU/PSU combination within budget.", id => build.CaseId = id, result))
             return result;
-        }
-        build.HardDriveId = hardDrive.Id;
+
+
+        var cooler = await SelectComponentAsync(
+        cpuCoolerRepository.GetAllCpuCoolersAsync,
+        c => c.Price,
+        [
+            cc => compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync(cpu!.Id, cc.Id, cancellationToken),
+            cc => compatibilityCheckService.CheckCaseToCpuCoolerCompatibilityAsync(pcCase!.Id, cc.Id, cancellationToken),
+        ],
+        requirements, BuildComponentType.CpuCooler, totalBudget, cancellationToken);
+        if (!TryAssign(cooler, "No CPU cooler fits the selected CPU/case combination within budget.", id => build.CpuCoolerId = id, result))
+            return result;
+
+
+        var hardDrive = await SelectComponentAsync(
+        hardDriveRepository.GetAllHardDrivesAsync,
+        h => h.Price,
+        [],
+        requirements, BuildComponentType.HardDrive, totalBudget, cancellationToken);
+        AssignOptional(hardDrive, "No suitable hard drive found within budget; build is missing storage.", id => build.HardDriveId = id, result);
 
         if (requirements.NeedsMonitor)
         {
-            var monitors = await pcMonitorRepository.GetAllMonitorsAsync(cancellationToken);
-            var monitorCandidates = FilterByTarget(monitors, requirements.TargetResolution);
-            var monitor = PickBest(monitorCandidates, m => m.Price, requirements, BuildComponentType.PcMonitor, totalBudget);
-            if (monitor is null)
-            {
-                result.Notes.Add("No suitable monitor found within budget.");
-                result.Status = BuildRecommendationStatus.Failed;
-                return result;
-            }
-            build.MonitorId = monitor.Id;
+            var monitor = await SelectComponentAsync(
+                async ct => FilterByResolution(await pcMonitorRepository.GetAllMonitorsAsync(ct), requirements.TargetResolution).ToList(),
+                m => m.Price,
+                [],
+                requirements, BuildComponentType.PcMonitor, totalBudget, cancellationToken);
+            AssignOptional(monitor, "No suitable monitor found within budget.", id => build.MonitorId = id, result);
         }
 
         if (result.Notes.Count == 0)
@@ -277,7 +256,7 @@ public class AiBuildSevice(
         }
         return passed;
     }
-    private static IEnumerable<T> FilterByTarget<T>(IEnumerable<T> candidates, string? target)
+    private static IEnumerable<T> FilterByResolution<T>(IEnumerable<T> candidates, string? target)
       //refine in future(GpuEntity has no resolution so it should be filtered by VramGb);
       => candidates;
 
@@ -313,5 +292,52 @@ public class AiBuildSevice(
                 return preffered;
         }
         return pool.FirstOrDefault();
+    }
+
+    private async Task<T?> SelectComponentAsync<T>(
+        Func<CancellationToken, Task<List<T>>> pullCandidates,
+        Func<T, decimal?> priceSelector,
+        List<Func<T, Task<CompatibilityCheckResponse>>> compatibilityChecks,
+        AiBuildRequirements requirements,
+        BuildComponentType componentType,
+        decimal totalBudget,
+        CancellationToken cancellationToken) where T : Component
+    {
+        var candidates = await pullCandidates(cancellationToken);
+
+        foreach (var check in compatibilityChecks)
+        {
+            candidates = await FilterCompatibleAsync(candidates, check);
+        }
+        return PickBest(candidates, priceSelector, requirements, componentType, totalBudget);
+    }
+
+    private static bool TryAssign<T>(T? component,
+        string failureMessage,
+        Action<int> assign,
+        BuildRecommendationResult result) where T : Component
+    {
+        if (component is null)
+        {
+            result.Notes.Add(failureMessage);
+            result.Status = BuildRecommendationStatus.Failed;
+            return false;
+        }
+        assign(component.Id);
+        return true;
+    }
+    private static void AssignOptional<T>(T? component,
+        string noteMessage,
+        Action<int> assign,
+        BuildRecommendationResult result) where T : Component
+    {
+        if (component is null)
+        {
+            result.Notes.Add(noteMessage);
+        }
+        else
+        {
+            assign(component.Id);
+        }
     }
 }
