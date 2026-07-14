@@ -35,7 +35,6 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IAdminService, AdminService>();
         builder.Services.AddScoped<IAuthService, AuthService>(); 
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
-        builder.Services.AddScoped<IBuildRecommendationService, BuildRecommendationService>();
         builder.Services.AddScoped<IAiBuildService, AiBuildSevice>();
 
         builder.Services.AddOpenApi();
