@@ -66,7 +66,7 @@ public static class BuildEndpoints
             return Results.BadRequest(new { Message = "Build has compatibility issues", Issues = compatibilityCheckResult.Issues });
         }).RequireAuthorization();
 
-        group.MapDelete("/{id}/components", async ([FromServices] IBuildService service, int id, [FromBody] BuildComponentType componentType, CancellationToken cancellationToken) =>
+        group.MapDelete("/{id}/components/{componentType}", async ([FromServices] IBuildService service, int id, BuildComponentType componentType, CancellationToken cancellationToken) =>
         {
             var build = await service.RemoveComponentAsync(id, componentType, cancellationToken);
             return Results.Ok(build);

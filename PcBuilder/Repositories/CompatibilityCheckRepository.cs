@@ -12,7 +12,7 @@ public class CompatibilityCheckRepository(PcDbContext context) : ICompatibilityC
 
     public async Task<PcCaseEntity?> GetCaseByIdAsync(int caseId, CancellationToken cancellationToken)
     {
-        return await _context.PcCase.AsNoTracking().FirstOrDefaultAsync(c => c.Id == caseId, cancellationToken);
+        return await _context.PcCase.AsNoTracking().FirstOrDefaultAsync(c => c.Id == caseId, cancellationToken); 
     }
 
     public async Task<CpuEntity?> GetCpuByIdAsync(int cpuId, CancellationToken cancellationToken)
