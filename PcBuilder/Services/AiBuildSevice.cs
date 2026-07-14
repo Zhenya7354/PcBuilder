@@ -34,24 +34,13 @@ public class AiBuildSevice(
             {
                 new
                 {
-                    role = "user",
+                    role = ApiRequestBodyVariables.ContentsRole,
                     parts = new[]
                     {
                         new
                         {
                             text = $$"""
-                                Extract PC build requirements from the user prompt.
-                                Return only JSON with these exact fields:
-                                {
-                                  "purpose": "gaming | office | streaming | programming | editing | general use | unknown",
-                                  "budget": number or null,
-                                  "currency": "currency code or null",
-                                  "targetResolution": "1080p | 1440p | 4K | null",
-                                  "priorities": ["important preferences like quiet, wifi, rgb, low price"],
-                                  "needsMonitor": true or false,
-                                  "preferredBrands": ["brand names"],
-                                  "avoidBrands": ["brand names"]
-                                }
+                                {{ApiRequestBodyVariables.StructuredOutputInstructions}}
 
                                 User prompt:
                                 {{prompt}}
@@ -62,82 +51,72 @@ public class AiBuildSevice(
             },
             generationConfig = new
             {
-                temperature = 0,
-                maxOutputTokens = 1024,
-                responseMimeType = "application/json",
+                temperature = ApiRequestBodyVariables.GenerationConfigTemperature,
+                maxOutputTokens = ApiRequestBodyVariables.GenerationConfigMaxOutputTokens,
+                responseMimeType = ApiRequestBodyVariables.GenerationConfigResponseMimeType,
                 responseSchema = new
                 {
-                    type = GeminiApiResponseSchemaTypes.Object,
+                    type = ApiRequestBodyVariables.Object,
                     properties = new
                     {
                         purpose = new
                         {
-                            type = GeminiApiResponseSchemaTypes.String,
-                            description = "Main use case, for example gaming, office, streaming, programming, editing, or general use."
+                            type = ApiRequestBodyVariables.String,
+                            description = ApiRequestBodyVariables.PurposeDescription
                         },
                         budget = new
                         {
-                            type = GeminiApiResponseSchemaTypes.Decimal,
+                            type = ApiRequestBodyVariables.Decimal,
                             nullable = true,
-                            description = "User budget as a number only, or null if no budget is provided."
+                            description = ApiRequestBodyVariables.BudgetDescription
                         },
                         currency = new
                         {
-                            type = GeminiApiResponseSchemaTypes.String,
+                            type = ApiRequestBodyVariables.String,
                             nullable = true,
-                            description = "Currency code or null if no currency is provided."
+                            description = ApiRequestBodyVariables.CurrencyDescription
                         },
                         targetResolution = new
                         {
-                            type = GeminiApiResponseSchemaTypes.String,
+                            type = ApiRequestBodyVariables.String,
                             nullable = true,
-                            description = "Gaming or monitor resolution, or null if not provided."
+                            description = ApiRequestBodyVariables.TargetResolutionDescription
                         },
                         priorities = new
                         {
-                            type = GeminiApiResponseSchemaTypes.Array,
+                            type = ApiRequestBodyVariables.Array,
                             items = new
                             {
-                                type = GeminiApiResponseSchemaTypes.String
+                                type = ApiRequestBodyVariables.String
                             }
                         },
                         needsMonitor = new
                         {
-                            type = GeminiApiResponseSchemaTypes.Bool
+                            type = ApiRequestBodyVariables.Bool
                         },
                         preferredBrands = new
                         {
-                            type = GeminiApiResponseSchemaTypes.Array,
+                            type = ApiRequestBodyVariables.Array,
                             items = new
                             {
-                                type = GeminiApiResponseSchemaTypes.String
+                                type = ApiRequestBodyVariables.String
                             }
                         },
                         avoidBrands = new
                         {
-                            type = GeminiApiResponseSchemaTypes.Array,
+                            type = ApiRequestBodyVariables.Array,
                             items = new
                             {
-                                type = GeminiApiResponseSchemaTypes.String
+                                type = ApiRequestBodyVariables.String
                             }
                         }
                     },
-                    required = new[]
-                    {
-                        "purpose",
-                        "budget",
-                        "currency",
-                        "targetResolution",
-                        "priorities",
-                        "needsMonitor",
-                        "preferredBrands",
-                        "avoidBrands"
-                    }
+                    required = ApiRequestBodyVariables.RequiredFields
                 }
             }
         };
         var json = JsonSerializer.Serialize(requestBody);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        using var content = new StringContent(json, Encoding.UTF8, ApiRequestBodyVariables.GenerationConfigResponseMimeType);
 
         var response = await _geminiAiProvider.GenerateContentAsync(content, cancellationToken);
 
