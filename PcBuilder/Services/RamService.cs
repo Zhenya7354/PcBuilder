@@ -6,7 +6,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class RamService(IRamRepository ramRepository) : IRamService
+public class RamService(IRamRepository ramRepository, IComponentCatalogCache cache) : IRamService
 {
     private readonly IRamRepository _ramRepository = ramRepository;
 
@@ -49,6 +49,7 @@ public class RamService(IRamRepository ramRepository) : IRamService
 
         await _ramRepository.AddRamAsync(ram, cancellationToken);
         await _ramRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.RamsKey);
         return ram;
     }
 
@@ -76,6 +77,8 @@ public class RamService(IRamRepository ramRepository) : IRamService
         if (dto.Price.HasValue) ram.Price = dto.Price.Value;
 
         await _ramRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.RamsKey);
+
         return ram;
     }
 
@@ -86,6 +89,7 @@ public class RamService(IRamRepository ramRepository) : IRamService
 
         await _ramRepository.DeleteRamAsync(ram, cancellationToken);
         await _ramRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.RamsKey);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

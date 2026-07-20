@@ -5,7 +5,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class GpuService(IGpuRepository gpuRepository) : IGpuService
+public class GpuService(IGpuRepository gpuRepository, IComponentCatalogCache cache) : IGpuService
 {
     private readonly IGpuRepository _gpuRepository = gpuRepository;
 
@@ -53,7 +53,7 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
         };
         await _gpuRepository.AddGpuAsync(gpu, cancellationToken);
         await _gpuRepository.SaveChangesAsync(cancellationToken);
-
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
         return gpu;
     }
     public async Task<GpuEntity> UpdateGpuAsync(int id, GpuUpdateRequest dto, CancellationToken cancellationToken)
@@ -87,6 +87,8 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
         if (dto.Price.HasValue) gpu.Price = dto.Price.Value;
 
         await _gpuRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
+
         return gpu;
     }
 
@@ -96,6 +98,7 @@ public class GpuService(IGpuRepository gpuRepository) : IGpuService
             throw new KeyNotFoundException("Gpu not found");
         await _gpuRepository.DeleteGpuAsync(gpu, cancellationToken);
         await _gpuRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
     }
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {

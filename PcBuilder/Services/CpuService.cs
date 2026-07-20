@@ -5,7 +5,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class CpuService(ICpuRepository cpuRepository) : ICpuService
+public class CpuService(ICpuRepository cpuRepository, IComponentCatalogCache cache) : ICpuService
 {
     private readonly ICpuRepository _cpuRepository = cpuRepository;
     public async Task<List<CpuEntity>> GetAllCpuAsync(CancellationToken cancellationToken)
@@ -54,6 +54,7 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
 
         await _cpuRepository.AddCpuAsync(cpu, cancellationToken);
         await _cpuRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
         return cpu;
     }
     public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest dto, CancellationToken cancellationToken)
@@ -90,6 +91,7 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
         if (dto.Price.HasValue) cpu.Price = dto.Price.Value;
 
         await _cpuRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
         return cpu;
     }
     public async Task DeleteCpuAsync(int id, CancellationToken cancellationToken)
@@ -98,6 +100,7 @@ public class CpuService(ICpuRepository cpuRepository) : ICpuService
             throw new KeyNotFoundException("Cpu not found");
         await _cpuRepository.DeleteCpuAsync(cpu, cancellationToken);
         await _cpuRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.GpusKey);
     }
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
     {

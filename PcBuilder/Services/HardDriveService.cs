@@ -5,7 +5,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardDriveService
+public class HardDriveService(IHardDriveRepository hardDriveRepository, IComponentCatalogCache cache) : IHardDriveService
 {
     private readonly IHardDriveRepository _hardDriveRepository = hardDriveRepository;
 
@@ -49,6 +49,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
 
         await _hardDriveRepository.AddHardDriveAsync(hardDrive, cancellationToken);
         await _hardDriveRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.HardDrivesKey);
         return hardDrive;
     }
 
@@ -77,6 +78,8 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
         if (dto.Price.HasValue) hardDrive.Price = dto.Price.Value;
 
         await _hardDriveRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.HardDrivesKey);
+
         return hardDrive;
     }
 
@@ -86,6 +89,7 @@ public class HardDriveService(IHardDriveRepository hardDriveRepository) : IHardD
             throw new KeyNotFoundException($"Hard drive with ID {id} not found.");
         await _hardDriveRepository.DeleteHardDriveAsync(hardDrive, cancellationToken);
         await _hardDriveRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.HardDrivesKey);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

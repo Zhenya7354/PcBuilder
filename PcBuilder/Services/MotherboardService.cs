@@ -6,7 +6,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class MotherboardService(IMotherboardRepository motherboardRepository) : IMotherboardService
+public class MotherboardService(IMotherboardRepository motherboardRepository, IComponentCatalogCache cache) : IMotherboardService
 {
     private readonly IMotherboardRepository _motherboardRepository = motherboardRepository;
 
@@ -63,6 +63,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
 
         await _motherboardRepository.AddMotherboardAsync(motherboard, cancellationToken);
         await _motherboardRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MotherboardsKey);
         return motherboard;
     }
 
@@ -104,6 +105,8 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
         if (dto.Price.HasValue) motherboard.Price = dto.Price.Value;
 
         await _motherboardRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MotherboardsKey);
+
         return motherboard;
     }
 
@@ -114,6 +117,7 @@ public class MotherboardService(IMotherboardRepository motherboardRepository) : 
 
         await _motherboardRepository.DeleteMotherboardAsync(motherboard, cancellationToken);
         await _motherboardRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MotherboardsKey);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

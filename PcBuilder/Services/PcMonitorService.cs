@@ -6,7 +6,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMonitorService
+public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, IComponentCatalogCache cache) : IPcMonitorService
 {
     private readonly IPcMonitorRepository _pcMonitorRepository = pcMonitorRepository;
 
@@ -59,6 +59,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
 
         await _pcMonitorRepository.AddMonitorAsync(monitor, cancellationToken);
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MonitorsKey);
         return monitor;
     }
 
@@ -97,6 +98,8 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
         if (dto.Price.HasValue) monitor.Price = dto.Price.Value;
 
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MonitorsKey);
+
         return monitor;
     }
 
@@ -107,6 +110,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository) : IPcMon
 
         await _pcMonitorRepository.DeleteMonitorAsync(monitor, cancellationToken);
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.MonitorsKey);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

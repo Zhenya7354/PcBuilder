@@ -6,7 +6,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
+public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalogCache cache) : IPcCaseService
 {
     private readonly IPcCaseRepository _pcCaseRepository = pcCaseRepository;
 
@@ -54,6 +54,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
 
         await _pcCaseRepository.AddCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
         return pcCase;
     }
 
@@ -87,6 +88,8 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
         if (dto.Price.HasValue) pcCase.Price = dto.Price.Value;
 
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
+
         return pcCase;
     }
 
@@ -97,6 +100,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository) : IPcCaseService
 
         await _pcCaseRepository.DeleteCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
+        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
