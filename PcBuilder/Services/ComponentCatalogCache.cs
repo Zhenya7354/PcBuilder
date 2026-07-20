@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using PcBuilder.Configurations;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
 using PcBuilder.Models;
@@ -14,7 +16,8 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class ComponentCatalogCache(IConfiguration configuration,
+public class ComponentCatalogCache(
+    IOptions<CacheOptions> options,
     IMemoryCache cache,
     ICpuRepository cpuRepository,
     IGpuRepository gpuRepository,
@@ -26,15 +29,15 @@ public class ComponentCatalogCache(IConfiguration configuration,
     IPcCaseRepository pcCaseRepository,
     IPcMonitorRepository pcMonitorRepository) : IComponentCatalogCache
 {
-    private readonly IConfiguration _configuration = configuration;
+    private readonly IOptions<CacheOptions> _options = options;
     private readonly IMemoryCache _cache = cache;
 
     private async Task<List<T>> GetOrLoadAsync<T>(string cacheKey, Func<CancellationToken, Task<List<T>>> loadFunction, CancellationToken cancellationToken)
     {
         var result = await _cache.GetOrCreateAsync(cacheKey, async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_configuration.GetValue<int>("ComponentCatalogCache:AbsoluteExpirationInMinutes"));
-            entry.SlidingExpiration = TimeSpan.FromMinutes(_configuration.GetValue<int>("ComponentCatalogCache:SlidingExpirationInMinutes"));
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_options.Value?.CacheAbsoluteExpirationInMinutes ?? 0);
+            entry.SlidingExpiration = TimeSpan.FromMinutes(_options.Value?.CacheSlidingExpirationInMinutes ?? 0);
             entry.Size = 1;
 
             var data = await loadFunction(cancellationToken);
