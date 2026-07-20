@@ -38,7 +38,9 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IAiBuildService, AiBuildSevice>();
         builder.Services.AddScoped<IComponentCatalogCache, ComponentCatalogCache>();
 
-        builder.Services.AddMemoryCache();
+        builder.Services.AddMemoryCache(options =>
+            options.SizeLimit = builder.Configuration.GetValue<int>("ComponentCatalogCache:SizeLimit")
+            );
 
         builder.Services.AddOpenApi();
         builder.Services.AddHttpContextAccessor();
