@@ -1,4 +1,6 @@
-﻿using PcBuilder.Enums;
+﻿using Microsoft.Extensions.Options;
+using PcBuilder.Configurations;
+using PcBuilder.Enums;
 using PcBuilder.Models;
 using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services.Interfaces;
@@ -8,12 +10,10 @@ using System.Text.Json;
 namespace PcBuilder.Services;
 
 public class AiBuildSevice(
-    IGeminiAiProvider geminiAiProvider,
-    IConfiguration configuration,
+    IGeminiAiProvider geminiAiProvider, 
     IComponentCatalogCache componentCatalogCache,
     ICompatibilityCheckService compatibilityCheckService) : IAiBuildService
 {
-    private readonly IConfiguration _configuration = configuration;
     private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
     private const decimal DefaultBudget = 1500m;
 
