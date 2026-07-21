@@ -39,7 +39,7 @@ public class ComponentCatalogCache(
         {
             entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_options.Value?.AbsoluteExpirationInMinutes ?? 0);
             entry.SlidingExpiration = TimeSpan.FromMinutes(_options.Value?.SlidingExpirationInMinutes ?? 0);
-            entry.Size = 1;
+            entry.Size = _options.Value?.EntrySize ?? 1;
 
             var data = await loadFunction(cancellationToken);
 
