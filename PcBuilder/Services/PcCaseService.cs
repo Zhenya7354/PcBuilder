@@ -1,4 +1,5 @@
 using PcBuilder.Entities;
+using PcBuilder.Enums;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
@@ -54,7 +55,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
 
         await _pcCaseRepository.AddCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
+        cache.InvalidateCache(BuildComponentType.PcCase);
         return pcCase;
     }
 
@@ -88,7 +89,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
         if (dto.Price.HasValue) pcCase.Price = dto.Price.Value;
 
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
+        cache.InvalidateCache(BuildComponentType.PcCase);
 
         return pcCase;
     }
@@ -100,7 +101,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
 
         await _pcCaseRepository.DeleteCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PcCasesKey);
+        cache.InvalidateCache(BuildComponentType.PcCase);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

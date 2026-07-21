@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using PcBuilder.Configurations;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
+using PcBuilder.Mappers;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
@@ -82,8 +83,9 @@ public class ComponentCatalogCache(
         }
     }
 
-    public void InvalidateCache(string cacheKey)
+    public void InvalidateCache(BuildComponentType componentType)
     {
+        var cacheKey = CacheKeyToBuildTypeMapper.GetCacheKeyForBuildComponentType(componentType);
         _cache.Remove(cacheKey);
     }
 }

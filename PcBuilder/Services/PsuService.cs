@@ -1,4 +1,5 @@
 using PcBuilder.Entities;
+using PcBuilder.Enums;
 using PcBuilder.Models;
 using PcBuilder.Repositories;
 using PcBuilder.Repositories.Interfaces;
@@ -49,7 +50,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
 
         await _psuRepository.AddPsuAsync(psu, cancellationToken);
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PsusKeys);
+        cache.InvalidateCache(BuildComponentType.Psu);
         return psu;
     }
 
@@ -78,7 +79,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
         if (dto.Price.HasValue) psu.Price = dto.Price.Value;
 
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PsusKeys);
+        cache.InvalidateCache(BuildComponentType.Psu);
 
         return psu;
     }
@@ -90,7 +91,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
 
         await _psuRepository.DeletePsuAsync(psu, cancellationToken);
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.PsusKeys);
+        cache.InvalidateCache(BuildComponentType.Psu);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

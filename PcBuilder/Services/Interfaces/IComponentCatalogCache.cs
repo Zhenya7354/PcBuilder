@@ -16,6 +16,6 @@ public interface IComponentCatalogCache
     Task<List<PcMonitorEntity>> GetAllMonitorsAsync(CancellationToken cancellationToken);
     Task<List<CpuCoolerEntity>> GetAllCpuCoolersAsync(CancellationToken cancellationToken);
 
-    void InvalidateCache(string cacheKey);
+    void InvalidateCache(BuildComponentType componentType);
     void InvalidateAllCaches();
 }

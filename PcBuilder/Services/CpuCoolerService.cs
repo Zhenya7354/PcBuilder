@@ -2,6 +2,7 @@ using PcBuilder.Models;
 using PcBuilder.Entities;
 using PcBuilder.Repositories.Interfaces;
 using PcBuilder.Services.Interfaces;
+using PcBuilder.Enums;
 
 namespace PcBuilder.Services;
 
@@ -47,7 +48,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository, ICompone
 
         await _cpuCoolerRepository.AddCpuCoolerAsync(cpuCooler, cancellationToken);
         await _cpuCoolerRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.CpuCoolersKey);
+        cache.InvalidateCache(BuildComponentType.CpuCooler);
         return cpuCooler;
     }
 
@@ -74,7 +75,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository, ICompone
         if (dto.Price.HasValue) cpuCooler.Price = dto.Price.Value;
 
         await _cpuCoolerRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.CpuCoolersKey);
+        cache.InvalidateCache(BuildComponentType.CpuCooler);
         return cpuCooler;
     }
 
@@ -85,7 +86,7 @@ public class CpuCoolerService(ICpuCoolerRepository cpuCoolerRepository, ICompone
 
         await _cpuCoolerRepository.DeleteCpuCoolerAsync(cpuCooler, cancellationToken);
         await _cpuCoolerRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(ComponentCacheKeys.CpuCoolersKey);
+        cache.InvalidateCache(BuildComponentType.CpuCooler);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
