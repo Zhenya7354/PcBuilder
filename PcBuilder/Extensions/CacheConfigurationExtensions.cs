@@ -9,6 +9,9 @@ public static class CacheConfigurationExtensions
         builder.Services
             .Configure<CacheOptions>(builder.Configuration.GetSection("ComponentCatalogCache"));
 
+        builder.Services.AddMemoryCache(options =>
+            options.SizeLimit = builder.Configuration.GetValue<int>("ComponentCatalogCache:SizeLimit"));
+
         return builder;
     }
 }
