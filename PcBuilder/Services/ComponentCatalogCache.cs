@@ -75,7 +75,7 @@ public class ComponentCatalogCache(
     public Task<List<HardDriveEntity>> GetAllHardDrivesAsync(CancellationToken cancellationToken) =>
         GetOrLoadAsync(ComponentCacheKeys.HardDrivesKey, hardDriveRepository.GetAllHardDrivesAsync, cancellationToken);
 
-    public void InvalidateAllCaches()
+    public void InvalidateComponentCatalog()
     {
         foreach(var key in ComponentCacheKeys.All)
         {

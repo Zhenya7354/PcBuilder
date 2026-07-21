@@ -29,7 +29,6 @@ public class BrandService(IBrandRepository brandRepository, IComponentCatalogCac
         var brand = new BrandEntity { Name = dto.Name };
         await _brandRepository.AddBrandAsync(brand, cancellationToken);
         await _brandRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateAllCaches();
         return brand;
     }
 
@@ -43,7 +42,7 @@ public class BrandService(IBrandRepository brandRepository, IComponentCatalogCac
         if (!string.IsNullOrWhiteSpace(dto.Name)) brand.Name = dto.Name;
 
         await _brandRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateAllCaches();
+        cache.InvalidateComponentCatalog();
         return brand;
     }
 
@@ -54,6 +53,6 @@ public class BrandService(IBrandRepository brandRepository, IComponentCatalogCac
 
         await _brandRepository.DeleteBrandAsync(brand, cancellationToken);
         await _brandRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateAllCaches();
+        cache.InvalidateComponentCatalog();
     }
 }
