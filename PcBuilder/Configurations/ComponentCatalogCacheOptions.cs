@@ -2,7 +2,7 @@
 
 public class CacheOptions
 {
-    public int CacheAbsoluteExpirationInMinutes { get; set; } = 30;
-    public int CacheSlidingExpirationInMinutes { get; set; } = 10;
-    public int CacheSize { get; set; } = 1;
+    public int AbsoluteExpirationInMinutes { get; set; } = 30;
+    public int SlidingExpirationInMinutes { get; set; } = 10;
+    public int SizeLimit { get; set; } = 1;
 }

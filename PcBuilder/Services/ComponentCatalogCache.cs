@@ -37,8 +37,8 @@ public class ComponentCatalogCache(
     {
         var result = await _cache.GetOrCreateAsync(cacheKey, async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_options.Value?.CacheAbsoluteExpirationInMinutes ?? 0);
-            entry.SlidingExpiration = TimeSpan.FromMinutes(_options.Value?.CacheSlidingExpirationInMinutes ?? 0);
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_options.Value?.AbsoluteExpirationInMinutes ?? 0);
+            entry.SlidingExpiration = TimeSpan.FromMinutes(_options.Value?.SlidingExpirationInMinutes ?? 0);
             entry.Size = 1;
 
             var data = await loadFunction(cancellationToken);
