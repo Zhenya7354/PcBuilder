@@ -7,7 +7,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cache) : IPsuService
+public class PsuService(IPsuRepository psuRepository, IComponentCatalogCacheInvalidator invalidator) : IPsuService
 {
     private readonly IPsuRepository _psuRepository = psuRepository;
 
@@ -50,7 +50,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
 
         await _psuRepository.AddPsuAsync(psu, cancellationToken);
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Psu);
+        invalidator.InvalidateCache(BuildComponentType.Psu);
         return psu;
     }
 
@@ -79,7 +79,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
         if (dto.Price.HasValue) psu.Price = dto.Price.Value;
 
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Psu);
+        invalidator.InvalidateCache(BuildComponentType.Psu);
 
         return psu;
     }
@@ -91,7 +91,7 @@ public class PsuService(IPsuRepository psuRepository, IComponentCatalogCache cac
 
         await _psuRepository.DeletePsuAsync(psu, cancellationToken);
         await _psuRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Psu);
+        invalidator.InvalidateCache(BuildComponentType.Psu);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

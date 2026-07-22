@@ -7,7 +7,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class RamService(IRamRepository ramRepository, IComponentCatalogCache cache) : IRamService
+public class RamService(IRamRepository ramRepository, IComponentCatalogCacheInvalidator invalidator) : IRamService
 {
     private readonly IRamRepository _ramRepository = ramRepository;
 
@@ -50,7 +50,7 @@ public class RamService(IRamRepository ramRepository, IComponentCatalogCache cac
 
         await _ramRepository.AddRamAsync(ram, cancellationToken);
         await _ramRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Ram);
+        invalidator.InvalidateCache(BuildComponentType.Ram);
         return ram;
     }
 
@@ -78,7 +78,7 @@ public class RamService(IRamRepository ramRepository, IComponentCatalogCache cac
         if (dto.Price.HasValue) ram.Price = dto.Price.Value;
 
         await _ramRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Ram);
+        invalidator.InvalidateCache(BuildComponentType.Ram);
 
         return ram;
     }
@@ -90,7 +90,7 @@ public class RamService(IRamRepository ramRepository, IComponentCatalogCache cac
 
         await _ramRepository.DeleteRamAsync(ram, cancellationToken);
         await _ramRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.Ram);
+        invalidator.InvalidateCache(BuildComponentType.Ram);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

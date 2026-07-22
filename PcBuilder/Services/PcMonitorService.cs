@@ -7,7 +7,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, IComponentCatalogCache cache) : IPcMonitorService
+public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, IComponentCatalogCacheInvalidator invalidator) : IPcMonitorService
 {
     private readonly IPcMonitorRepository _pcMonitorRepository = pcMonitorRepository;
 
@@ -60,7 +60,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, ICompone
 
         await _pcMonitorRepository.AddMonitorAsync(monitor, cancellationToken);
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcMonitor);
+        invalidator.InvalidateCache(BuildComponentType.PcMonitor);
         return monitor;
     }
 
@@ -99,7 +99,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, ICompone
         if (dto.Price.HasValue) monitor.Price = dto.Price.Value;
 
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcMonitor);
+        invalidator.InvalidateCache(BuildComponentType.PcMonitor);
 
         return monitor;
     }
@@ -111,7 +111,7 @@ public class PcMonitorService(IPcMonitorRepository pcMonitorRepository, ICompone
 
         await _pcMonitorRepository.DeleteMonitorAsync(monitor, cancellationToken);
         await _pcMonitorRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcMonitor);
+        invalidator.InvalidateCache(BuildComponentType.PcMonitor);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)

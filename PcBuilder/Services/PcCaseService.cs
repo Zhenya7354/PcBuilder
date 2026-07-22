@@ -7,7 +7,7 @@ using PcBuilder.Services.Interfaces;
 
 namespace PcBuilder.Services;
 
-public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalogCache cache) : IPcCaseService
+public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalogCacheInvalidator invalidator) : IPcCaseService
 {
     private readonly IPcCaseRepository _pcCaseRepository = pcCaseRepository;
 
@@ -55,7 +55,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
 
         await _pcCaseRepository.AddCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcCase);
+        invalidator.InvalidateCache(BuildComponentType.PcCase);
         return pcCase;
     }
 
@@ -89,7 +89,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
         if (dto.Price.HasValue) pcCase.Price = dto.Price.Value;
 
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcCase);
+        invalidator.InvalidateCache(BuildComponentType.PcCase);
 
         return pcCase;
     }
@@ -101,7 +101,7 @@ public class PcCaseService(IPcCaseRepository pcCaseRepository, IComponentCatalog
 
         await _pcCaseRepository.DeleteCaseAsync(pcCase, cancellationToken);
         await _pcCaseRepository.SaveChangesAsync(cancellationToken);
-        cache.InvalidateCache(BuildComponentType.PcCase);
+        invalidator.InvalidateCache(BuildComponentType.PcCase);
     }
 
     private async Task EnsureBrandExistsAsync(int brandId, CancellationToken cancellationToken)
