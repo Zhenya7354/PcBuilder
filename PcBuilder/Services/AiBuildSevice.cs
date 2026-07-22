@@ -11,7 +11,15 @@ namespace PcBuilder.Services;
 
 public class AiBuildSevice(
     IGeminiAiProvider geminiAiProvider, 
-    IComponentCatalogCache componentCatalogCache,
+    ICpuRepository cpuRepository,
+    IMotherboardRepository motherboardRepository,
+    IRamRepository ramRepository,
+    IGpuRepository gpuRepository,
+    IPsuRepository psuRepository,
+    ICpuCoolerRepository cpuCoolerRepository,
+    IPcCaseRepository pcCaseRepository,
+    IHardDriveRepository hardDriveRepository,
+    IPcMonitorRepository pcMonitorRepository,
     ICompatibilityCheckService compatibilityCheckService) : IAiBuildService
 {
     private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
@@ -137,7 +145,7 @@ public class AiBuildSevice(
         var totalBudget = requirements.Budget ?? DefaultBudget;
 
         var cpu = await SelectComponentAsync(
-            componentCatalogCache.GetAllCpusAsync,
+            cpuRepository.GetAllCpusAsync,
             c => c.Price,
             [],
             requirements,
@@ -150,7 +158,7 @@ public class AiBuildSevice(
         }
 
         var motherboard = await SelectComponentAsync(
-        componentCatalogCache.GetAllMotherboardsAsync,
+        motherboardRepository.GetAllMotherboardsAsync,
         m => m.Price,
         [mb => compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync(cpu!.Id, mb.Id, cancellationToken)],
         requirements, BuildComponentType.Motherboard, totalBudget, cancellationToken);
@@ -158,7 +166,7 @@ public class AiBuildSevice(
             return result;
 
         var ram = await SelectComponentAsync(
-        componentCatalogCache.GetAllRamsAsync,
+        ramRepository.GetAllRamAsync,
         r => r.Price,
         [r => compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync(r.Id, motherboard!.Id, cancellationToken)],
         requirements, BuildComponentType.Ram, totalBudget, cancellationToken);
@@ -166,7 +174,7 @@ public class AiBuildSevice(
             return result;
 
         var gpu = await SelectComponentAsync(
-        async ct => FilterByResolution(await componentCatalogCache.GetAllGpusAsync(ct), requirements.TargetResolution).ToList(),
+        async ct => FilterByResolution(await gpuRepository.GetAllGpusAsync(ct), requirements.TargetResolution).ToList(),
         g => g.Price,
         [],
         requirements, BuildComponentType.Gpu, totalBudget, cancellationToken);
@@ -175,7 +183,7 @@ public class AiBuildSevice(
 
 
         var psu = await SelectComponentAsync(
-        async ct => (await componentCatalogCache.GetAllPsusAsync(ct)).Where(p => p.Wattage >= gpu!.RecommendedPsuWattage).ToList(),
+        async ct => (await psuRepository.GetAllPsusAsync(ct)).Where(p => p.Wattage >= gpu!.RecommendedPsuWattage).ToList(),
         p => p.Price,
         [],
         requirements, BuildComponentType.Psu, totalBudget, cancellationToken);
@@ -184,7 +192,7 @@ public class AiBuildSevice(
 
 
         var pcCase = await SelectComponentAsync(
-        componentCatalogCache.GetAllCasesAsync,
+        pcCaseRepository.GetAllCasesAsync,
         c => c.Price,
         [
             c => compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync(c.Id, motherboard!.Id, cancellationToken),
@@ -197,7 +205,7 @@ public class AiBuildSevice(
 
 
         var cooler = await SelectComponentAsync(
-        componentCatalogCache.GetAllCpuCoolersAsync,
+        cpuCoolerRepository.GetAllCpuCoolersAsync,
         c => c.Price,
         [
             cc => compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync(cpu!.Id, cc.Id, cancellationToken),
@@ -209,7 +217,7 @@ public class AiBuildSevice(
 
 
         var hardDrive = await SelectComponentAsync(
-        componentCatalogCache.GetAllHardDrivesAsync,
+        hardDriveRepository.GetAllHardDrivesAsync,
         h => h.Price,
         [],
         requirements, BuildComponentType.HardDrive, totalBudget, cancellationToken);
@@ -218,7 +226,7 @@ public class AiBuildSevice(
         if (requirements.NeedsMonitor)
         {
             var monitor = await SelectComponentAsync(
-                async ct => FilterByResolution(await componentCatalogCache.GetAllMonitorsAsync(ct), requirements.TargetResolution).ToList(),
+                async ct => FilterByResolution(await pcMonitorRepository.GetAllMonitorsAsync(ct), requirements.TargetResolution).ToList(),
                 m => m.Price,
                 [],
                 requirements, BuildComponentType.PcMonitor, totalBudget, cancellationToken);
