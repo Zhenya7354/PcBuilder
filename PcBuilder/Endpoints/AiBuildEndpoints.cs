@@ -19,8 +19,7 @@ public static class AiBuildEndpoints
             if (string.IsNullOrEmpty(request.Prompt))
                 return Results.BadRequest(new { Message = "Prompt is required" });
 
-            var requirements = await service.AnalyzeAsync(request.Prompt, cancellationToken);
-            var recommendation = await service.RecommendBuildAsync(requirements, cancellationToken);
+            var recommendation = await service.RecommendBuildAsync(request.Prompt, cancellationToken);
 
             return Results.Ok(recommendation);
         }).RequireAuthorization();

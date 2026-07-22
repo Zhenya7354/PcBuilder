@@ -25,9 +25,9 @@ public class AiBuildSevice(
     private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
     private const decimal DefaultBudget = 1500m;
 
-    public async Task<AiBuildRequirements> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
-    {
 
+    public async Task<BuildRecommendationResult> RecommendBuildAsync(string prompt, CancellationToken cancellationToken)
+    {
         var requestBody = new
         {
             contents = new[]
@@ -132,14 +132,10 @@ public class AiBuildSevice(
             throw new InvalidOperationException("Gemini API returned no output text.");
         }
 
-        return JsonSerializer.Deserialize<AiBuildRequirements>(
+        var requirements = JsonSerializer.Deserialize<AiBuildRequirements>(
                 outputText!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
-    }
-
-    public async Task<BuildRecommendationResult> RecommendBuildAsync(AiBuildRequirements requirements, CancellationToken cancellationToken)
-    {
         var result = new BuildRecommendationResult();
         var build = result.Build;
         var totalBudget = requirements.Budget ?? DefaultBudget;
