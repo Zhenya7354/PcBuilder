@@ -36,7 +36,8 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IAuthService, AuthService>(); 
         builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
         builder.Services.AddScoped<IAiBuildService, AiBuildSevice>();
-        builder.Services.AddScoped<IComponentCatalogCache, ComponentCatalogCache>();
+        builder.Services.AddSingleton<IMemoryListCache, MemoryListCache>();
+        builder.Services.AddScoped<IComponentCatalogCacheInvalidator, ComponentCatalogCacheInvalidator>();
 
         builder.Services.AddOpenApi();
         builder.Services.AddHttpContextAccessor();
