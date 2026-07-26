@@ -1,6 +1,6 @@
 ﻿namespace PcBuilder.Configurations;
 
-public class CacheOptions
+public class ComponentCatalogCacheOptions
 {
     public int AbsoluteExpirationInMinutes { get; set; } = 30;
     public int SlidingExpirationInMinutes { get; set; } = 10;

@@ -7,7 +7,7 @@ namespace PcBuilder.Services;
 
 public class MemoryListCache(
     IMemoryCache _cache,
-    IOptions<CacheOptions> _options) : IMemoryListCache
+    IOptions<ComponentCatalogCacheOptions> _options) : IMemoryListCache
 {
     public async Task<List<T>> GetOrCreateAsync<T>(string cacheKey, Func<CancellationToken, Task<List<T>>> loadFunction, CancellationToken cancellationToken)
     {
