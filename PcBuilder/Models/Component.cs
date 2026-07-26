@@ -1,4 +1,5 @@
 using PcBuilder.Entities;
+using PcBuilder.Enums;
 using System.Text.Json.Serialization;
 
 namespace PcBuilder.Models;
@@ -13,4 +14,6 @@ public abstract class Component
     public string Name { get; set; } = string.Empty;
     //Navigation property for the brand relationship
     public BrandEntity? Brand { get; set; }
+    public Currency? Currency { get; set; }
+    public decimal? Price { get; set; }
 }

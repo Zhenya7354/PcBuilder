@@ -29,8 +29,5 @@ public class MotherboardEntity : Component
     public int RearUsbC { get; set; }
     public bool RearHdmi { get; set; }
     public bool RearDisplayPort { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
-
-
+    
 }

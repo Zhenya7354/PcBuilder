@@ -27,7 +27,6 @@ public class CpuEntity : Component
     public int? PcieLanes { get; set; }
     public bool IncludesCooler { get; set; }
     public int? LaunchedYear { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
+    
 
 }

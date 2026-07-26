@@ -14,6 +14,5 @@ public class CpuCoolerEntity : Component
     public int? HeightMm { get; set; }
     public ColorScheme ColorScheme { get; set; }
     public double? NoiseLevelDb { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
+    
 }

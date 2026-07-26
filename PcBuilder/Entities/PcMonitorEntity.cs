@@ -25,6 +25,5 @@ public class PcMonitorEntity : Component
     public bool HasSpeakers { get; set; }
     public bool HeightAdjustable { get; set; }
     public string VesaMount { get; set; } = string.Empty;
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
+   
 }

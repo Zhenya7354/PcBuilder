@@ -20,7 +20,5 @@ public class PcCaseEntity : Component
     public bool HasGlassPanel { get; set; }
     public int IncludedFans { get; set; }
     public ColorScheme ColorScheme { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
-
+    
 }

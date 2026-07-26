@@ -14,6 +14,5 @@ public class RamEntity : Component
     public ColorScheme ColorScheme { get; set; }
     public bool HasEcc { get; set; }
     public int? HeightMm { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
+    
 }

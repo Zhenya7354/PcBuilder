@@ -21,7 +21,5 @@ public class GpuEntity : Component
     public int? CardLengthMm { get; set; }
     public double CardSlots { get; set; }
     public ColorScheme ColorScheme { get; set; }
-    public Currency? Currency { get; set; }
-    public decimal? Price { get; set; }
-
+   
 }
