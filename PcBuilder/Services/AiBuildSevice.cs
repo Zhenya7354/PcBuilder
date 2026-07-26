@@ -20,9 +20,11 @@ public class AiBuildSevice(
     IPcCaseRepository pcCaseRepository,
     IHardDriveRepository hardDriveRepository,
     IPcMonitorRepository pcMonitorRepository,
-    ICompatibilityCheckService compatibilityCheckService) : IAiBuildService
+    ICompatibilityCheckService compatibilityCheckService,
+    ICurrencyExchangeService currencyExchangeService) : IAiBuildService
 {
     private readonly IGeminiAiProvider _geminiAiProvider = geminiAiProvider;
+    private readonly ICurrencyExchangeService _currencyExchangeService = currencyExchangeService;
     private const decimal DefaultBudget = 1500m;
 
 
@@ -137,12 +139,17 @@ public class AiBuildSevice(
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
         var result = new BuildRecommendationResult();
+        var requestedCurrency = ResolveRequestedCurrency(requirements, result);
+        var totalBudget = requirements.Budget ?? await _currencyExchangeService.ConvertAsync(
+        DefaultBudget,
+        Currency.USD,
+        requestedCurrency,
+        cancellationToken);
         var build = result.Build;
-        var totalBudget = requirements.Budget ?? DefaultBudget;
 
         var cpu = await SelectComponentAsync(
             cpuRepository.GetAllCpusAsync,
-            c => c.Price,
+            requestedCurrency,
             [],
             requirements,
             BuildComponentType.Cpu,
@@ -155,7 +162,7 @@ public class AiBuildSevice(
 
         var motherboard = await SelectComponentAsync(
         motherboardRepository.GetAllMotherboardsAsync,
-        m => m.Price,
+        requestedCurrency,
         [mb => compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync(cpu!.Id, mb.Id, cancellationToken)],
         requirements, BuildComponentType.Motherboard, totalBudget, cancellationToken);
         if (!TryAssign(motherboard, $"No motherboard compatible with {cpu?.Name ?? "selected Cpu"} within budget.", id => build.MotherboardId = id, result))
@@ -163,7 +170,7 @@ public class AiBuildSevice(
 
         var ram = await SelectComponentAsync(
         ramRepository.GetAllRamAsync,
-        r => r.Price,
+        requestedCurrency,
         [r => compatibilityCheckService.CheckRamToMotherboardCompatibilityAsync(r.Id, motherboard!.Id, cancellationToken)],
         requirements, BuildComponentType.Ram, totalBudget, cancellationToken);
         if (!TryAssign(ram, $"No RAM compatible with {motherboard?.Name ?? "selected Motherboard"} within budget.", id => build.RamId = id, result))
@@ -171,7 +178,7 @@ public class AiBuildSevice(
 
         var gpu = await SelectComponentAsync(
         async ct => FilterByResolution(await gpuRepository.GetAllGpusAsync(ct), requirements.TargetResolution).ToList(),
-        g => g.Price,
+        requestedCurrency,
         [],
         requirements, BuildComponentType.Gpu, totalBudget, cancellationToken);
         if (!TryAssign(gpu, "No GPU found matching budget/resolution target.", id => build.GpuId = id, result))
@@ -180,7 +187,7 @@ public class AiBuildSevice(
 
         var psu = await SelectComponentAsync(
         async ct => (await psuRepository.GetAllPsusAsync(ct)).Where(p => p.Wattage >= gpu!.RecommendedPsuWattage).ToList(),
-        p => p.Price,
+        requestedCurrency,
         [],
         requirements, BuildComponentType.Psu, totalBudget, cancellationToken);
         if (!TryAssign(psu, $"No PSU rated for {gpu?.Name ?? "selected GPU"}'s {gpu?.RecommendedPsuWattage ?? 0}W requirement within budget.", id => build.PsuId = id, result))
@@ -189,7 +196,7 @@ public class AiBuildSevice(
 
         var pcCase = await SelectComponentAsync(
         pcCaseRepository.GetAllCasesAsync,
-        c => c.Price,
+        requestedCurrency,
         [
             c => compatibilityCheckService.CheckCaseToMotherboardCompatibilityAsync(c.Id, motherboard!.Id, cancellationToken),
             c => compatibilityCheckService.CheckCaseToGpuCompatibilityAsync(c.Id, gpu!.Id, cancellationToken),
@@ -202,7 +209,7 @@ public class AiBuildSevice(
 
         var cooler = await SelectComponentAsync(
         cpuCoolerRepository.GetAllCpuCoolersAsync,
-        c => c.Price,
+        requestedCurrency,
         [
             cc => compatibilityCheckService.CheckCpuCoolerToCpuCompatibilityAsync(cpu!.Id, cc.Id, cancellationToken),
             cc => compatibilityCheckService.CheckCaseToCpuCoolerCompatibilityAsync(pcCase!.Id, cc.Id, cancellationToken),
@@ -214,7 +221,7 @@ public class AiBuildSevice(
 
         var hardDrive = await SelectComponentAsync(
         hardDriveRepository.GetAllHardDrivesAsync,
-        h => h.Price,
+        requestedCurrency,
         [],
         requirements, BuildComponentType.HardDrive, totalBudget, cancellationToken);
         AssignOptional(hardDrive, "No suitable hard drive found within budget; build is missing storage.", id => build.HardDriveId = id, result);
@@ -223,7 +230,7 @@ public class AiBuildSevice(
         {
             var monitor = await SelectComponentAsync(
                 async ct => FilterByResolution(await pcMonitorRepository.GetAllMonitorsAsync(ct), requirements.TargetResolution).ToList(),
-                m => m.Price,
+                requestedCurrency,
                 [],
                 requirements, BuildComponentType.PcMonitor, totalBudget, cancellationToken);
             AssignOptional(monitor, "No suitable monitor found within budget.", id => build.MonitorId = id, result);
@@ -235,6 +242,17 @@ public class AiBuildSevice(
         }
 
         return result;
+    }
+    private static Currency ResolveRequestedCurrency(
+        AiBuildRequirements requirements,
+        BuildRecommendationResult result)
+    {
+        if(Enum.TryParse<Currency>(requirements.Currency, true, out var currency))
+        {
+            return currency;
+        }
+        result.Notes.Add("Currency was not recognized. USD was used instead.");
+        return Currency.USD;
     }
 
     private static async Task<List<T>> FilterCompatibleAsync<T>(
@@ -256,12 +274,13 @@ public class AiBuildSevice(
       //refine in future(GpuEntity has no resolution so it should be filtered by VramGb);
       => candidates;
 
-    private static T? PickBest<T>(
+    private async Task<T?> PickBest<T>(
         IEnumerable<T> candidates,
-        Func<T, decimal?> PriceSelector,
         AiBuildRequirements requirements,
         BuildComponentType componentType,
-        decimal totalBudget) where T : Component
+        decimal totalBudget,
+        Currency requestedCurrency,
+        CancellationToken cancelationToken) where T : Component
     {
         var targetSpend = totalBudget * BudgetAllocationProfiles.GetShare(requirements.Purpose, componentType);
 
@@ -272,27 +291,36 @@ public class AiBuildSevice(
         if (filtered.Count == 0)
             return null;
 
-        var withinBudget = filtered
-            .Where(c => PriceSelector(c) is { } price && price <= targetSpend * 1.2m)
-            .OrderByDescending(PriceSelector)
+        var pricedCandidates = new List<(T component, decimal convertedPrice)>();
+        foreach(var component in filtered)
+        {
+            if (component.Price is null)
+                continue;
+
+            var convertedPrice = await _currencyExchangeService.ConvertAsync(
+                component.Price.Value,
+                component.Currency ?? Currency.USD,
+                requestedCurrency,
+                cancelationToken);
+
+            pricedCandidates.Add((component, convertedPrice));
+        }
+
+        var withinBudget = pricedCandidates
+            .Where(x => x.convertedPrice <= targetSpend * 1.2m)
+            .OrderByDescending(x => x.convertedPrice)
             .ToList();
+
         var pool = withinBudget.Count > 0
             ? withinBudget
-            : filtered.OrderBy(c => PriceSelector(c) ?? decimal.MaxValue).Take(1).ToList();
+            : pricedCandidates.OrderBy(x => x.convertedPrice).Take(1).ToList();
 
-        if (requirements.PreferredBrands.Count > 0)
-        {
-            var preffered = pool.FirstOrDefault(c =>
-            requirements.PreferredBrands.Contains(c.Brand?.Name, StringComparer.OrdinalIgnoreCase));
-            if (preffered is not null)
-                return preffered;
-        }
-        return pool.FirstOrDefault();
+        return pool.FirstOrDefault().component;
     }
 
     private async Task<T?> SelectComponentAsync<T>(
         Func<CancellationToken, Task<List<T>>> pullCandidates,
-        Func<T, decimal?> priceSelector,
+        Currency requestedCurrency,
         List<Func<T, Task<CompatibilityCheckResponse>>> compatibilityChecks,
         AiBuildRequirements requirements,
         BuildComponentType componentType,
@@ -305,7 +333,7 @@ public class AiBuildSevice(
         {
             candidates = await FilterCompatibleAsync(candidates, check);
         }
-        return PickBest(candidates, priceSelector, requirements, componentType, totalBudget);
+        return await PickBest(candidates, requirements, componentType,totalBudget, requestedCurrency, cancellationToken);
     }
 
     private static bool TryAssign<T>(T? component,
