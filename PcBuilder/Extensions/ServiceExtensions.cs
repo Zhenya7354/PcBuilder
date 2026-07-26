@@ -55,6 +55,12 @@ public static class ServiceExtensions
             httpClient.DefaultRequestHeaders.Add(ApiKeyHeaderName, apiKey);
         });
 
+        builder.Services.AddHttpClient<ICurrencyExchangeService, FrankFurterCurrencyExchangeService>((serviceProvider, httpClient) =>
+        {
+            httpClient.BaseAddress = new Uri(serviceProvider.GetRequiredService<IConfiguration>()["ExchangeRatesApi:ApiUrl"]!);
+            httpClient.Timeout = TimeSpan.FromSeconds(serviceProvider.GetRequiredService<IConfiguration>().GetValue<int>("ExchangeRatesApi:TimeoutInSeconds"));
+        });
+
         builder.Services.AddDbContext<PcDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
