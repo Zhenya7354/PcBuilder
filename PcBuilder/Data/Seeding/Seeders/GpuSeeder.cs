@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
@@ -10,8 +10,6 @@ public class GpuSeeder : IDataSeeder
 {
     public async Task SeedAsync(PcDbContext context)
     {
-        if (await context.Gpu.AnyAsync())
-            return;
         var brands = await context.Brand.ToDictionaryAsync(b => b.Name);
 
         var gpus = new List<GpuEntity>
@@ -61,9 +59,63 @@ public class GpuSeeder : IDataSeeder
                 ColorScheme = ColorScheme.RGB,
                 Currency = Currency.USD,
                 Price = 999.99m
+            },
+            new GpuEntity
+            {
+                Name = "AMD Radeon RX 7600 XT",
+                Brand = brands["Sapphire"],
+                GpuChip = "Navi 33",
+                GpuInterface = GpuInterface.PCle4x16,
+                VramGb = 16,
+                VramType = "GDDR6",
+                BaseClockMhz = 1980,
+                BoostClockMhz = 2755,
+                MemoryBusBits = 128,
+                MemoryBandwithGb = 288,
+                TdpWatts = 190,
+                RecommendedPsuWattage = 550,
+                PowerConnectors = "1x 8-pin",
+                OutputHdmi = 1,
+                OutputDp = 3,
+                CardLengthMm = 250,
+                CardSlots = 2.5,
+                ColorScheme = ColorScheme.NonRGB,
+                Currency = Currency.USD,
+                Price = 329.99m
+            },
+            new GpuEntity
+            {
+                Name = "NVIDIA GeForce RTX 4070 Ti SUPER",
+                Brand = brands["NVIDIA"],
+                GpuChip = "AD103",
+                GpuInterface = GpuInterface.PCle4x16,
+                VramGb = 16,
+                VramType = "GDDR6X",
+                BaseClockMhz = 2340,
+                BoostClockMhz = 2610,
+                MemoryBusBits = 256,
+                MemoryBandwithGb = 672,
+                TdpWatts = 285,
+                RecommendedPsuWattage = 700,
+                PowerConnectors = "1x 16-pin",
+                OutputHdmi = 1,
+                OutputDp = 3,
+                CardLengthMm = 300,
+                CardSlots = 3,
+                ColorScheme = ColorScheme.RGB,
+                Currency = Currency.USD,
+                Price = 799.99m
             }   
         };
-        await context.Gpu.AddRangeAsync(gpus);
+        var existingNames = await context.Gpu.Select(g => g.Name).ToListAsync();
+        var newGpus = gpus
+            .Where(g => !existingNames.Contains(g.Name))
+            .ToList();
+
+        if (newGpus.Count == 0)
+            return;
+
+        await context.Gpu.AddRangeAsync(newGpus);
         await context.SaveChangesAsync();
     }
 }

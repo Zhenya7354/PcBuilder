@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PcBuilder.Data.Seeding.Interfaces;
 using PcBuilder.Entities;
 using PcBuilder.Enums;
@@ -9,9 +9,6 @@ public class PcCaseSeeder : IDataSeeder
 {
     public async Task SeedAsync(PcDbContext context)
     {
-        if (await context.PcCase.AnyAsync())
-            return;
-
         var brands = await context.Brand.ToDictionaryAsync(b => b.Name);
 
         var PcCases = new List<PcCaseEntity>()
@@ -59,9 +56,61 @@ public class PcCaseSeeder : IDataSeeder
                 Currency = Currency.USD,
                 Price = 94.99m,
                 BrandId = brands["Corsair"].Id
+            },
+            new PcCaseEntity
+            {
+                Name = "Cooler Master MasterBox Q300L",
+                SupportedFormFactors = new List<FormFactor> { FormFactor.MicroATX, FormFactor.MiniITX },
+                MaxGpuLengthMm = 360,
+                MaxCpuCoolerHeightMm = 159,
+                MaxPsuLengthMm = 160,
+                DriveBays35Inch = 1,
+                DriveBays25Inch = 2,
+                FrontUsbA = 2,
+                FrontUsbC = 0,
+                RadiatorSupportMm = new List<string> { "120mm", "240mm" },
+                CaseWidthMm = 230,
+                CaseHeightMm = 387,
+                CaseDepthMm = 378,
+                HasGlassPanel = true,
+                IncludedFans = 1,
+                ColorScheme = ColorScheme.NonRGB,
+                Currency = Currency.USD,
+                Price = 59.99m,
+                BrandId = brands["Cooler Master"].Id
+            },
+            new PcCaseEntity
+            {
+                Name = "NZXT H5 Flow",
+                SupportedFormFactors = new List<FormFactor> { FormFactor.EATX, FormFactor.MicroATX, FormFactor.MiniITX },
+                MaxGpuLengthMm = 365,
+                MaxCpuCoolerHeightMm = 165,
+                MaxPsuLengthMm = 200,
+                DriveBays35Inch = 1,
+                DriveBays25Inch = 2,
+                FrontUsbA = 1,
+                FrontUsbC = 1,
+                RadiatorSupportMm = new List<string> { "120mm", "240mm", "280mm" },
+                CaseWidthMm = 227,
+                CaseHeightMm = 464,
+                CaseDepthMm = 446,
+                HasGlassPanel = true,
+                IncludedFans = 2,
+                ColorScheme = ColorScheme.NonRGB,
+                Currency = Currency.USD,
+                Price = 94.99m,
+                BrandId = brands["NZXT"].Id
             }
         };
-        await context.PcCase.AddRangeAsync(PcCases);
+        var existingNames = await context.PcCase.Select(c => c.Name).ToListAsync();
+        var newPcCases = PcCases
+            .Where(c => !existingNames.Contains(c.Name))
+            .ToList();
+
+        if (newPcCases.Count == 0)
+            return;
+
+        await context.PcCase.AddRangeAsync(newPcCases);
         await context.SaveChangesAsync();
     }
 }

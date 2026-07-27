@@ -10,9 +10,6 @@ public class MotherboardSeeder : IDataSeeder
 {
     public async Task SeedAsync(PcDbContext context)
     {
-        if (await context.Motherboard.AnyAsync())
-            return;
-
         var brands = await context.Brand.ToDictionaryAsync(b => b.Name);
 
         var motherboards = new List<MotherboardEntity>()
@@ -76,10 +73,78 @@ public class MotherboardSeeder : IDataSeeder
                 RearDisplayPort = true,
                 Currency = Currency.USD,
                 Price = 179.99m
+            },
+            new MotherboardEntity
+            {
+                Name = "Gigabyte B550M DS3H AC",
+                BrandId = brands["Gigabyte"].Id,
+                Socket = PcSocketType.AM4,
+                Chipset = "B550",
+                FormFactor = FormFactor.MicroATX,
+                MemoryType = MemoryType.DDR4,
+                MemorySlots = 4,
+                MaxMemoryGb = 128,
+                MaxMemorySpeedMhz = 3600,
+                PcieX16Slots = 1,
+                PcieX1Slots = 1,
+                M2Slots = 2,
+                SataPorts = 4,
+                UsbHeaders3Gen2 = 1,
+                UsbHeaders2Gen0 = 1,
+                HasWifi = true,
+                HasBluetooth = true,
+                LanSpeedGbps = 1,
+                FanHeaders = 3,
+                ArgbHeaders = 1,
+                VrmPhases = 8,
+                RearUsbA = 6,
+                RearUsbC = 0,
+                RearHdmi = true,
+                RearDisplayPort = true,
+                Currency = Currency.USD,
+                Price = 109.99m
+            },
+            new MotherboardEntity
+            {
+                Name = "MSI MAG B650M Mortar WiFi",
+                BrandId = brands["MSI"].Id,
+                Socket = PcSocketType.AM5,
+                Chipset = "B650",
+                FormFactor = FormFactor.MicroATX,
+                MemoryType = MemoryType.DDR5,
+                MemorySlots = 4,
+                MaxMemoryGb = 192,
+                MaxMemorySpeedMhz = 6400,
+                PcieX16Slots = 2,
+                PcieX1Slots = 1,
+                M2Slots = 2,
+                SataPorts = 6,
+                UsbHeaders3Gen2 = 2,
+                UsbHeaders2Gen0 = 1,
+                HasWifi = true,
+                HasBluetooth = true,
+                LanSpeedGbps = 2,
+                FanHeaders = 5,
+                ArgbHeaders = 2,
+                VrmPhases = 12,
+                RearUsbA = 7,
+                RearUsbC = 1,
+                RearHdmi = true,
+                RearDisplayPort = true,
+                Currency = Currency.USD,
+                Price = 219.99m
             }
         };
 
-        await context.Motherboard.AddRangeAsync(motherboards);
+        var existingNames = await context.Motherboard.Select(m => m.Name).ToListAsync();
+        var newMotherboards = motherboards
+            .Where(m => !existingNames.Contains(m.Name))
+            .ToList();
+
+        if (newMotherboards.Count == 0)
+            return;
+
+        await context.Motherboard.AddRangeAsync(newMotherboards);
         await context.SaveChangesAsync();
     }
 }
