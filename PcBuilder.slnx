@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="PcBuilder.Tests/PcBuilder.Tests.csproj" Id="8cd0a75b-5026-440f-958f-0e6bb00f05a9" />
   <Project Path="PcBuilder/PcBuilder.csproj" />
 </Solution>
