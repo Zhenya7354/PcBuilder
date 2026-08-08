@@ -1,4 +1,5 @@
 <Solution>
-  <Project Path="PcBuilder.Tests/PcBuilder.Tests.csproj" Id="8cd0a75b-5026-440f-958f-0e6bb00f05a9" />
+  <Project Path="PcBuilder.IntegrationTests/PcBuilder.IntegrationTests.csproj" Id="72b30804-9352-4aaa-809d-d09390150fe1" />
+  <Project Path="PcBuilder.Tests/PcBuilder.UnitTests.csproj" Id="8cd0a75b-5026-440f-958f-0e6bb00f05a9" />
   <Project Path="PcBuilder/PcBuilder.csproj" />
 </Solution>
