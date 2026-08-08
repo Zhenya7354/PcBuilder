@@ -21,8 +21,6 @@ public class CpuService(ICpuRepository cpuRepository, IComponentCatalogCacheInva
     }
     public async Task<CpuEntity> AddCpuAsync(CpuCreateRequest dto, CancellationToken cancellationToken)
     {
-        if (dto is null) 
-            throw new ArgumentNullException("Cpu data is required");
 
         if (!await _cpuRepository.BrandExistsAsync(dto.BrandId, cancellationToken))
             throw new KeyNotFoundException("Brand not found");
@@ -60,9 +58,6 @@ public class CpuService(ICpuRepository cpuRepository, IComponentCatalogCacheInva
     }
     public async Task<CpuEntity> UpdateCpuAsync(int id, CpuUpdateRequest dto, CancellationToken cancellationToken)
     {
-        if (dto is null)
-            throw new ArgumentNullException("Cpu data is required");
-
         var cpu = await _cpuRepository.GetCpuByIdAsync(id, cancellationToken) ??
             throw new KeyNotFoundException("Cpu not found");
 
