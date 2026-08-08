@@ -22,10 +22,13 @@ builder.AddIdentityAndJwt();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("IntegrationTests"))
 {
-    var seeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>();
-    await seeder.SeedDataAsync(scope.ServiceProvider);
+    using (var scope = app.Services.CreateScope())
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>();
+        await seeder.SeedDataAsync(scope.ServiceProvider);
+    }
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -55,4 +58,4 @@ app.MapAiBuildEndpoints();
 
 app.Run();
 
-
+public partial class Program { }
