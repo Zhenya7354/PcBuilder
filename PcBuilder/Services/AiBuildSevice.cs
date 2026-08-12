@@ -28,7 +28,7 @@ public class AiBuildSevice(
     private const decimal DefaultBudget = 1500m;
 
 
-    public async Task<BuildRecommendationResult> RecommendBuildAsync(string prompt, CancellationToken cancellationToken)
+    public async Task<BuildRecommendationResult> RecommendBuildAsync(AiBuildRequest request, CancellationToken cancellationToken)
     {
         var requestBody = new
         {
@@ -45,7 +45,7 @@ public class AiBuildSevice(
                                 {{ApiRequestBodyVariables.StructuredOutputInstructions}}
 
                                 User prompt:
-                                {{prompt}}
+                                {{request.Prompt}}
                                 """
                         }
                     }
@@ -61,6 +61,11 @@ public class AiBuildSevice(
                     type = ApiRequestBodyVariables.Object,
                     properties = new
                     {
+                        name = new
+                        {
+                            type = ApiRequestBodyVariables.String,
+                            description = ApiRequestBodyVariables.NameDescription
+                        },
                         purpose = new
                         {
                             type = ApiRequestBodyVariables.String,
@@ -146,7 +151,11 @@ public class AiBuildSevice(
         requestedCurrency,
         cancellationToken);
         var build = result.Build;
-
+        if(request.AcceptAiSuggestedName || string.IsNullOrWhiteSpace(request.Name))
+        {
+            result.Build.Name = requirements.Name;
+        }
+        result.Build.Name = request.Name;
         var cpu = await SelectComponentAsync(
             cpuRepository.GetAllCpusAsync,
             requestedCurrency,
@@ -292,16 +301,19 @@ public class AiBuildSevice(
             return null;
 
         var pricedCandidates = new List<(T component, decimal convertedPrice)>();
-        foreach(var component in filtered)
+        foreach (var component in filtered)
         {
             if (component.Price is null)
                 continue;
-
-            var convertedPrice = await _currencyExchangeService.ConvertAsync(
-                component.Price.Value,
-                component.Currency ?? Currency.USD,
-                requestedCurrency,
-                cancelationToken);
+            var convertedPrice = component.Price.Value;
+            if(requestedCurrency != Currency.USD)
+            {
+                 convertedPrice = await _currencyExchangeService.ConvertAsync(
+                    component.Price.Value,
+                    component.Currency ?? Currency.USD,
+                    requestedCurrency,
+                    cancelationToken);
+            }
 
             pricedCandidates.Add((component, convertedPrice));
         }
