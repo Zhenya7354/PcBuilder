@@ -2,6 +2,7 @@ namespace PcBuilder.Models;
 
 public class AiBuildRequirements
 {
+    public string Name { get; set; } = string.Empty;
     public string Purpose { get; set; } = string.Empty;
     public decimal? Budget { get; set; }
     public string? Currency { get; set; }
