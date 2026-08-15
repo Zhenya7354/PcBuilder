@@ -249,6 +249,10 @@ public class AiBuildSevice(
         {
             result.Status = BuildRecommendationStatus.Completed;
         }
+        if(result.Notes.Count > 0 && result.Status != BuildRecommendationStatus.Failed)
+        {
+            result.Status = BuildRecommendationStatus.PartiallyCompleted;
+        }
 
         return result;
     }
