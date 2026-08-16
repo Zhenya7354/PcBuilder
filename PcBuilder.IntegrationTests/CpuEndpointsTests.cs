@@ -10,12 +10,8 @@ using Microsoft.Extensions.Configuration.KeyPerFile;
 
 namespace PcBuilder.IntegrationTests;
 
-public class CpuEndpointsTests : BaseIntegrationTest
+public class CpuEndpointsTests(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
 {
-    public CpuEndpointsTests(IntegrationTestWebAppFactory factory) : base(factory)
-    {
-    }
-
     [Fact]
     public async Task GetAllCpusAsync_Should_ReturnOk()
     {
@@ -34,10 +30,10 @@ public class CpuEndpointsTests : BaseIntegrationTest
         // Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         result.Should().NotBeNullOrEmpty();
-        result.Count.Should().Be(2);
-        result[0].Name.Should().Be("Ryzen 7 9800");
-        result[0].Socket.Should().Be(Enums.PcSocketType.AM5);
-        result[0].Price.Should().Be(449.99m);
+        result.Count.Should().Be(1);
+        result[0].Name.Should().Be("Ryzen 5 5600");
+        result[0].Socket.Should().Be(Enums.PcSocketType.AM4);
+        result[0].Price.Should().Be(220.00m);
     }
     [Fact]
     public async Task GetCpuByIdAsync_Should_ReturnOk()
@@ -58,9 +54,9 @@ public class CpuEndpointsTests : BaseIntegrationTest
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         result.Should().NotBeNull();
         result.Id.Should().Be(1);
-        result.Name.Should().Be("Ryzen 7 9800");
-        result.Socket.Should().Be(Enums.PcSocketType.AM5); 
-        result.Price.Should().Be(449.99m);
+        result.Name.Should().Be("Ryzen 5 5600");
+        result.Socket.Should().Be(Enums.PcSocketType.AM4); 
+        result.Price.Should().Be(220.00m);
 
     }
 [Fact]
