@@ -22,14 +22,7 @@ builder.AddIdentityAndJwt();
 
 var app = builder.Build();
 
-if (!app.Environment.IsEnvironment("IntegrationTests"))
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var seeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>();
-        await seeder.SeedDataAsync(scope.ServiceProvider);
-    }
-}
+app.AddDataSeeding();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
