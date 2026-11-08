@@ -28,10 +28,22 @@ public class AuthService(
         var user = new UserEntity { UserName = dto.Email, Email = dto.Email };
         var result = await _userManager.CreateAsync(user, dto.Password);
 
-        if (!result.Succeeded) 
-            throw new InvalidOperationException("Failed to create user.");
+        if (!result.Succeeded)
+        {
+            var details = string.Join(" ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException(
+                string.IsNullOrWhiteSpace(details) ? "Failed to create user." : details);
+        }
 
-        await _userManager.AddToRoleAsync(user, "User");
+        var roleResult = await _userManager.AddToRoleAsync(user, "User");
+        if (!roleResult.Succeeded)
+        {
+            var details = string.Join(" ", roleResult.Errors.Select(e => e.Description));
+            throw new InvalidOperationException(
+                string.IsNullOrWhiteSpace(details)
+                    ? "User was created but role assignment failed."
+                    : details);
+        }
 
         await _regularUserRepository.AddRegularUserAsync(new RegularUserEntity { UserId = user.Id }, cancellationToken);
         await _regularUserRepository.SaveChangesAsync(cancellationToken);
