@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-steel-950: #0b0d10;
+  --color-steel-900: #12151a;
+  --color-steel-850: #181c23;
+  --color-steel-800: #222831;
+  --color-steel-700: #2e3540;
+  --color-steel-500: #6b7380;
+  --color-steel-400: #8b929e;
+  --color-steel-300: #b4bac4;
+  --color-steel-100: #e8eaee;
+
+  --color-accent: #f0a202;
+  --color-accent-dim: #c48402;
+  --color-accent-soft: color-mix(in srgb, #f0a202 16%, transparent);
+
+  --color-danger: #e85d4c;
+  --color-danger-soft: color-mix(in srgb, #e85d4c 14%, transparent);
+  --color-warn: #e6b422;
+  --color-warn-soft: color-mix(in srgb, #e6b422 14%, transparent);
+  --color-ok: #3d9b6e;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    background-color: var(--color-steel-950);
+    color: var(--color-steel-100);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-steel-100);
+  }
+}
