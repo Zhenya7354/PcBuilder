@@ -151,11 +151,14 @@ public class AiBuildSevice(
         requestedCurrency,
         cancellationToken);
         var build = result.Build;
-        if(request.AcceptAiSuggestedName || string.IsNullOrWhiteSpace(request.Name))
+        if (request.AcceptAiSuggestedName || string.IsNullOrWhiteSpace(request.Name))
         {
             result.Build.Name = requirements.Name;
         }
-        result.Build.Name = request.Name;
+        else
+        {
+            result.Build.Name = request.Name;
+        }
         var cpu = await SelectComponentAsync(
             cpuRepository.GetAllCpusAsync,
             requestedCurrency,
@@ -245,28 +248,14 @@ public class AiBuildSevice(
             AssignOptional(monitor, "No suitable monitor found within budget.", id => build.MonitorId = id, result);
         }
 
-        if (result.Notes.Count == 0)
-        {
-            result.Status = BuildRecommendationStatus.Completed;
-        }
-        if(result.Notes.Count > 0 && result.Status != BuildRecommendationStatus.Failed)
-        {
-            result.Status = BuildRecommendationStatus.PartiallyCompleted;
-        }
+        AiBuildRecommendationFinalizer.FinalizeStatus(result);
 
         return result;
     }
     private static Currency ResolveRequestedCurrency(
         AiBuildRequirements requirements,
         BuildRecommendationResult result)
-    {
-        if(Enum.TryParse<Currency>(requirements.Currency, true, out var currency))
-        {
-            return currency;
-        }
-        result.Notes.Add("Currency was not recognized. USD was used instead.");
-        return Currency.USD;
-    }
+        => AiBuildRecommendationFinalizer.ResolveRequestedCurrency(requirements.Currency, result.Notes);
 
     private static async Task<List<T>> FilterCompatibleAsync<T>(
         IEnumerable<T> candidates,
