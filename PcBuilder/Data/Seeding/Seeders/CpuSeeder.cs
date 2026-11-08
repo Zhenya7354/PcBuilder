@@ -6,6 +6,11 @@ using System.Net.Sockets;
 
 namespace PcBuilder.Data.Seeding.Seeders;
 
+/// <summary>
+/// Demo kits (spot by name prefix; prices tuned for AI gaming budget shares):
+/// Budget1000 Value (~$995): CPU + cooler + MB + RAM + GPU + PSU + case + storage.
+/// Budget2000 Performance (~$1995): same roles at higher tiers.
+/// </summary>
 public class CpuSeeder : IDataSeeder
 {
     public async Task SeedAsync(PcDbContext context)
@@ -101,6 +106,52 @@ public class CpuSeeder : IDataSeeder
                 LaunchedYear = 2022,
                 Currency = Currency.USD,
                 Price = 319.99m
+            },
+            // Budget1000 Value kit — AM4 / B550 / DDR4-3600 / ~$180 of $1000 gaming share
+            new CpuEntity
+            {
+                BrandId = brands["AMD"].Id,
+                Name = "Budget1000 Value Ryzen 5 5500",
+                Socket = Enums.PcSocketType.AM4,
+                Cores = 6,
+                Threads = 12,
+                BaseClockGhz = 3.6,
+                BoostClockGhz = 4.2,
+                TdpWatts = 65,
+                ChipsetsSupported = new List<string> { "B550", "X570" },
+                MemoryType = Enums.MemoryType.DDR4,
+                MaxMemoryGb = 128,
+                MaxMemorySpeedMhz = 3600,
+                MemoryChannels = 2,
+                IntegratedGraphics = false,
+                IncludesCooler = false,
+                IgpuModel = null,
+                LaunchedYear = 2022,
+                Currency = Currency.USD,
+                Price = 179.99m
+            },
+            // Budget2000 Performance kit — AM5 / B650 / DDR5-6000 / ~$460 of $2000 gaming share
+            new CpuEntity
+            {
+                BrandId = brands["AMD"].Id,
+                Name = "Budget2000 Performance Ryzen 7 7700",
+                Socket = Enums.PcSocketType.AM5,
+                Cores = 8,
+                Threads = 16,
+                BaseClockGhz = 3.8,
+                BoostClockGhz = 5.3,
+                TdpWatts = 65,
+                ChipsetsSupported = new List<string> { "B650", "X670" },
+                MemoryType = Enums.MemoryType.DDR5,
+                MaxMemoryGb = 128,
+                MaxMemorySpeedMhz = 6000,
+                MemoryChannels = 2,
+                IntegratedGraphics = true,
+                IncludesCooler = false,
+                IgpuModel = "Radeon Graphics",
+                LaunchedYear = 2023,
+                Currency = Currency.USD,
+                Price = 459.99m
             }
         };
 

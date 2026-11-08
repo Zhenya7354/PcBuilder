@@ -114,6 +114,42 @@ public class HardDriveSeeder : IDataSeeder
                 WriteSpeedMbs = 6300,
                 Rpm = null,
                 Tbw = 1200
+            },
+            // Budget1000 Value kit — 1TB NVMe
+            new HardDriveEntity
+            {
+                Name = "Budget1000 Value 1TB NVMe",
+                BrandId = brands["Crucial"].Id,
+                CacheMb = 512,
+                CapacityGb = 1000,
+                DriveInterface = Enums.StorageInterface.NvmePcie_Gen3,
+                FormFactor = Enums.StorageFormFactor.M2_2280,
+                PcDriveType = Enums.PcDriveType.Nvme,
+                PowerWatts = 5,
+                Currency = Currency.USD,
+                Price = 69.99m,
+                ReadSpeedMbS = 3500,
+                WriteSpeedMbs = 3000,
+                Rpm = null,
+                Tbw = 200
+            },
+            // Budget2000 Performance kit — 2TB Gen4 NVMe
+            new HardDriveEntity
+            {
+                Name = "Budget2000 Performance 2TB NVMe",
+                BrandId = brands["Samsung"].Id,
+                CacheMb = 2048,
+                CapacityGb = 2000,
+                DriveInterface = Enums.StorageInterface.NvmePcie_Gen4,
+                FormFactor = Enums.StorageFormFactor.M2_2280,
+                PcDriveType = Enums.PcDriveType.Nvme,
+                PowerWatts = 8,
+                Currency = Currency.USD,
+                Price = 159.99m,
+                ReadSpeedMbS = 7000,
+                WriteSpeedMbs = 6500,
+                Rpm = null,
+                Tbw = 1200
             }
         };
         var existingNames = await context.HardDrive.Select(h => h.Name).ToListAsync();

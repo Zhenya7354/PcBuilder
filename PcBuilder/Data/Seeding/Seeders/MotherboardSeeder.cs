@@ -133,6 +133,68 @@ public class MotherboardSeeder : IDataSeeder
                 RearDisplayPort = true,
                 Currency = Currency.USD,
                 Price = 219.99m
+            },
+            // Budget1000 Value kit — matches Budget1000 Value Ryzen 5 5500 (AM4/B550/DDR4/3600)
+            new MotherboardEntity
+            {
+                Name = "Budget1000 Value B550M Gaming",
+                BrandId = brands["MSI"].Id,
+                Socket = PcSocketType.AM4,
+                Chipset = "B550",
+                FormFactor = FormFactor.MicroATX,
+                MemoryType = MemoryType.DDR4,
+                MemorySlots = 4,
+                MaxMemoryGb = 128,
+                MaxMemorySpeedMhz = 3600,
+                PcieX16Slots = 1,
+                PcieX1Slots = 1,
+                M2Slots = 2,
+                SataPorts = 4,
+                UsbHeaders3Gen2 = 1,
+                UsbHeaders2Gen0 = 1,
+                HasWifi = true,
+                HasBluetooth = true,
+                LanSpeedGbps = 1,
+                FanHeaders = 4,
+                ArgbHeaders = 1,
+                VrmPhases = 8,
+                RearUsbA = 6,
+                RearUsbC = 1,
+                RearHdmi = true,
+                RearDisplayPort = true,
+                Currency = Currency.USD,
+                Price = 99.99m
+            },
+            // Budget2000 Performance kit — matches Budget2000 Performance Ryzen 7 7700 (AM5/B650/DDR5/6000+)
+            new MotherboardEntity
+            {
+                Name = "Budget2000 Performance B650 Gaming WiFi",
+                BrandId = brands["Gigabyte"].Id,
+                Socket = PcSocketType.AM5,
+                Chipset = "B650",
+                FormFactor = FormFactor.MicroATX,
+                MemoryType = MemoryType.DDR5,
+                MemorySlots = 4,
+                MaxMemoryGb = 192,
+                MaxMemorySpeedMhz = 6400,
+                PcieX16Slots = 2,
+                PcieX1Slots = 1,
+                M2Slots = 3,
+                SataPorts = 4,
+                UsbHeaders3Gen2 = 2,
+                UsbHeaders2Gen0 = 1,
+                HasWifi = true,
+                HasBluetooth = true,
+                LanSpeedGbps = 2,
+                FanHeaders = 5,
+                ArgbHeaders = 2,
+                VrmPhases = 14,
+                RearUsbA = 7,
+                RearUsbC = 1,
+                RearHdmi = true,
+                RearDisplayPort = true,
+                Currency = Currency.USD,
+                Price = 199.99m
             }
         };
 

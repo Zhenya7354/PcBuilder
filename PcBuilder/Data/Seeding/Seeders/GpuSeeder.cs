@@ -105,7 +105,55 @@ public class GpuSeeder : IDataSeeder
                 ColorScheme = ColorScheme.RGB,
                 Currency = Currency.USD,
                 Price = 799.99m
-            }   
+            },
+            // Budget1000 Value kit — ~$400 of $1000 gaming GPU share; needs >=550W PSU
+            new GpuEntity
+            {
+                Name = "Budget1000 Value RTX 4060",
+                Brand = brands["NVIDIA"],
+                GpuChip = "AD107",
+                GpuInterface = GpuInterface.PCle4x16,
+                VramGb = 8,
+                VramType = "GDDR6",
+                BaseClockMhz = 1830,
+                BoostClockMhz = 2460,
+                MemoryBusBits = 128,
+                MemoryBandwithGb = 272,
+                TdpWatts = 115,
+                RecommendedPsuWattage = 550,
+                PowerConnectors = "1x 8-pin",
+                OutputHdmi = 1,
+                OutputDp = 3,
+                CardLengthMm = 244,
+                CardSlots = 2,
+                ColorScheme = ColorScheme.NonRGB,
+                Currency = Currency.USD,
+                Price = 399.99m
+            },
+            // Budget2000 Performance kit — ~$820 of $2000 gaming GPU share; needs >=750W PSU
+            new GpuEntity
+            {
+                Name = "Budget2000 Performance RTX 4070 SUPER",
+                Brand = brands["NVIDIA"],
+                GpuChip = "AD104",
+                GpuInterface = GpuInterface.PCle4x16,
+                VramGb = 12,
+                VramType = "GDDR6X",
+                BaseClockMhz = 1980,
+                BoostClockMhz = 2475,
+                MemoryBusBits = 192,
+                MemoryBandwithGb = 504,
+                TdpWatts = 220,
+                RecommendedPsuWattage = 750,
+                PowerConnectors = "1x 16-pin",
+                OutputHdmi = 1,
+                OutputDp = 3,
+                CardLengthMm = 285,
+                CardSlots = 2.5,
+                ColorScheme = ColorScheme.RGB,
+                Currency = Currency.USD,
+                Price = 819.99m
+            }
         };
         var existingNames = await context.Gpu.Select(g => g.Name).ToListAsync();
         var newGpus = gpus

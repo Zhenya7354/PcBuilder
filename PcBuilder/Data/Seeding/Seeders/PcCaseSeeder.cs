@@ -100,6 +100,52 @@ public class PcCaseSeeder : IDataSeeder
                 Currency = Currency.USD,
                 Price = 94.99m,
                 BrandId = brands["NZXT"].Id
+            },
+            // Budget1000 Value kit — MicroATX; clears kit cooler/GPU/PSU sizes
+            new PcCaseEntity
+            {
+                Name = "Budget1000 Value MicroATX Case",
+                SupportedFormFactors = new List<FormFactor> { FormFactor.MicroATX, FormFactor.MiniITX },
+                MaxGpuLengthMm = 350,
+                MaxCpuCoolerHeightMm = 160,
+                MaxPsuLengthMm = 160,
+                DriveBays35Inch = 2,
+                DriveBays25Inch = 2,
+                FrontUsbA = 2,
+                FrontUsbC = 1,
+                RadiatorSupportMm = new List<string> { "120", "240" },
+                CaseWidthMm = 210,
+                CaseHeightMm = 420,
+                CaseDepthMm = 400,
+                HasGlassPanel = true,
+                IncludedFans = 2,
+                ColorScheme = ColorScheme.NonRGB,
+                Currency = Currency.USD,
+                Price = 64.99m,
+                BrandId = brands["Cooler Master"].Id
+            },
+            // Budget2000 Performance kit — roomier clearances for higher-tier parts
+            new PcCaseEntity
+            {
+                Name = "Budget2000 Performance Mid Tower",
+                SupportedFormFactors = new List<FormFactor> { FormFactor.EATX, FormFactor.MicroATX, FormFactor.MiniITX },
+                MaxGpuLengthMm = 400,
+                MaxCpuCoolerHeightMm = 175,
+                MaxPsuLengthMm = 200,
+                DriveBays35Inch = 2,
+                DriveBays25Inch = 3,
+                FrontUsbA = 2,
+                FrontUsbC = 1,
+                RadiatorSupportMm = new List<string> { "120", "240", "280", "360" },
+                CaseWidthMm = 230,
+                CaseHeightMm = 480,
+                CaseDepthMm = 460,
+                HasGlassPanel = true,
+                IncludedFans = 3,
+                ColorScheme = ColorScheme.ARGB,
+                Currency = Currency.USD,
+                Price = 119.99m,
+                BrandId = brands["NZXT"].Id
             }
         };
         var existingNames = await context.PcCase.Select(c => c.Name).ToListAsync();

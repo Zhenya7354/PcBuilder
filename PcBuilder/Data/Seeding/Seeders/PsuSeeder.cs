@@ -97,6 +97,42 @@ public class PsuSeeder : IDataSeeder
                 LengthMm = 160,
                 Currency = Currency.USD,
                 Price = 139.99m
+            },
+            // Budget1000 Value kit — 650W covers Budget1000 Value RTX 4060 (550W rec)
+            new PsuEntity
+            {
+                Name = "Budget1000 Value 650W Bronze",
+                Brand = brands["Corsair"],
+                Wattage = 650,
+                Efficiency = PsuRating.Bronze,
+                Modularity = PsuModular.SemiModular,
+                AtxVersion = "ATX12V v2.4",
+                Has16Pin = false,
+                EpsConnectors = 2,
+                SataConnectors = 6,
+                Pcie8PinConnectors = 2,
+                FanSizeMm = 120,
+                LengthMm = 140,
+                Currency = Currency.USD,
+                Price = 64.99m
+            },
+            // Budget2000 Performance kit — 850W covers Budget2000 Performance RTX 4070 SUPER (750W rec)
+            new PsuEntity
+            {
+                Name = "Budget2000 Performance 850W Gold",
+                Brand = brands["Seasonic"],
+                Wattage = 850,
+                Efficiency = PsuRating.Gold,
+                Modularity = PsuModular.FullyModular,
+                AtxVersion = "ATX 3.0",
+                Has16Pin = true,
+                EpsConnectors = 4,
+                SataConnectors = 8,
+                Pcie8PinConnectors = 4,
+                FanSizeMm = 135,
+                LengthMm = 150,
+                Currency = Currency.USD,
+                Price = 129.99m
             }
         };
         var existingNames = await context.Psu.Select(p => p.Name).ToListAsync();

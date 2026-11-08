@@ -92,6 +92,40 @@ public class RamSeeder : IDataSeeder
                 Currency = Currency.USD,
                 Price = 139.99m,
                 BrandId = brands["G.Skill"].Id
+            },
+            // Budget1000 Value kit — DDR4-3200 dual-channel, under CPU/MB 3600 max
+            new RamEntity
+            {
+                Name = "Budget1000 Value DDR4-3200 16GB (2x8GB)",
+                MemoryType = MemoryType.DDR4,
+                CapacityGb = 8,
+                KitCount = 2,
+                SpeedMhz = 3200,
+                CasLatency = 16,
+                Voltage = 1.35,
+                ColorScheme = ColorScheme.NonRGB,
+                HasEcc = false,
+                HeightMm = 32,
+                Currency = Currency.USD,
+                Price = 69.99m,
+                BrandId = brands["Kingston"].Id
+            },
+            // Budget2000 Performance kit — DDR5-6000 dual-channel, equals CPU max / under MB 6400
+            new RamEntity
+            {
+                Name = "Budget2000 Performance DDR5-6000 32GB (2x16GB)",
+                MemoryType = MemoryType.DDR5,
+                CapacityGb = 16,
+                KitCount = 2,
+                SpeedMhz = 6000,
+                CasLatency = 30,
+                Voltage = 1.35,
+                ColorScheme = ColorScheme.RGB,
+                HasEcc = false,
+                HeightMm = 42,
+                Currency = Currency.USD,
+                Price = 149.99m,
+                BrandId = brands["G.Skill"].Id
             }
         };
         var existingNames = await context.Ram.Select(r => r.Name).ToListAsync();

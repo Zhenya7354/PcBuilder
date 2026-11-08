@@ -76,10 +76,52 @@ public class CpuCoolerSeeder : IDataSeeder
                 Price = 39.99m,
                 BrandId = brands["Thermalright"].Id,
                 RadiatorSizeMm = null
+            },
+            // Budget1000 Value kit — AM4 air cooler, height under Budget1000 case (160mm)
+            new CpuCoolerEntity
+            {
+                Name = "Budget1000 Value Air Cooler",
+                CoolerType = CoolerType.Air,
+                SocketsSupported = new List<PcSocketType> { PcSocketType.AM4, PcSocketType.AM5 },
+                FanCount = 1,
+                FanSizeMm = 120,
+                MaxTdpWatts = 150,
+                HeightMm = 155,
+                ColorScheme = ColorScheme.NonRGB,
+                NoiseLevelDb = 28.0,
+                Currency = Currency.USD,
+                Price = 34.99m,
+                BrandId = brands["Cooler Master"].Id,
+                RadiatorSizeMm = null
+            },
+            // Budget2000 Performance kit — dual-tower air, height under Budget2000 case (175mm)
+            new CpuCoolerEntity
+            {
+                Name = "Budget2000 Performance Dual Tower Cooler",
+                CoolerType = CoolerType.Air,
+                SocketsSupported = new List<PcSocketType> { PcSocketType.AM4, PcSocketType.AM5, PcSocketType.LGA1700, PcSocketType.LGA1851 },
+                FanCount = 2,
+                FanSizeMm = 120,
+                MaxTdpWatts = 250,
+                HeightMm = 157,
+                ColorScheme = ColorScheme.RGB,
+                NoiseLevelDb = 24.0,
+                Currency = Currency.USD,
+                Price = 89.99m,
+                BrandId = brands["Thermalright"].Id,
+                RadiatorSizeMm = null
             }
         };
 
-        await context.CpuCooler.AddRangeAsync(cpuCoolers);
+        var existingNames = await context.CpuCooler.Select(c => c.Name).ToListAsync();
+        var newCoolers = cpuCoolers
+            .Where(c => !existingNames.Contains(c.Name))
+            .ToList();
+
+        if (newCoolers.Count == 0)
+            return;
+
+        await context.CpuCooler.AddRangeAsync(newCoolers);
         await context.SaveChangesAsync();
     }
 }
