@@ -98,6 +98,18 @@ dotnet run
 
 By default the HTTPS profile serves at `https://localhost:7088` and opens Scalar at `/scalar/v1`. HTTP-only: `http://localhost:5150`.
 
+### Frontend
+
+A React SPA lives in `frontend/` (Vite + React 19 + TypeScript + Tailwind). Start the API first, then:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+App: [http://localhost:5173](http://localhost:5173). Optional `VITE_API_BASE_URL` (see `frontend/.env.example`); defaults to `https://localhost:7088`. More detail in [`frontend/README.md`](frontend/README.md).
+
 ---
 
 ## 🔌 API Overview
