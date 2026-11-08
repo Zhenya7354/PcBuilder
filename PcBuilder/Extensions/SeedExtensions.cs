@@ -22,13 +22,13 @@ public static class SeedExtensions
         builder.Services.AddScoped<IDbSeeder, DbSeeder>();
         return builder;
     }
-    public static WebApplication AddDataSeeding(this WebApplication app)
+    public static async Task<WebApplication> AddDataSeedingAsync(this WebApplication app)
     {
         if (!app.Environment.IsEnvironment("IntegrationTests"))
         {
             using var scope = app.Services.CreateScope();
             var seeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>();
-            seeder.SeedDataAsync(scope.ServiceProvider);
+            await seeder.SeedDataAsync(scope.ServiceProvider);
         }
         return app;
     }
