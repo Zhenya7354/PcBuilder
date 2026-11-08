@@ -43,12 +43,12 @@ public class CompatibilityCheckService(ICompatibilityCheckRepository repository)
                 Severity = CompatibilitySeverity.Error
             });
         }
-        if (motherboard.MaxMemorySpeedMhz <= cpu.MaxMemorySpeedMhz)
+        if (motherboard.MaxMemorySpeedMhz < cpu.MaxMemorySpeedMhz)
         {
             issues.Add(new CompatibilityIssue()
             {
                 Field = nameof(cpu.MaxMemorySpeedMhz),
-                Message = $"CPU max memory speed {cpu.MaxMemorySpeedMhz} is is higher than motherboard max memory speed {motherboard.MaxMemorySpeedMhz}",
+                Message = $"Motherboard max memory speed {motherboard.MaxMemorySpeedMhz} is lower than CPU max memory speed {cpu.MaxMemorySpeedMhz}",
                 Severity = CompatibilitySeverity.Warning
             });
         }

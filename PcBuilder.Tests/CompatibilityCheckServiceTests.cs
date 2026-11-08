@@ -166,6 +166,37 @@ public class CompatibilityCheckServiceTests
         issue.Message.Contains("memory speed"));
     }
     [Fact]
+    public async Task CheckCpuToMotherboardCompatibilityAsync_Should_ReturnSuccess_WhenMemoryMaxSpeedsAreEqual()
+    {
+        // Arrange — equal max speeds must not produce a memory-speed warning
+        _compatibilityCheckRepositoryMock.GetCpuByIdAsync(Arg.Any<int>(), default)
+            .Returns(new CpuEntity
+            {
+                Socket = Enums.PcSocketType.AM5,
+                ChipsetsSupported = new List<string> { "B650" },
+                MemoryType = Enums.MemoryType.DDR5,
+                MaxMemorySpeedMhz = 6000
+            });
+
+        _compatibilityCheckRepositoryMock.GetMotherboardByIdAsync(Arg.Any<int>(), default)
+            .Returns(new MotherboardEntity
+            {
+                Socket = Enums.PcSocketType.AM5,
+                Chipset = "B650",
+                MemoryType = Enums.MemoryType.DDR5,
+                MaxMemorySpeedMhz = 6000
+            });
+
+        // Act
+        var result = await _compatibilityCheckService.CheckCpuToMotherboardCompatibilityAsync(1, 2, default);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Empty(result.Issues);
+        Assert.DoesNotContain(result.Issues, issue =>
+            issue.Field == nameof(CpuEntity.MaxMemorySpeedMhz));
+    }
+    [Fact]
     public async Task CheckCpuToMotherboardCompatibilityAsync_Should_ReturnSuccess()
     {
         // Arrange
