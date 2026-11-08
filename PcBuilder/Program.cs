@@ -19,10 +19,11 @@ builder.AddSeeders();
 builder.AddRepositories();
 builder.AddExceptionsServices();
 builder.AddIdentityAndJwt();
+builder.AddFrontendCors();
 
 var app = builder.Build();
 
-app.AddDataSeeding();
+await app.AddDataSeedingAsync();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -31,6 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(CorsExtensions.FrontendPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandler();
