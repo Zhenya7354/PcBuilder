@@ -53,21 +53,23 @@ public class BuildService : IBuildService
 
     public async Task<BuildEntity> UpdateBuildAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
     {
-        var build = await GetBuildByIdAsync(buildId, cancellationToken);
+        var build = await GetBuildForUpdateAsync(buildId, cancellationToken);
 
         if (!string.IsNullOrEmpty(dto.Name)) { build.Name = dto.Name; }
-        if (dto.CpuId.HasValue) build.CpuId = dto.CpuId;
-        if (dto.CpuCoolerId.HasValue) build.CpuCoolerId = dto.CpuCoolerId;
-        if (dto.GpuId.HasValue) build.GpuId = dto.GpuId;
-        if (dto.RamId.HasValue) build.RamId = dto.RamId;
-        if (dto.HardDriveId.HasValue) build.HardDriveId = dto.HardDriveId;
-        if (dto.MotherboardId.HasValue) build.MotherboardId = dto.MotherboardId;
-        if (dto.PsuId.HasValue) build.PsuId = dto.PsuId;
-        if (dto.CaseId.HasValue) build.CaseId = dto.CaseId;
-        if (dto.MonitorId.HasValue) build.MonitorId = dto.MonitorId;
+
+        // Full replacement: null in the request clears that slot.
+        build.CpuId = dto.CpuId;
+        build.CpuCoolerId = dto.CpuCoolerId;
+        build.GpuId = dto.GpuId;
+        build.RamId = dto.RamId;
+        build.HardDriveId = dto.HardDriveId;
+        build.MotherboardId = dto.MotherboardId;
+        build.PsuId = dto.PsuId;
+        build.CaseId = dto.CaseId;
+        build.MonitorId = dto.MonitorId;
 
         await _buildRepository.SaveChangesAsync(cancellationToken);
-        return build;
+        return await GetBuildByIdAsync(buildId, cancellationToken);
     }
 
     public async Task DeleteBuildAsync(int buildId, CancellationToken cancellationToken)
@@ -79,21 +81,28 @@ public class BuildService : IBuildService
 
     public async Task<BuildEntity> SetComponentAsync(int buildId, BuildComponentRequest dto, CancellationToken cancellationToken)
     {
-        var build = await GetBuildByIdAsync(buildId, cancellationToken);
+        var build = await GetBuildForUpdateAsync(buildId, cancellationToken);
         if (!await ComponentExists(dto.ComponentType, dto.ComponentId, cancellationToken))
         {
             throw new KeyNotFoundException($"Component with Id {dto.ComponentId} not found for type {dto.ComponentType}");
         }
         ApplyComponent(build, dto.ComponentType, dto.ComponentId);
         await _buildRepository.SaveChangesAsync(cancellationToken);
-        return build;
+        return await GetBuildByIdAsync(buildId, cancellationToken);
     }
     public async Task<BuildEntity> RemoveComponentAsync(int buildId, BuildComponentType componentType, CancellationToken cancellationToken)
     {
-        var build = await GetBuildByIdAsync(buildId, cancellationToken);
+        var build = await GetBuildForUpdateAsync(buildId, cancellationToken);
         ApplyComponent(build, componentType, null);
         await _buildRepository.SaveChangesAsync(cancellationToken);
-        return build;
+        return await GetBuildByIdAsync(buildId, cancellationToken);
+    }
+
+    private async Task<BuildEntity> GetBuildForUpdateAsync(int buildId, CancellationToken cancellationToken)
+    {
+        var userId = _userContextAccessor.GetUserContext().UserId;
+        return await _buildRepository.GetByIdForUpdateAsync(buildId, userId, cancellationToken) ??
+            throw new KeyNotFoundException($"Build with Id {buildId} not found");
     }
 
     public async Task<CompatibilityCheckResponse> RunCompatibilityChecksAsync(BuildRequest dto, CancellationToken cancellationToken)
@@ -125,23 +134,9 @@ public class BuildService : IBuildService
     }
     public async Task<CompatibilityCheckResponse> RunCompatibilityChecksForBuildUpdateAsync(int buildId, BuildRequest dto, CancellationToken cancellationToken)
     {
-        var build = await GetBuildByIdAsync(buildId, cancellationToken);
-
-        var mergedDto = new BuildRequest
-        {
-            Name = dto.Name ?? build.Name,
-            CpuId = dto.CpuId ?? build.CpuId,
-            MotherboardId = dto.MotherboardId ?? build.MotherboardId,
-            RamId = dto.RamId ?? build.RamId,
-            GpuId = dto.GpuId ?? build.GpuId,
-            CpuCoolerId = dto.CpuCoolerId ?? build.CpuCoolerId,
-            CaseId = dto.CaseId ?? build.CaseId,
-            PsuId = dto.PsuId ?? build.PsuId,
-            MonitorId = dto.MonitorId ?? build.MonitorId,
-            HardDriveId = dto.HardDriveId ?? build.HardDriveId
-        };
-
-        return await RunCompatibilityChecksAsync(mergedDto, cancellationToken);
+        // Ensure the build exists and belongs to the current user; slots use full-replacement from dto.
+        await GetBuildByIdAsync(buildId, cancellationToken);
+        return await RunCompatibilityChecksAsync(dto, cancellationToken);
     }
 
     public async Task<CompatibilityCheckResponse> RunCompatibilityChecksForComponentUpdateAsync(int buildId, BuildComponentRequest dto, CancellationToken cancellationToken)

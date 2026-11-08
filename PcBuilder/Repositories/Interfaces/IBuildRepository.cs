@@ -6,6 +6,7 @@ public interface IBuildRepository
 {
     public Task<List<BuildEntity>> GetAllAsync(string userId, CancellationToken cancellationToken);
     public Task<BuildEntity?> GetByIdAsync(int buildId, string userId, CancellationToken cancellationToken);
+    public Task<BuildEntity?> GetByIdForUpdateAsync(int buildId, string userId, CancellationToken cancellationToken);
     public Task AddBuildAsync(BuildEntity build, CancellationToken cancellationToken);
     public Task DeleteBuildAsync(BuildEntity build, CancellationToken cancellationToken);
     public Task SaveChangesAsync(CancellationToken cancellationToken);

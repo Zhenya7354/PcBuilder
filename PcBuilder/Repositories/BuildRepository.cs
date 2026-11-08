@@ -17,6 +17,12 @@ public class BuildRepository(PcDbContext context) : IBuildRepository
     {
         return await BuildWithAllComponents().AsNoTracking().FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId, cancellationToken);
     }
+
+    public async Task<BuildEntity?> GetByIdForUpdateAsync(int buildId, string userId, CancellationToken cancellationToken)
+    {
+        return await _context.Build.FirstOrDefaultAsync(b => b.Id == buildId && b.UserId == userId, cancellationToken);
+    }
+
     public async Task AddBuildAsync(BuildEntity build, CancellationToken cancellationToken)
     {
         await _context.AddAsync(build, cancellationToken);
@@ -35,15 +41,16 @@ public class BuildRepository(PcDbContext context) : IBuildRepository
     }
     private IQueryable<BuildEntity> BuildWithAllComponents()
     {
-        return _context.Build.Include(b => b.Cpu)
-                    .Include(b => b.CpuCooler)
-                    .Include(b => b.Gpu)
-                    .Include(b => b.Ram)
-                    .Include(b => b.HardDrive)
-                    .Include(b => b.Motherboard)
-                    .Include(b => b.Psu)
-                    .Include(b => b.PcCase)
-                    .Include(b => b.Monitor);
+        return _context.Build
+                    .Include(b => b.Cpu!).ThenInclude(c => c.Brand)
+                    .Include(b => b.CpuCooler!).ThenInclude(c => c.Brand)
+                    .Include(b => b.Gpu!).ThenInclude(g => g.Brand)
+                    .Include(b => b.Ram!).ThenInclude(r => r.Brand)
+                    .Include(b => b.HardDrive!).ThenInclude(h => h.Brand)
+                    .Include(b => b.Motherboard!).ThenInclude(m => m.Brand)
+                    .Include(b => b.Psu!).ThenInclude(p => p.Brand)
+                    .Include(b => b.PcCase!).ThenInclude(c => c.Brand)
+                    .Include(b => b.Monitor!).ThenInclude(m => m.Brand);
     }
 
     public async Task<bool> CpuExistsAsync(int cpuId, CancellationToken cancellationToken)
