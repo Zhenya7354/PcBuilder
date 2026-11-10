@@ -67,7 +67,7 @@ PcBuilder/
 
 ### Configuration
 
-Update `PcBuilder/appsettings.json` (or user secrets) with:
+`appsettings.json` holds defaults and placeholders. Set local secrets with **.NET user secrets**:
 
 | Setting | Purpose |
 |--------|---------|
@@ -78,14 +78,11 @@ Update `PcBuilder/appsettings.json` (or user secrets) with:
 | `ExchangeRatesApi:*` | Frankfurter base URL, currency, timeout |
 | `ComponentCatalogCache:*` / `ExchangeRatesCache:*` | Cache lifetimes |
 
-> Prefer **user secrets** for `Jwt:Key` and `Gemini:ApiKey` instead of committing real values.
-
-Example user-secrets setup:
-
 ```bash
 cd PcBuilder
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Username=postgres;Password=YOUR_PASSWORD;Database=PcBuilderDb"
+dotnet user-secrets set "Jwt:Key" "YOUR_LONG_SECRET_KEY_AT_LEAST_32_CHARS"
 dotnet user-secrets set "Gemini:ApiKey" "YOUR_GEMINI_API_KEY"
-dotnet user-secrets set "Jwt:Key" "YOUR_LONG_SECRET_KEY"
 ```
 
 ### Run the API
