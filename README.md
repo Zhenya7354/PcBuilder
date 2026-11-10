@@ -193,4 +193,4 @@ Failed checks return `400` with a message and an `Issues` list instead of saving
 
 ## 📄 License
 
-This project is for learning and portfolio use unless otherwise specified.
+This project is for learning and portfolio use.
